@@ -1,6 +1,6 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.34 for daffy on Wed Oct 11 22:07:37 2017.
-# http://www.jwz.org/xscreensaver/
+# Written by xscreensaver-demo 5.36 for daffy on Sun Nov  5 22:51:03 2017.
+# https://www.jwz.org/xscreensaver/
 
 timeout:	0:02:00
 cycle:		0:10:00
@@ -259,6 +259,16 @@ programs:								      \
 - GL: 				winduprobot -root			    \n\
 - GL: 				splitflap -root				    \n\
 				testx11 -root				    \n\
+  GL: 				cubestack -root				    \n\
+  GL: 				cubetwist -root				    \n\
+  GL: 				discoball -root				    \n\
+  GL: 				dymaxionmap -root			    \n\
+  GL: 				energystream -root			    \n\
+  GL: 				hexstrut -root				    \n\
+  GL: 				hydrostat -root				    \n\
+  GL: 				raverhoop -root				    \n\
+  GL: 				splodesic -root				    \n\
+  GL: 				unicrud -root				    \n\
 
 
 pointerPollTime:    0:00:05
