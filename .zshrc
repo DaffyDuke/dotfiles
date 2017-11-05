@@ -1,30 +1,16 @@
 # Path to your oh-my-zsh installation.
-<<<<<<< HEAD
-export ZSH=/home/daffy/.oh-my-zsh
-=======
 export ZSH=$HOME/.oh-my-zsh
->>>>>>> b496d4db7e0d22616c9261082458438a132de200
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="robbyrussell"
-<<<<<<< HEAD
-=======
 #ZSH_THEME="wulve"
->>>>>>> b496d4db7e0d22616c9261082458438a132de200
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-<<<<<<< HEAD
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-=======
->>>>>>> b496d4db7e0d22616c9261082458438a132de200
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
@@ -60,19 +46,11 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-<<<<<<< HEAD
-plugins=(git aws colored-man-pages command-not-found docker go golang history rsync systemd tmux ubuntu)
-
-# User configuration
-
-  export PATH="/home/daffy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-=======
 plugins=(git bundler golang rake ruby ssh-agent tmuxinator)
 
 # User configuration
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
->>>>>>> b496d4db7e0d22616c9261082458438a132de200
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -102,12 +80,6 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-<<<<<<< HEAD
-if [[ $TILIX_ID ]]; then
-    source /etc/profile.d/vte.sh
-fi
-
-=======
 
 export TERM=xterm-256color
 
@@ -125,4 +97,3 @@ ssh() {
 }
 
 export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
->>>>>>> b496d4db7e0d22616c9261082458438a132de200
