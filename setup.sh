@@ -286,3 +286,18 @@ go get -u github.com/golang/lint/golint
 # tips cross compilation
 # CGO_ENABLED=yes go build
 
+# Powershell
+# https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md
+# Import the public repository GPG keys
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+ # Register the Microsoft Ubuntu repository
+curl https://packages.microsoft.com/config/ubuntu/17.10/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+ # Update the list of products
+ sudo apt-get update
+ # Install PowerShell
+ sudo apt-get install -y powershell
+# as repo is not available for the moment ....
+cd /tmp
+wget -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
+sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
+
