@@ -12,3 +12,4 @@ cp .zshrc ~/
 sudo npm install -g eslint
 sudo npm install -g babel-eslint
 sudo npm install -g eslint-plugin-react
+apt-get Install thefuck

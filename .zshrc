@@ -46,7 +46,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git bundler golang rake ruby ssh-agent tmuxinator)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby ssh-agent terraform thefuck tmuxinator ubuntu )
 
 # User configuration
 
