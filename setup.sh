@@ -33,7 +33,8 @@ sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety times
 sudo apt install -y git zsh
 
 # Install some packages
-sudo apt install -f gnome-tweak-tool ubuntu-restricted-extras tilix alien awscli bc bluegriffon corkscrew darktable default-jre deluge-gtk dnstracer easytag ethstatus ethtool fastboot fortunes-fr freemind ftp gcompris gcompris-sound-fr gcstar geary glances gnupg2 google-cloud-sdk guake handbrake harmony heimdall-flash-frontend hugin hugo icedtea-plugin iftop iotop iptstate jxplorer kerneloops klavaro language-pack-fr libreoffice-gnome lightworks lsof lynx mc meld ncdu netcat-openbsd nmap nmon ogmrip openconnect openssh-client openssh-server openvpn owncloud-client p7zip parcellite parted pass patch pgtop pssh pwgen qarte qemu-kvm qtpass rdesktop remmina repo rpm rsync s3cmf scribus seahorse shellcheck shotwell simple-scan sshpass strace synaptic tcpdump testssl.sh thefuck tilix traceroute tshark tuxmath unetbootin unrar vagrant vim-gnome vim-youcompleteme virt-manager vlc weboob-qt whois wireshark xauth youtube-dlg zenmap
+sudo apt install -y gnome-tweak-tool ubuntu-restricted-extras tilix alien awscli bc bluegriffon corkscrew darktable default-jre deluge-gtk dnstracer easytag ethstatus ethtool fastboot fortunes-fr freemind ftp gcompris gcompris-sound-fr gcstar geary glances gnupg2 google-cloud-sdk guake handbrake harmony heimdall-flash-frontend hugin hugo icedtea-plugin iftop iotop iptstate jxplorer keepass2 kerneloops klavaro language-pack-fr libreoffice-gnome lightworks lsof lynx mc meld ncdu netcat-openbsd nmap nmon ogmrip openconnect openssh-client openssh-server openvpn owncloud-client p7zip parcellite parted pass patch pgtop pssh pwgen qarte qemu-kvm qtpass rdesktop remmina repo rpm rsync s3cmf scribus seahorse shellcheck shotwell simple-scan sshpass strace synaptic tcpdump testssl.sh thefuck tilix traceroute tshark tuxmath unetbootin unrar vagrant vim-gnome vim-youcompleteme virt-manager vlc weboob-qt whois wireshark xauth youtube-dlg zenmap
+sudo apt install -f
 
 # Dropbox
 # https://www.dropbox.com/install-linux
@@ -122,4 +123,26 @@ sudo npm install -g eslint-plugin-react
 wget -o /tmp/ttf-mscorefonts-installer_3.6_all.deb -O http://ftp.fr.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
 sudo dpkg -i /tmp/ttf-mscorefonts-installer_3.6_all.deb
 sudo apt install -f
+
+# Install atom modules
+# http://flight-manual.atom.io/using-atom/sections/atom-packages/
+for module in git-plus \
+  go-plus \
+  intentions \
+  language-powershell \
+  language-puppet \
+  language-terraform \
+  linter \
+  linter-docker \
+  linter-golinter \
+  linter-packer-validate \
+  linter-puppet-lint \
+  linter-shellcheck \
+  linter-terraform-syntax \
+  linter-ui-default \
+  terraform-fmt
+do 
+  apm install "${module}"
+done
+
 
