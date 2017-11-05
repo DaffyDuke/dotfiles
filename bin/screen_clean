@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for Sockets in `screen -ls|grep Detached|awk '{print $1}'`
+do
+	screen -r $Sockets exit
+done
+

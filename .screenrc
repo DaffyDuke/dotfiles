@@ -1,0 +1,73 @@
+#
+# ~/.screenrc startup file for GNU Screen.
+#
+# Steve
+# --
+# $Id: _screenrc,v 1.4 2005/11/20 21:00:35 steve Exp $
+#
+
+# skip the startup message
+startup_message off
+
+# go to home dir
+chdir
+
+# Automatically detach on hangup. 
+autodetach on
+
+# Change default scrollback value for new windows
+defscrollback 1000
+
+# start with visual bell as default
+vbell on
+vbell_msg "bell on %t (%n)"
+
+# look and feel
+caption always "%{= bb}%{+b w}%n %h %=%t %c"
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+
+activity "Activity in %t(%n)"
+
+shelltitle "shell"
+
+#
+# Run a screensaver if there's nothing happening for a while.
+#
+# idle 420 eval "screen cmatrix -f -o -u 10" "idle 0"
+################
+#
+# keybindings
+#
+
+#remove some stupid / dangerous key bindings
+bind k
+bind ^k
+bind .
+bind ^\
+bind \\
+bind ^h
+bind h
+#make them better
+bind 'K' kill
+bind 'I' login on
+bind 'O' login off
+bind '}' history
+# replace ctrl-A by ctrl-O
+escape ^Oo
+
+# Yet another hack:
+# Prepend/append register [/] to the paste if ^a^] is pressed.
+# This lets me have autoindent mode in vi.
+register [ "\033:se noai\015a"
+register ] "\033:se ai\015a"
+bind ^] paste [.]
+# Pour naviguer...
+bindkey -k k8 prev
+bindkey -k k9 next
+bind R screen -t 'ROOT@WINGATE' 2 ssh root@wingate01
+#Permettre le scroll avec Shift + PgUp/PgDw
+termcapinfo xterm ti@:te@
+termcapinfo xterm-color ti@:te@
+termcapinfo rxvt ti@:te@
+bindkey -m "^[[5;2~" stuff ^b
+bindkey -m "^[[6;2~" stuff ^f
