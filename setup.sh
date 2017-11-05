@@ -194,3 +194,71 @@ gsettings set com.canonical.indicator.datetime show-clock true
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.mutter workspaces-only-on-primary true
 gsettings set org.gnome.shell favorite-apps ['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop']
+
+# Kubernetes
+# https://github.com/kubernetes/minikube
+cd ~/bin/
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
+curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
+export MINIKUBE_WANTUPDATENOTIFICATION=false
+export MINIKUBE_WANTREPORTERRORPROMPT=false
+export MINIKUBE_HOME=$HOME
+export CHANGE_MINIKUBE_NONE_USER=true
+mkdir $HOME/.kube || true
+touch $HOME/.kube/config
+export KUBECONFIG=$HOME/.kube/config
+sudo -E ./minikube start
+# this for loop waits until kubectl can access the api server that Minikube has created
+for i in {1..150}; do # timeout for 5 minutes
+  ./kubectl get po &> /dev/null
+  if [ $? -ne 1 ]; then
+    break
+  fi
+  sleep 2
+done
+sudo kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+sudo kubectl expose deployment hello-minikube --type=NodePort
+curl $(minikube service hello-minikube --url)
+# sudo minikube dashboard
+sudo minikube stop
+
+# some cloud tools
+# Packer
+# https://www.packer.io/downloads.html
+cd ~/bin
+wget -O https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
+unzip packer_1.1.1_linux_amd64.zip
+rm packer_1.1.1_linux_amd64.zip
+
+# terraform
+# https://www.terraform.io/downloads.html
+cd ~/bin
+wget -O https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
+unzip terraform_0.10.8_linux_amd64.zip
+rm terraform_0.10.8_linux_amd64.zip
+
+# rancher
+# https://github.com/rancher/cli/release
+cd ~/bin
+wget -O https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
+tar xvfz rancher-linux-amd64-v0.6.5-rc4.tar.gz
+rm rancher-linux-amd64-v0.6.5-rc4.tar.gz
+# https://github.com/rancher/rancher-compose/releases
+cd ~/bin
+wget -O https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
+tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
+rm rancher-compose-linux-amd64-v0.12.5.tar.gz
+
+# GO
+# https://golang.org/dl/
+mkdir -p $GOROOT $GOPATH
+cd $GOROOT
+wget -O https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
+tar xvfz go1.9.2.linux-amd64.tar.gz
+rm go1.9.2.linux-amd64.tar.gz
+go get golang.org/x/tools/cmd/godoc
+go get golang.org/x/tools/cmd/goimports
+go get -u github.com/golang/lint/golint
+# tips cross compilation
+# CGO_ENABLED=yes go build
+
