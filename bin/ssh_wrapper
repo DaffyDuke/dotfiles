@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+
+set hostname [lindex $argv 0];
+
+set timeout -1
+spawn ssh -o StrictHostKeyChecking=no -o ForwardX11=no -l changeme $hostname 
+expect -re "password:"
+send "changeme\r"
+interact

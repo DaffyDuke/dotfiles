@@ -30,7 +30,7 @@ do
 done
 sudo apt-get update
 sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy atom indicator-kdeconnect tor-browser y-ppa-manager 
-sudo apt install -y git zsh
+sudo apt install -y git zsh expect
 
 # Install some packages
 sudo apt install -y gnome-tweak-tool ubuntu-restricted-extras tilix alien awscli bc bluegriffon corkscrew darktable default-jre deluge-gtk dnstracer easytag ethstatus ethtool fastboot fortunes-fr freemind ftp gcompris gcompris-sound-fr gcstar geary glances gnupg2 google-cloud-sdk guake handbrake harmony heimdall-flash-frontend hugin hugo icedtea-plugin iftop iotop iptstate jxplorer keepass2 kerneloops klavaro language-pack-fr libreoffice-gnome lightworks lsof lynx mc meld ncdu netcat-openbsd nmap nmon ogmrip openconnect openssh-client openssh-server openvpn owncloud-client p7zip parcellite parted pass patch pgtop pssh pwgen qarte qemu-kvm qtpass rdesktop remmina repo rpm rsync s3cmf scribus seahorse shellcheck shotwell simple-scan sshpass strace synaptic tcpdump testssl.sh thefuck tilix traceroute tshark tuxmath unetbootin unrar vagrant vim-gnome vim-youcompleteme virt-manager vlc weboob-qt whois wireshark xauth youtube-dlg zenmap
