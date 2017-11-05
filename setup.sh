@@ -117,6 +117,7 @@ sudo npm install -g eslint-plugin-react
  # Install Tilix Theme
  mkdir -p ~/.config/tilix/schemes/
  wget -qO $HOME"/.config/tilix/schemes/desert.json" https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
+ gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
 
 # Fix ttf-mscorefonts-installer
 # http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
@@ -162,4 +163,10 @@ gnomeshell-extension-manage --install --extension-id 1036
 gnomeshell-extension-manage --install --extension-id 16
 # workspace-switch-wraparound@theychx.org                           - enabled    
 gnomeshell-extension-manage --install --extension-id 1116
+
+# Misc Gnome configurations
+gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinates (50.633000000000003, 3.0586000000000002)
+
 
