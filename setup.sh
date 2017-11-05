@@ -145,4 +145,21 @@ do
   apm install "${module}"
 done
 
+# Install Gnome-extensions
+# https://wiki.gnome.org/Projects/GnomeShell/Extensions#Enabling_extensions
+# https://github.com/cyberalex4life/gnome-shell-extension-cl/blob/master/gnome-shell-extension-cl
+# alternate-tab@gnome-shell-extensions.gcampax.github.com           - enabled    
+gnomeshell-extension-manage --install --extension-id 15
+# drive-menu@gnome-shell-extensions.gcampax.github.com              - enabled    
+gnomeshell-extension-manage --install --extension-id 7
+# windowsNavigator@gnome-shell-extensions.gcampax.github.com        - enabled    
+gnomeshell-extension-manage --install --extension-id 10
+# refresh-wifi@kgshank.net                                          - enabled    
+gnomeshell-extension-manage --install --extension-id 905
+# extensions@abteil.org                                             - enabled    
+gnomeshell-extension-manage --install --extension-id 1036
+# auto-move-windows@gnome-shell-extensions.gcampax.github.com       - enabled    
+gnomeshell-extension-manage --install --extension-id 16
+# workspace-switch-wraparound@theychx.org                           - enabled    
+gnomeshell-extension-manage --install --extension-id 1116
 
