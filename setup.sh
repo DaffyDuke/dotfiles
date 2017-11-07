@@ -60,6 +60,9 @@ sudo apt install -y \
   xauth xscreensaver \
   youtube-dlg \
   zenmap
+sudo apt remove gnome-screensaver
+mkdir -p ~/.config/systemd/user/
+systemctl --user enable xscreensaver
 
 # Dropbox
 # https://www.dropbox.com/install-linux
