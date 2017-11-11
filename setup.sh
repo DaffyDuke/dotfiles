@@ -157,6 +157,8 @@ sudo apt install -f
 for module in git-plus \
   go-plus \
   intentions \
+  hugofy \
+  language-hugo \
   language-powershell \
   language-puppet \
   language-terraform \
