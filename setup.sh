@@ -37,7 +37,7 @@ sudo apt install -y \
   alien ansible apt-file atop awscli \
   baobab bc bcc-tools bluegriffon build-essential bundler \
   ca-certificates checkinstall clipit corkscrew \
-  darktable debian-goodies default-jre deluge-gtk dnstracer \
+  darktable debian-goodies default-jre deluge-gtk dnstracer dos2unix \
   easytag ethstatus ethtool evince \
   fastboot filezilla fortunes-fr freemind ftp \
   gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 google-cloud-sdk graphviz guake guake-indicator \
