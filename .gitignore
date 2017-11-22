@@ -20,6 +20,7 @@
 .config/
 .cpan/
 .dbus/
+.dia/
 .disruptive innovations sarl/
 .dmrc
 .dropbox-dist/
@@ -97,6 +98,8 @@
 .sudo_as_admin_successful
 .synaptic/
 .t4k_common/
+.terraform.d/
+.terraform/
 .thumbnails/
 .thunderbird/
 .tor-browser-en/

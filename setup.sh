@@ -255,26 +255,31 @@ sudo minikube stop
 # Packer
 # https://www.packer.io/downloads.html
 cd ~/bin
-wget -O https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
+wget https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
 unzip packer_1.1.1_linux_amd64.zip
 rm packer_1.1.1_linux_amd64.zip
 
 # terraform
 # https://www.terraform.io/downloads.html
 cd ~/bin
-wget -O https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
+wget https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
 unzip terraform_0.10.8_linux_amd64.zip
 rm terraform_0.10.8_linux_amd64.zip
+wget https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
+sudo mkdir -p /usr/local/terraform/toolbox/providers/
+sudo bash ~/bin/getTerraformProviders.sh
+cd
+terraform init -plugin-dir=/usr/local/terraform/toolbox/providers/
 
 # rancher
 # https://github.com/rancher/cli/release
 cd ~/bin
-wget -O https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
+wget https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
 tar xvfz rancher-linux-amd64-v0.6.5-rc4.tar.gz
 rm rancher-linux-amd64-v0.6.5-rc4.tar.gz
 # https://github.com/rancher/rancher-compose/releases
 cd ~/bin
-wget -O https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
+wget https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
 tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
 rm rancher-compose-linux-amd64-v0.12.5.tar.gz
 
@@ -282,7 +287,7 @@ rm rancher-compose-linux-amd64-v0.12.5.tar.gz
 # https://golang.org/dl/
 mkdir -p $GOROOT $GOPATH
 cd $GOROOT
-wget -O https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
+wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
 tar xvfz go1.9.2.linux-amd64.tar.gz
 rm go1.9.2.linux-amd64.tar.gz
 go get golang.org/x/tools/cmd/godoc
