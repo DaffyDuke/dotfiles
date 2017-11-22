@@ -170,6 +170,7 @@ for module in git-plus \
   linter-shellcheck \
   linter-terraform-syntax \
   linter-ui-default \
+  teletype \
   terraform-fmt
 do 
   apm install "${module}"
