@@ -117,6 +117,11 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update
 sudo apt-get install docker-ce
 
+# TLDR
+cd /tmp
+wget https://github.com/pranavraja/tldr/releases/download/v1/tldr_0.1.0_amd64.deb
+sudo dpkg -i tldr_0.1.0_amd64.deb
+
 # Install vundle
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +BundleInstall
