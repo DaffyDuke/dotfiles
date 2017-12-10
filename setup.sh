@@ -256,6 +256,9 @@ sudo kubectl expose deployment hello-minikube --type=NodePort
 curl $(minikube service hello-minikube --url)
 # sudo minikube dashboard
 sudo minikube stop
+cd /tmp
+git clone git clone https://github.com/ahmetb/kubectx.git
+cp -v kubectx/{kubectx,kubens,utils.bash} ~/bin/
 
 # some cloud tools
 # Packer
