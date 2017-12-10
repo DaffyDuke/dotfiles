@@ -24,12 +24,13 @@ for ppa in ppa:djcj/hybrid \
   ppa:webupd8team/atom \
   ppa:webupd8team/indicator-kdeconnect \
   ppa:webupd8team/tor-browser \
-  ppa:webupd8team/y-ppa-manager
+  ppa:webupd8team/y-ppa-manager \
+  ppa:twodopeshaggy/jarun
 do
   sudo apt-add-repository --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy atom indicator-kdeconnect tor-browser y-ppa-manager 
+sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy atom indicator-kdeconnect tor-browser y-ppa-manager ddgr
 sudo apt install -y git zsh expect
 
 # Install some packages
