@@ -259,7 +259,12 @@ curl $(minikube service hello-minikube --url)
 sudo minikube stop
 cd /tmp
 git clone git clone https://github.com/ahmetb/kubectx.git
-cp -v kubectx/{kubectx,kubens,utils.bash} ~/bin/
+cp -v kubectx/{kubectx,kubens,utils.bash} ~/bin/ 
+# Some other tools
+# https://github.com/appscode/kubed
+# https://github.com/heptio/ark
+# https://github.com/cloudnativelabs/kube-router
+# https://github.com/GoogleCloudPlatform/kube-metacontroller
 
 # some cloud tools
 # Packer
