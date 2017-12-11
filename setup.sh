@@ -176,6 +176,7 @@ for module in git-plus \
   linter-shellcheck \
   linter-terraform-syntax \
   linter-ui-default \
+  pandoc-convert \
   teletype \
   terraform-fmt
 do 
