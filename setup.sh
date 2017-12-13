@@ -119,9 +119,7 @@ sudo apt-get update
 sudo apt-get install docker-ce
 
 # TLDR
-cd /tmp
-wget https://github.com/pranavraja/tldr/releases/download/v1/tldr_0.1.0_amd64.deb
-sudo dpkg -i tldr_0.1.0_amd64.deb
+go get 4d63.com/tldr
 
 # Install vundle
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
