@@ -54,7 +54,7 @@ sudo apt install -y \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
-  tcpdump testssl.sh thefuck tilix traceroute tshark tuxmath \
+  tcpdump testssl.sh thefuck tilix toilet traceroute tshark tuxmath \
   ubuntu-restricted-extras unetbootin unrar \
   vagrant vim-gnome vim-youcompleteme virt-manager vlc \
   weboob-qt whois wireshark \
