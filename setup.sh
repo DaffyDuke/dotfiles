@@ -37,7 +37,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   alien ansible apt-file atop awscli \
   baobab bc bcc-tools bluegriffon build-essential bundler \
-  ca-certificates checkinstall clipit corkscrew \
+  ca-certificates checkinstall clipit corkscrew cowsay \
   darktable debian-goodies default-jre deluge-gtk dnstracer dos2unix \
   easytag ethstatus ethtool evince \
   fastboot filezilla fortunes-fr freemind ftp \
