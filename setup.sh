@@ -39,7 +39,7 @@ sudo apt install -y \
   baobab bc bcc-tools bluegriffon build-essential bundler \
   ca-certificates checkinstall clipit corkscrew cowsay \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
-  easytag ethstatus ethtool evince \
+  easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr freemind ftp \
   gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 google-cloud-sdk graphviz guake guake-indicator \
   handbrake harmony heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
