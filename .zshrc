@@ -81,6 +81,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
+alias recent="awk -F'file://|\" ' '/file:\/\// {print \$2}' ~/.local/share/recently-used.xbel"
 
 export TERM=xterm-256color
 
