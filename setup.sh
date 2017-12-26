@@ -329,3 +329,7 @@ cd /tmp
 wget -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
 sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
 
+# CloudConvert
+sudo npm install -g cloudconvert-cli
+export CLOUDCONVERT_API_KEY=<changeme>
+
