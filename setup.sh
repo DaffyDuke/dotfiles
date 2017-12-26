@@ -47,7 +47,7 @@ sudo apt install -y \
   jq jxplorer \
   keepass2 kerneloops klavaro \
   language-pack-fr ldap-utils lftp libreoffice-gnome lightworks lolcat lsof ltrace lynx \
-  mc meld ncdu \
+  mat mc meld ncdu \
   netcat-openbsd nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
   p7zip parted pass patch perf-tools-unstable pgtop postgresql-client pssh putty-tools pwgen \
