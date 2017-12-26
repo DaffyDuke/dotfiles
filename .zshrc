@@ -82,6 +82,7 @@ source $ZSH/oh-my-zsh.sh
 
 alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
 alias recent="awk -F'file://|\" ' '/file:\/\// {print \$2}' ~/.local/share/recently-used.xbel"
+alias meteo='curl wttr.in/Lille'
 
 export TERM=xterm-256color
 
