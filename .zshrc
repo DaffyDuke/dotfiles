@@ -83,7 +83,8 @@ source $ZSH/oh-my-zsh.sh
 alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
 alias recent="awk -F'file://|\" ' '/file:\/\// {print \$2}' ~/.local/share/recently-used.xbel"
 alias meteo='curl wttr.in/Lille'
-alias starwars='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05 ; printf "\e[0;0H" ; done'
+alias starwars_pic='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05 ; printf "\e[0;0H" ; done'
+alias starwars_history='telnet towel.blinkenlights.nl'
 alias mapscii='telnet mapscii.me'
 
 export TERM=xterm-256color
