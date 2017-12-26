@@ -344,3 +344,13 @@ sudo apt-get install -y python-nose python3-nose python-ipy
 git clone https://github.com/Gandi/gandi.cli.git && cd gandi.cli
 ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
 
+# Android Rules
+cd /tmp
+git clone git@github.com:M0Rf30/android-udev-rules.git
+sudo cp android-udev-rules/51-android.rules /etc/udev/rules.d/ 
+sudo chmod a+r /etc/udev/rules.d/51-android.rules
+sudo groupadd adbusers
+sudo usermod -a -G adbusers $(whoami)
+sudo udevadm control --reload-rules
+sudo service udev restart
+
