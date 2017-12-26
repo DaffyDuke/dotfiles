@@ -297,6 +297,10 @@ wget https://github.com/rancher/rancher-compose/releases/download/v0.12.5/ranche
 tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
 rm rancher-compose-linux-amd64-v0.12.5.tar.gz
 
+# ack-grep
+# https://beyondgrep.com/install/
+curl https://beyondgrep.com/ack-2.22-single-file > ~/bin/ack && chmod 0755 ~/bin/ack
+
 # GO
 # https://golang.org/dl/
 mkdir -p $GOROOT $GOPATH
