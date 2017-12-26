@@ -86,6 +86,7 @@ alias meteo='curl wttr.in/Lille'
 alias starwars_pic='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05 ; printf "\e[0;0H" ; done'
 alias starwars_history='telnet towel.blinkenlights.nl'
 alias mapscii='telnet mapscii.me'
+alias whatismyip='curl ipinfo.io'
 
 export TERM=xterm-256color
 
