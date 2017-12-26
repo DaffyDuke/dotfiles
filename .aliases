@@ -78,3 +78,4 @@ genssl(){
 }
 
 whitespace() { sed -i 's/[[:space:]]*$//' $1 }
+when() { zgrep -h " installed " /var/log/dpkg.log* | sort | grep $1 }
