@@ -5,6 +5,7 @@
 .Qarte/
 .VeraCrypt/
 .Xauthority
+.ansible/
 .apport-ignore.xml
 .aptitude/
 .asciinema/
