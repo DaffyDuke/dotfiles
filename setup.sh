@@ -333,3 +333,7 @@ sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
 sudo npm install -g cloudconvert-cli
 export CLOUDCONVERT_API_KEY=<changeme>
 
+# Fast speedtest by Netflix commandline
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+sudo apt-get install -y nodejs
+# sudo npm install --global fast-cli  # needs to understand why installation fail
