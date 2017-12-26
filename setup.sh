@@ -337,3 +337,10 @@ export CLOUDCONVERT_API_KEY=<changeme>
 curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
 sudo apt-get install -y nodejs
 # sudo npm install --global fast-cli  # needs to understand why installation fail
+
+# Gandi Client
+cd /tmp
+sudo apt-get install -y python-nose python3-nose python-ipy
+git clone https://github.com/Gandi/gandi.cli.git && cd gandi.cli
+ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
+
