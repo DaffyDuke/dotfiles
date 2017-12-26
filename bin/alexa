@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+import urllib, sys, re
+xml = urllib.urlopen('http://data.alexa.com/data?cli=10&dat=s&url=%s'%sys.argv[1]).read()
+try: rank = int(re.search(r'<POPULARITY[^>]*TEXT="(\d+)"', xml).groups()[0])
+except: rank = -1
+print 'Your rank for %s is %d!\n' % (sys.argv[1], rank)
