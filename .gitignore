@@ -5,6 +5,7 @@
 .Qarte/
 .VeraCrypt/
 .Xauthority
+.android/
 .ansible/
 .apport-ignore.xml
 .aptitude/
