@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Things to do after installing Ubuntu 17.10
+sudo timedatectl set-local-rtc 1
+
 # https://itsfoss.com/things-installing-ubuntu-17-10/
 sudo apt update && sudo apt upgrade
 sudo apt install tlp tlp-rdw
@@ -35,7 +37,7 @@ sudo apt install -y git zsh expect
 
 # Install some packages
 sudo apt install -y \
-  alien ansible apt-file atop awscli \
+  alien androidsdk-ddms ansible apt-file atop awscli \
   baobab bc bcc-tools bluegriffon build-essential bundler \
   ca-certificates checkinstall clipit corkscrew cowsay \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
@@ -50,7 +52,7 @@ sudo apt install -y \
   mat mc meld ncdu \
   netcat-openbsd nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch perf-tools-unstable pgtop postgresql-client pssh putty-tools pwgen \
+  p7zip parted pass patch perf-tools-unstable pgtop pidcat postgresql-client pssh putty-tools pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
