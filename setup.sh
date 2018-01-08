@@ -356,3 +356,10 @@ sudo usermod -a -G adbusers $(whoami)
 sudo udevadm control --reload-rules
 sudo service udev restart
 
+# Trello Client
+# git clone https://github.com/mheap/trello-cli.git # best but badly installed
+# https://github.com/qcam/3llo
+sudo em install 3llo
+export TRELLO_USER=your_username
+export TRELLO_KEY=your_key
+export TRELLO_TOKEN=your_token
