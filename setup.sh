@@ -52,7 +52,7 @@ sudo apt install -y \
   mat mc meld ncdu \
   netcat-openbsd nethogs nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch perf-tools-unstable pgtop pidcat postgresql-client pssh putty-tools pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pidcat postgresql-client pssh putty-tools pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
