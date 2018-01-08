@@ -45,7 +45,7 @@ sudo apt install -y \
   fastboot filezilla fortunes-fr freemind ftp \
   gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 google-cloud-sdk graphviz guake guake-indicator \
   handbrake harmony heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
-  icedtea-plugin iftop ioping iotop iproute2 iputils-arping iptstate \
+  icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq jxplorer \
   keepass2 kerneloops klavaro \
   language-pack-fr ldap-utils lftp libreoffice-gnome lightworks lolcat lsof ltrace lynx \
