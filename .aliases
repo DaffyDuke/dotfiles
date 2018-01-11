@@ -16,6 +16,7 @@ alias t='tmux attach || tmux'
 alias diskinfo="sudo lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT,STATE,GROUP,UUID,MODEL,VENDOR"
 alias calendar='cal'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+alias docker-update="docker image ls --filter "dangling=false" --format '{{.Repository}}:{{.Tag}}'|xargs -i docker pull {} && docker image prune"
 alias gitfat='git rev-list --all --objects|sed -n $(git rev-list --objects --all|cut -f1 -d" "|git cat-file --batch-check|grep blob|sort -n -k 3|tail -n40|while read hash type size; do echo -n "-e s/$hash/$size/p "; done)|sort -n -k1;'
 # alias gdiff="git diff --color | diff-so-fancy"
 # alias git='LANG=en_US.UTF-8 git'
