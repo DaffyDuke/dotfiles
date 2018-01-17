@@ -371,3 +371,11 @@ sudo em install 3llo
 export TRELLO_USER=your_username
 export TRELLO_KEY=your_key
 export TRELLO_TOKEN=your_token
+
+# Try alphago .....
+pip install tenserflow
+pip install betago
+# cd /tmp
+# git clone https://github.com/maxpumperla/betago
+# cd betago
+# python run_demo.py
