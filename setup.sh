@@ -207,6 +207,8 @@ gnomeshell-extension-manage --install --extension-id 16
 gnomeshell-extension-manage --install --extension-id 1116
 
 # Misc Gnome configurations
+# Some help : https://askubuntu.com/questions/971067/how-can-i-script-the-settings-made-by-gnome-tweak-tool
+# dconf watch / is your friend !
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
 gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
 gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinates (50.633000000000003, 3.0586000000000002)
@@ -236,6 +238,7 @@ gsettings set com.canonical.indicator.datetime show-clock true
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.mutter workspaces-only-on-primary true
 gsettings set org.gnome.shell favorite-apps ['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop']
+gsettings set org.gnome.shell.window-switcher current-workspace-only false
 
 # Kubernetes
 # https://github.com/kubernetes/minikube
