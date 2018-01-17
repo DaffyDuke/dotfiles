@@ -23,7 +23,6 @@ for ppa in ppa:djcj/hybrid \
   ppa:unit193/encryption \
   ppa:uroni/urbackup \
   ppa:vincent-vandevyvre/vvv \
-  ppa:webupd8team/atom \
   ppa:webupd8team/indicator-kdeconnect \
   ppa:webupd8team/tor-browser \
   ppa:webupd8team/y-ppa-manager \
@@ -32,7 +31,7 @@ do
   sudo apt-add-repository --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy atom indicator-kdeconnect tor-browser y-ppa-manager ddgr
+sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy indicator-kdeconnect tor-browser y-ppa-manager ddgr
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -66,6 +65,12 @@ sudo apt install -y \
 sudo apt remove gnome-screensaver
 mkdir -p ~/.config/systemd/user/
 systemctl --user enable xscreensaver
+
+# Atom
+curl -L https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
+sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
+sudo apt-get update
+sudo apt-get install -y atom
 
 # Dropbox
 # https://www.dropbox.com/install-linux
