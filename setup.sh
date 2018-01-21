@@ -295,6 +295,7 @@ sudo mkdir -p /usr/local/terraform/toolbox/providers/
 sudo bash ~/bin/getTerraformProviders.sh
 cd
 terraform init -plugin-dir=/usr/local/terraform/toolbox/providers/
+# terraform graph | dot -Tpng > terraform-graph.png
 
 # rancher
 # https://github.com/rancher/cli/release
