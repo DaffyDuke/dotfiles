@@ -26,7 +26,8 @@ for ppa in ppa:djcj/hybrid \
   ppa:webupd8team/indicator-kdeconnect \
   ppa:webupd8team/tor-browser \
   ppa:webupd8team/y-ppa-manager \
-  ppa:twodopeshaggy/jarun
+  ppa:twodopeshaggy/jarun \
+  ppa:yubico/stable
 do
   sudo apt-add-repository --yes ${ppa}
 done
@@ -47,7 +48,7 @@ sudo apt install -y \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq jxplorer \
   keepass2 kerneloops klavaro \
-  language-pack-fr ldap-utils lftp libreoffice-gnome lightworks lolcat lsof ltrace lynx \
+  language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lightworks lolcat lsof ltrace lynx \
   mat mc meld ncdu \
   netcat-openbsd nethogs nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
@@ -60,7 +61,7 @@ sudo apt install -y \
   vagrant vim-gnome vim-youcompleteme virt-manager vlc \
   weboob-qt whois wireshark \
   xauth xscreensaver \
-  youtube-dlg \
+  youtube-dlg yubikey-manager-qt \
   zenmap
 sudo apt remove gnome-screensaver
 mkdir -p ~/.config/systemd/user/
@@ -379,3 +380,6 @@ pip install betago
 # git clone https://github.com/maxpumperla/betago
 # cd betago
 # python run_demo.py
+
+# WSS by Netflix
+# https://github.com/brendangregg/wss.git
