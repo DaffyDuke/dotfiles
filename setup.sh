@@ -43,7 +43,7 @@ sudo apt install -y \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr freemind ftp \
-  gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 google-cloud-sdk graphviz guake guake-indicator \
+  gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 gnupg-agent google-cloud-sdk graphviz guake guake-indicator \
   handbrake harmony heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq jxplorer \
@@ -52,10 +52,10 @@ sudo apt install -y \
   mat mc meld ncdu \
   netcat-openbsd nethogs nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable pgtop pidcat postgresql-client pssh putty-tools pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
-  s3cmd scribus seahorse shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
+  s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck tilix toilet traceroute tshark tuxmath \
   ubuntu-restricted-extras unetbootin unrar \
   vagrant vim-gnome vim-youcompleteme virt-manager vlc \
