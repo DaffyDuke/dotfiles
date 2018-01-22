@@ -384,3 +384,7 @@ pip install betago
 
 # WSS by Netflix
 # https://github.com/brendangregg/wss.git
+
+# dgraph
+curl https://get.dgraph.io -sSf | bash
+
