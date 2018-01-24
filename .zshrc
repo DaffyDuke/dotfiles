@@ -47,6 +47,7 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby ssh-agent terraform thefuck tmuxinator ubuntu )
+# plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
 
