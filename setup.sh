@@ -397,3 +397,6 @@ pip install betago
 # dgraph
 curl https://get.dgraph.io -sSf | bash
 
+# Chaos toolkit : https://medium.com/chaos-toolkit/announcing-chaos-discover-and-chaos-init-ff2bf02c5a85
+docker pull chaostoolkit/chaostoolkit
+docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
