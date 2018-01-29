@@ -55,7 +55,7 @@ sudo apt install -y \
   p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
-  s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport sshfs sshpass strace stunnel4 synaptic sysstat \
+  s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck tilix toilet traceroute tshark tuxmath \
   ubuntu-restricted-extras unetbootin unrar \
   vagrant vim-gnome vim-youcompleteme virt-manager vlc \
