@@ -243,6 +243,12 @@ gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.mutter workspaces-only-on-primary true
 gsettings set org.gnome.shell favorite-apps ['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop']
 gsettings set org.gnome.shell.window-switcher current-workspace-only false
+gsettings set org.gnome.desktop.screensaver lock-delay 120
+gsettings set org.gnome.desktop.privacy report-technical-problems true
+gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
+gsettings set org.gnome.desktop.screensaver primary-color '#ffffff'
+gsettings set org.gnome.desktop.screensaver secondary-color '#000000'
+gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/gnome/Bokeh_Tails.jpg'
 
 # Kubernetes
 # https://github.com/kubernetes/minikube
