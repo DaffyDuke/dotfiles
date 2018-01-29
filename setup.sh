@@ -46,7 +46,7 @@ sudo apt install -y \
   gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 gnupg-agent google-cloud-sdk graphviz guake guake-indicator \
   handbrake harmony heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
-  jq jxplorer \
+  jq junior-programming jxplorer \
   keepass2 kerneloops klavaro \
   language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lightworks lolcat lsof ltrace lynx \
   mat mc meld ncdu \
@@ -66,6 +66,8 @@ sudo apt install -y \
 sudo apt remove gnome-screensaver
 mkdir -p ~/.config/systemd/user/
 systemctl --user enable xscreensaver
+# when you need to add users to junior-programming
+# sudo dpkg-reconfigure --force junior-config
 
 # Atom
 curl -L https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
@@ -96,6 +98,7 @@ sudo apt-get install -f
 # https://doc.ubuntu-fr.org/spotify
 sudo sh -c 'echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list'
 udo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2C19886
+udo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EFDC8610341D9410
 sudo apt-get update
 sudo apt-get install spotify-client
 
