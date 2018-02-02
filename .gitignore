@@ -3,6 +3,7 @@
 .PlayOnLinux/
 .Popcorn-Time/
 .Qarte/
+.Rack/
 .VeraCrypt/
 .Xauthority
 .android/
@@ -29,6 +30,7 @@
 .dropbox/
 .dvdcss/
 .electron/
+.electron-gyp/
 .everpad/
 .flickr/
 .flickrfs/
@@ -52,6 +54,7 @@
 .joe_state
 .juniper_networks/
 .kde/
+.keras/
 .kismet/
 .kpcli-history
 .kube/
@@ -105,6 +108,7 @@
 .thumbnails/
 .thunderbird/
 .tor-browser-en/
+.trello-cli/
 .tuxmath/
 .urbackupclientgui_startonce
 .vim/
