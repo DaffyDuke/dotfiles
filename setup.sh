@@ -210,6 +210,10 @@ gnomeshell-extension-manage --install --extension-id 1036
 gnomeshell-extension-manage --install --extension-id 16
 # workspace-switch-wraparound@theychx.org                           - enabled    
 gnomeshell-extension-manage --install --extension-id 1116
+# panel-osd@berend.de.schouwer.gmail.com
+gnomeshell-extension-manage --install --extension-id 708
+dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
+dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
 
 # Misc Gnome configurations
 # Some help : https://askubuntu.com/questions/971067/how-can-i-script-the-settings-made-by-gnome-tweak-tool
