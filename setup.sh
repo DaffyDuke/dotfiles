@@ -40,7 +40,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   alien androidsdk-ddms ansible apt-file atop awscli \
   baobab bc bcc-tools bluegriffon build-essential bundler \
-  ca-certificates checkinstall clipit corkscrew cowsay cpuid \
+  ca-certificates checkinstall clipit corkscrew cowsay cpuid ctop \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr freemind ftp \
