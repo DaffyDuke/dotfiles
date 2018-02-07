@@ -40,7 +40,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   alien androidsdk-ddms ansible apt-file atop awscli \
   baobab bc bcc-tools bluegriffon build-essential bundler \
-  ca-certificates checkinstall clipit corkscrew cowsay cpuid ctop \
+  ca-certificates checkinstall clipit corkscrew cowsay cpuid \ # ctop
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr freemind ftp \
@@ -405,3 +405,8 @@ curl https://get.dgraph.io -sSf | bash
 # Chaos toolkit : https://medium.com/chaos-toolkit/announcing-chaos-discover-and-chaos-init-ff2bf02c5a85
 docker pull chaostoolkit/chaostoolkit
 docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
+
+# Top-like interface for container metrics https://ctop.sh
+sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
+sudo chmod +x /usr/local/bin/ctop
+
