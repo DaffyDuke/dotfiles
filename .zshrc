@@ -52,6 +52,8 @@ plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake rub
 # User configuration
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -86,7 +88,7 @@ export TERM=xterm-256color
 
 export GOROOT=$HOME/go-dist
 export GOPATH=~/GOPROJECTS
-export PATH=$PATH:$GOROOT/bin
+export PATH=$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
