@@ -410,3 +410,9 @@ docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
 sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
 sudo chmod +x /usr/local/bin/ctop
 
+# Infrakit : A toolkit for creating and managing declarative, self-healing infrastructure.
+mkdir -p $GOPATH/src/github.com/docker
+cd $GOPATH/src/github.com/docker
+git clone git@github.com:docker/infrakit.git
+cd infrakit && make get-tools & make ci && make binaries
+cp build/* ~/bin/
