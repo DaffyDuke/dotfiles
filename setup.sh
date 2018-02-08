@@ -416,3 +416,10 @@ cd $GOPATH/src/github.com/docker
 git clone git@github.com:docker/infrakit.git
 cd infrakit && make get-tools & make ci && make binaries
 cp build/* ~/bin/
+
+# molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
+sudo pip install molecule
+cd /tmp
+git clone https://github.com/metacloud/molecule
+cd /tmp/molecule/test/scenarios/driver/docker
+molecule test
