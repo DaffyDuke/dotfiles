@@ -118,3 +118,5 @@ alias bd=". bd -si"
 if [[ $TERMINIX_ID ]]; then
     source /etc/profile.d/vte.sh
 fi
+
+complete -C /home/daffy/bin/vault vault

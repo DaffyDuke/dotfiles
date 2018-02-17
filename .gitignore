@@ -7,7 +7,7 @@
 .VeraCrypt/
 .Xauthority
 .android/
-.ansible/
+.ansible*
 .apport-ignore.xml
 .aptitude/
 .asciinema/
@@ -17,8 +17,10 @@
 .bash_logout
 .byobu/
 .cache/
+.cargo/
 .ccnet/
 .cert/
+.cmake/
 .compiz/
 .config/
 .cpan/
@@ -26,6 +28,7 @@
 .dia/
 .disruptive innovations sarl/
 .dmrc
+.docker/
 .dropbox-dist/
 .dropbox/
 .dvdcss/
@@ -66,8 +69,10 @@
 .macromedia/
 .minikube/
 .mono/
+.moby/
 .mozilla/
 .mplayer/
+.multirust
 .neighbornote/
 .node-gyp/
 .npm/
@@ -90,6 +95,7 @@
 .repoconfig/
 .rnd
 .rpmdb/
+.rustup/
 .sane/
 .scribus/
 .selected_editor
@@ -111,6 +117,8 @@
 .trello-cli/
 .tuxmath/
 .urbackupclientgui_startonce
+.vagrant.d/
+.vault-token
 .vim/
 .viminfo
 .vmware/

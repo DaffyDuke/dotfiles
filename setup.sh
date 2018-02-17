@@ -433,3 +433,9 @@ unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
 vault -autocomplete-install
 export VAULT_ADDR='http://127.0.0.1:8200'
 # setup https://github.com/Caiyeon/goldfish/wiki/Production-Deployment
+
+# Issue-helper
+sudo apt remove cargo rustc
+curl https://sh.rustup.rs -sSf | sh
+source $HOME/.cargo/env
+cargo install gli

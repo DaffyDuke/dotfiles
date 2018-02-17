@@ -25,3 +25,5 @@ fi
 export GOROOT=$HOME/owncCloudPerso/go-dist
 export GOPATH=$HOME/owncCloudPerso/GOPROJECTS
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+export PATH="$HOME/.cargo/bin:$PATH"
