@@ -426,3 +426,10 @@ molecule test
 
 # chromeIPass : https://github.com/pfn/passifox/
 sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
+
+# Vault
+wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/
+unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
+vault -autocomplete-install
+export VAULT_ADDR='http://127.0.0.1:8200'
+# setup https://github.com/Caiyeon/goldfish/wiki/Production-Deployment
