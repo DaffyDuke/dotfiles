@@ -50,7 +50,7 @@ sudo apt install -y \
   jq junior-programming jxplorer \
   keepass2 kerneloops klavaro \
   language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lightworks lolcat lsof ltrace lynx \
-  mat mc meld ncdu \
+  mat mc meld ncdu mono-complete \
   netcat-openbsd nethogs nmap nmon numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
   p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools pwgen \
@@ -423,3 +423,6 @@ cd /tmp
 git clone https://github.com/metacloud/molecule
 cd /tmp/molecule/test/scenarios/driver/docker
 molecule test
+
+# chromeIPass : https://github.com/pfn/passifox/
+sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
