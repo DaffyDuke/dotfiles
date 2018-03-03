@@ -28,12 +28,13 @@ for ppa in ppa:djcj/hybrid \
   ppa:webupd8team/y-ppa-manager \
   ppa:twodopeshaggy/jarun \
   ppa:yubico/stable \
-  ppa:libreoffice/ppa
+  ppa:libreoffice/ppa \
+  ppa:yannubuntu/boot-repair
 do
   sudo apt-add-repository --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy indicator-kdeconnect tor-browser y-ppa-manager ddgr python-software-properties
+sudo apt install -y cool-retro-term hollywood frogr qownnotes peek variety timeshift veracrypt urbackup oqapy indicator-kdeconnect tor-browser y-ppa-manager ddgr python-software-properties boot-repair
 sudo apt install -y git zsh expect
 
 # Install some packages
