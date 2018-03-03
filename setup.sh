@@ -44,7 +44,7 @@ sudo apt install -y \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr freemind ftp \
-  gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnupg2 gnupg-agent google-cloud-sdk graphviz guake guake-indicator \
+  gcompris gcompris-sound-fr gcstar geary glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz guake guake-indicator \
   handbrake harmony heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
