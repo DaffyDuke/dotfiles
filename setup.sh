@@ -443,3 +443,8 @@ sudo apt remove cargo rustc
 curl https://sh.rustup.rs -sSf | sh
 source $HOME/.cargo/env
 cargo install gli
+
+# lnav
+cd ~/bin
+wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin
+unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
