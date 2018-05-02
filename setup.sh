@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr urbackup cool-retro-term bluegriffon bcc-tools freemind harmony lightworks 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr cool-retro-term bluegriffon bcc-tools freemind harmony 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -464,3 +464,8 @@ sudo sed -i -e "s+bionic+xenial+g" /etc/apt/sources.list.d/nilarimogard-ubuntu-w
 sudo apt update
 sudo apt install -y youtube-dlg
 
+# FIXME Lightworks
+cd /tmp || exit
+wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
+sudo dpkg -i lightworks.deb && rm lightworks.deb
+sudo apt --fix-broken install -y
