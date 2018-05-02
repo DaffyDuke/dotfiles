@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr bluegriffon bcc-tools freemind harmony 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr bluegriffon freemind harmony 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -477,3 +477,10 @@ git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
 cd cool-retro-term
 qmake && make
 sudo make install
+
+# FIXME bcc-tools
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
+echo "deb https://repo.iovisor.org/apt/xenial xenial main" | sudo tee /etc/apt/sources.list.d/iovisor.list
+sudo apt update
+sudo apt install -y bcc-tools libbcc-examples linux-headers-$(uname -r)
+
