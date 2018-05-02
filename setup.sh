@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr freemind 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -50,7 +50,7 @@ sudo apt install -y \
   mat mc meld ncdu mono-complete \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools python pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat planfacile postgresql-client pssh putty-tools python pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
@@ -474,7 +474,7 @@ sudo apt --fix-broken install -y
 cd /tmp || exit
 sudo apt -y install build-essential qml-module-qtgraphicaleffects qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qtquick-controls qml-module-qtquick-dialogs qmlscene qt5-default qt5-qmake qtdeclarative5-dev qtdeclarative5-localstorage-plugin qtdeclarative5-qtquick2-plugin qtdeclarative5-window-plugin
 git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
-cd cool-retro-term
+cd cool-retro-term || exit
 qmake && make
 sudo make install
 
