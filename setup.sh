@@ -105,7 +105,10 @@ sudo apt-get install spotify-client
 
 # FIXME Slack
 # https://slack.com/intl/fr-fr/downloads/Linux
-curl -s https://packagecloud.io/install/repositories/slacktechnologies/slack/script.deb.sh | sudo bash
+cd /tmp/ || exit
+wget -O slack.deb "https://downloads.slack-edge.com/linux_releases/slack-desktop-3.1.1-amd64.deb"
+sudo dpkg -i slack.deb && rm slack.deb
+apt --fix-broken install -y
 
 # Chrome
 # https://doc.ubuntu-fr.org/google_chrome
