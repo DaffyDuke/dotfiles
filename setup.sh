@@ -2,6 +2,7 @@
 
 # Things to do after installing Ubuntu 17.10
 sudo timedatectl set-local-rtc 1
+sudo apt install language-pack-gnome-fr-base
 
 # https://itsfoss.com/things-installing-ubuntu-17-10/
 sudo apt update && sudo apt upgrade -y
@@ -54,7 +55,7 @@ sudo apt install -y \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
-  tcpdump testssl.sh thefuck tilix toilet torbrowser-launcher traceroute tshark tuxmath \
+  tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
   ubuntu-restricted-extras unetbootin unrar \
   vagrant vim-gnome vim-youcompleteme virt-manager vlc \
   weboob-qt whois wireshark \
