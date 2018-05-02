@@ -96,7 +96,7 @@ sudo apt-get install -f
 
 # Spotify
 # https://doc.ubuntu-fr.org/spotify
-sudo rm /apt/sources.list.d/spotify.list
+sudo rm /etc/apt/sources.list.d/spotify.list
 sudo sh -c 'echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list'
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2C19886
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EFDC8610341D9410
@@ -118,7 +118,7 @@ sudo apt-get install google-chrome-stable
 # Puppet
 # https://docs.puppet.com/puppet/4.5/install_linux.html#installing-release-packages-on-apt-based-systems
 wget http://apt.puppetlabs.com/puppet-release-xenial.deb;
-sudo dpkg -i puppet-release-xenial.deb || rm -f puppet-release-xenial.deb
+sudo dpkg -i puppet-release-xenial.deb && rm -f puppet-release-xenial.deb
 
 # FIXME Docker
 # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
@@ -294,7 +294,7 @@ cp -v kubectx/{kubectx,kubens,utils.bash} ~/bin/
 # https://www.packer.io/downloads.html
 cd ~/bin || exit
 wget https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
-unzip packer_1.1.1_linux_amd64.zip
+unzip -f packer_1.1.1_linux_amd64.zip
 rm packer_1.1.1_linux_amd64.zip
 
 # terraform
@@ -370,7 +370,8 @@ sudo npm install -g eslint-plugin-react
 # Gandi Client
 cd /tmp || exit
 sudo apt-get install -y python-nose python3-nose python-ipy
-git clone https://github.com/Gandi/gandi.cli.git && cd gandi.cli
+git clone https://github.com/Gandi/gandi.cli.git
+cd gandi.cli  || exit
 ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
 
 # Android Rules
@@ -414,24 +415,24 @@ sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-a
 sudo chmod +x /usr/local/bin/ctop
 
 # Infrakit : A toolkit for creating and managing declarative, self-healing infrastructure.
-mkdir -p $GOPATH/src/github.com/docker
-cd $GOPATH/src/github.com/docker
+mkdir -p $GOPATH/src/github.com/docker || true
+cd $GOPATH/src/github.com/docker || exit
 git clone git@github.com:docker/infrakit.git
 cd infrakit && make get-tools & make ci && make binaries
 cp build/* ~/bin/
 
 # molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
 sudo pip install molecule
-cd /tmp
+cd /tmp || exit
 git clone https://github.com/metacloud/molecule
-cd /tmp/molecule/test/scenarios/driver/docker
+cd /tmp/molecule/test/scenarios/driver/docker || exit
 molecule test
 
 # chromeIPass : https://github.com/pfn/passifox/
 sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
 
 # Vault
-wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/
+wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/vault_0.9.3_linux_amd64.zip
 unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
 vault -autocomplete-install
 export VAULT_ADDR='http://127.0.0.1:8200'
@@ -447,9 +448,9 @@ cargo install gli
 curl https://raw.githubusercontent.com/jangernert/FeedReader/master/scripts/install_ubuntu.sh | bash
 
 # urbackup
-TF=`mktemp` && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sh $TF; rm $TF
+TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF; rm $TF
 
 # lnav
-cd ~/bin
-wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin
+cd ~/bin || exit
+wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin/lnav-0.8.3-linux-64bit.zip
 unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip

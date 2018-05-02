@@ -65,6 +65,7 @@
 .libquicktime_codecs
 .license/
 .lightworks.thereCanBeOnlyOne
+.lnav/
 .local/
 .macromedia/
 .minikube/
