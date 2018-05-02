@@ -48,9 +48,9 @@ sudo apt install -y \
   keepass2 kerneloops klavaro \
   language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lolcat lsof ltrace lynx \
   mat mc meld ncdu mono-complete \
-  netcat-openbsd nethogs nmap nmon numatop \
+  netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat postgresql-client pssh putty-tools python pwgen \
   qarte qemu qtpass \
   rdesktop remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \

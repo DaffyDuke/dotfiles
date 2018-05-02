@@ -42,13 +42,23 @@ vim +GoInstallBinaries
 ```
 mv /usr/bin/awk /usr/bin/awk-KO
 ln -s /usr/bin/gawk /usr/bin/awk
-pact install tmux sudo httpie 
+pact remove libcrypt0
+pact update perl
+pact install tmux sudo httpie make socat corkscrew python 
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 ```
 ### Install Docker
 https://store.docker.com/editions/community/docker-ce-desktop-windows
 
+```
+bin/docker-machine create --driver virtualbox --virtualbox-cpu-count 1 --virtualbox-disk-size "20000" --virtualbox-memory "2048"  --virtualbox-ui-type "headless" DockerMachine
+bin/docker-machine.exe env DockerMachine
+echo 'eval "$(docker-machine env DockerMachine)"' >> ~/.zshrc
+```
+
 ### Install Keybase
 https://keybase.io/docs/the_app/install_windows
 
+### Install Windows 10 SDK
+https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
