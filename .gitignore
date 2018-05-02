@@ -49,6 +49,7 @@
 .gnome2/
 .gnupg/
 .gstreamer-0.10/
+.gtk-bookmarks
 .gtkboard/
 .guake-indicator/
 .hugin

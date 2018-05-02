@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr urbackup cool-retro-term bluegriffon bcc-tools freemind harmony lightworks youtube-dlg
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr urbackup cool-retro-term bluegriffon bcc-tools freemind harmony lightworks 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -454,3 +454,10 @@ TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%2
 cd ~/bin || exit
 wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin/lnav-0.8.3-linux-64bit.zip
 unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
+
+# youtube-dlg
+sudo add-apt-repository -n -y ppa:nilarimogard/webupd8
+sudo sed -i -e "s+bionic+xenial+g" /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8-bionic.list
+sudo apt update
+sudo apt install -y youtube-dlg
+
