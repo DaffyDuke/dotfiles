@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr cool-retro-term bluegriffon bcc-tools freemind harmony 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr bluegriffon bcc-tools freemind harmony 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -469,3 +469,11 @@ cd /tmp || exit
 wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
 sudo dpkg -i lightworks.deb && rm lightworks.deb
 sudo apt --fix-broken install -y
+
+# FIXME cool-retro-term
+cd /tmp || exit
+sudo apt -y install build-essential qml-module-qtgraphicaleffects qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qtquick-controls qml-module-qtquick-dialogs qmlscene qt5-default qt5-qmake qtdeclarative5-dev qtdeclarative5-localstorage-plugin qtdeclarative5-qtquick2-plugin qtdeclarative5-window-plugin
+git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
+cd cool-retro-term
+qmake && make
+sudo make install
