@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr bluegriffon freemind harmony 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr freemind harmony 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -484,3 +484,7 @@ echo "deb https://repo.iovisor.org/apt/xenial xenial main" | sudo tee /etc/apt/s
 sudo apt update
 sudo apt install -y bcc-tools libbcc-examples linux-headers-$(uname -r)
 
+# FIXME bluegriffon
+cd /tmp || exit
+wget http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
+sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
