@@ -30,7 +30,7 @@ do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr freemind harmony 
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr freemind 
 sudo apt install -y git zsh expect
 
 # Install some packages
@@ -488,3 +488,8 @@ sudo apt install -y bcc-tools libbcc-examples linux-headers-$(uname -r)
 cd /tmp || exit
 wget http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
 sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
+
+# Harmony 
+# https://getharmony.xyz/
+# cd /tmp || exit
+# wget -O harmony.deb "https://getharmony.xyz/buy?dl=1"
