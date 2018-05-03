@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.36 for daffy on Sun Nov  5 22:51:03 2017.
+# Written by xscreensaver-demo 5.36 for daffy on Thu May  3 10:18:13 2018.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:02:00
@@ -35,7 +35,7 @@ chooseRandomImages: False
 imageDirectory:	
 
 mode:		one
-selected:	0
+selected:	225
 
 textMode:	url
 textLiteral:	XScreenSaver
@@ -269,10 +269,11 @@ programs:								      \
   GL: 				raverhoop -root				    \n\
   GL: 				splodesic -root				    \n\
   GL: 				unicrud -root				    \n\
- Best:         "Apple Aerial"   mpv --really-quiet --shuffle --no-audio       \
-                                  --fs --loop=inf --no-stop-screensaver       \
-                                  --wid=$XSCREENSAVER_WINDOW --panscan=1      \
-                                  $HOME/Dropbox/Screensavers/*                      \n\
+  Best: 	"Apple Aerial" 	mpv --really-quiet --shuffle --no-audio	      \
+				  --fs --loop=inf --no-stop-screensaver	      \
+				  --wid=$XSCREENSAVER_WINDOW --panscan=1      \
+				  $HOME/Dropbox/Screensavers/*		    \n\
+
 
 pointerPollTime:    0:00:05
 pointerHysteresis:  10
