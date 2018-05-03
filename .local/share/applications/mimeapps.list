@@ -1,0 +1,23 @@
+[Default Applications]
+x-scheme-handler/http=google-chrome.desktop
+text/html=google-chrome.desktop
+text/xml=chromium-browser.desktop
+application/xhtml_xml=chromium-browser.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/mailto=nylas.desktop
+message/rfc822=thunderbird.desktop
+x-scheme-handler/nylas=nylas.desktop
+audio/x-vorbis+ogg=spotify.desktop
+
+[Added Associations]
+text/html=chromium-browser.desktop;
+text/xml=chromium-browser.desktop;
+application/xhtml_xml=chromium-browser.desktop;
+x-scheme-handler/https=chromium-browser.desktop;
+application/pkix-cert=gedit.desktop;
+x-scheme-handler/mailto=thunderbird.desktop;
+message/rfc822=thunderbird.desktop;
+application/octet-stream=gedit.desktop;vlc.desktop;
+audio/x-vorbis+ogg=spotify.desktop;
