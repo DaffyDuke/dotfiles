@@ -62,9 +62,20 @@ sudo apt install -y \
   xauth xscreensaver \
   yamllint yubikey-manager-qt \
   zenmap
+
+# Screensavers
 sudo apt remove gnome-screensaver
+sudo add-apt-repository ppa:mc3man/mpv-tests
+sudo apt install -y mpv
+cat > /tmp/crons << EOF
+16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
+EOF
+crontab /tmp/crons
 mkdir -p ~/.config/systemd/user/
 systemctl --user enable xscreensaver
+
+
+
 # when you need to add users to junior-programming
 # sudo dpkg-reconfigure --force junior-config
 

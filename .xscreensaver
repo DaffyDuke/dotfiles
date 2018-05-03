@@ -269,7 +269,10 @@ programs:								      \
   GL: 				raverhoop -root				    \n\
   GL: 				splodesic -root				    \n\
   GL: 				unicrud -root				    \n\
-
+ Best:         "Apple Aerial"   mpv --really-quiet --shuffle --no-audio       \
+                                  --fs --loop=inf --no-stop-screensaver       \
+                                  --wid=$XSCREENSAVER_WINDOW --panscan=1      \
+                                  $HOME/Dropbox/Screensavers/*                      \n\
 
 pointerPollTime:    0:00:05
 pointerHysteresis:  10
