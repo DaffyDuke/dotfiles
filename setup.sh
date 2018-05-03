@@ -53,7 +53,7 @@ sudo apt install -y \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
   p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat planfacile postgresql-client pssh putty-tools python pwgen \
   qarte qemu qtpass \
-  rdesktop remmina repo rpm rsync \
+  rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
   ubuntu-restricted-extras unetbootin unrar \
