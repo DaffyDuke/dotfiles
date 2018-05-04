@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Appliquette Remmina
+Comment=Se connecter aux bureaux distants via le menu de l’appliquette
+Icon=remmina
+Exec=remmina -i
+Terminal=false
+Type=Application
+Hidden=true
+X-GNOME-Autostart-enabled=false
