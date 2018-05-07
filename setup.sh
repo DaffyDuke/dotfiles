@@ -505,3 +505,7 @@ sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ub
 # https://getharmony.xyz/
 # cd /tmp || exit
 # wget -O harmony.deb "https://getharmony.xyz/buy?dl=1"
+
+# PyCharm
+snap install pycharm-community --classic
+
