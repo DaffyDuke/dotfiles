@@ -54,9 +54,9 @@ sudo apt install -y \
   p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat planfacile postgresql-client pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
   qarte qemu qtpass \
   rdesktop redshift-gtk remmina repo rpm rsync \
-  s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
+  s3cmd scribus seahorse scdaemon shellcheck shotwell simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
-  ubuntu-restricted-extras unetbootin unrar \
+  ubuntu-restricted-extras ukuu unetbootin unrar \
   vagrant vim-gnome vim-youcompleteme virt-manager virtualenv vlc \
   weboob-qt whois wireshark \
   xauth xscreensaver \
