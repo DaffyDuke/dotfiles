@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Prerequisite for our .tmuxrc
+rm -rf /tmp/tmux-1000/* && touch /tmp/tmux-1000/default
+
 # Things to do after installing Ubuntu 17.10
 sudo timedatectl set-local-rtc 1
 sudo apt install language-pack-gnome-fr-base
