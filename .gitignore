@@ -127,6 +127,7 @@
 .viminfo
 .vmware/
 .wget-hsts
+.Windows.md.un~ 
 .wine-pipelight/
 .wine/
 .wireshark/
@@ -164,3 +165,4 @@ own*
 pampi/
 snap/
 workspace/
+Windows.md~
