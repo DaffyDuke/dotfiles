@@ -45,7 +45,7 @@ sudo apt install -y \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
-  gcompris gcstar geary glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz guake guake-indicator \
+  gcompris gcstar geary glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz gthumb guake guake-indicator \
   handbrake heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
@@ -60,7 +60,7 @@ sudo apt install -y \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
   ubuntu-restricted-extras ukuu unetbootin unrar \
-  vagrant vim-gnome vim-youcompleteme virt-manager virtualenv vlc \
+  vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
   weboob-qt whois wireshark \
   xauth xscreensaver \
   yamllint yubikey-manager-qt \
@@ -509,4 +509,9 @@ sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ub
 # PyCharm
 pip3 install virtualenv
 snap install pycharm-community --classic
+
+# NeoVIM
+pip3 install --upgrade neovim
+go get -u github.com/nsf/gocode
+
 
