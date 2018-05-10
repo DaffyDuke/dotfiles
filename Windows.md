@@ -62,3 +62,7 @@ https://keybase.io/docs/the_app/install_windows
 
 ### Install Windows 10 SDK
 https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
+
+### Python
+pact install python3-pip
+pip3 install virtualenv
