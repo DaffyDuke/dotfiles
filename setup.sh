@@ -49,7 +49,7 @@ sudo apt install -y \
   handbrake heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
-  keepass2 kerneloops klavaro \
+  keepass2 kerneloops kigo klavaro \
   language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lolcat lsof ltrace lynx \
   mat mc meld ncdu mono-complete \
   netcat-openbsd nethogs nmap nmon npm numatop \
