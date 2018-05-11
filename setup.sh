@@ -506,9 +506,12 @@ sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ub
 # cd /tmp || exit
 # wget -O harmony.deb "https://getharmony.xyz/buy?dl=1"
 
-# PyCharm
-pip3 install virtualenv
+# Python
 snap install pycharm-community --classic
+pip3 install virtualenv
+pip3 install docopt
+pip3 install configobj
+pip3 install terminaltables
 
 # NeoVIM
 pip3 install --upgrade neovim
