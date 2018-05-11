@@ -46,15 +46,15 @@ sudo apt install -y \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
   gcompris gcstar geary glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz gthumb guake guake-indicator \
-  handbrake heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
+  handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
   keepass2 kerneloops kigo klavaro \
-  language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lolcat lsof ltrace lynx \
+  language-pack-fr ldap-utils lftp libpam-yubico libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
   mat mc meld ncdu mono-complete \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat planfacile postgresql-client pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pidcat planfacile postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
   qarte qemu qtpass \
   rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
