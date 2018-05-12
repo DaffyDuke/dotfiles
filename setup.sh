@@ -175,7 +175,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
  # Install Tilix Theme
  mkdir -p ~/.config/tilix/schemes/
  wget -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
- gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
+gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
 
 # Fixed in bionic ttf-mscorefonts-installer
 # http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
@@ -240,7 +240,6 @@ gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinat
 gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
 gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
 gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
-gsettings set org.gnome.eog.plugins.pythonconsole font 'Monospace 10'
 gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
 gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
 gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
@@ -250,19 +249,12 @@ gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace
 gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
 gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
 gsettings set org.gnome.gedit.plugins.pythonconsole font 'Monospace 10'
-gsettings set com.canonical.unity-greeter icon-theme-name 'ubuntu-mono-dark'
 gsettings set org.gnome.meld custom-font 'monospace, 14'
 gsettings set org.gnome.gedit.plugins.externaltools font 'Monospace 10'
 gsettings set org.gnome.desktop.interface clock-show-date true
-gsettings set com.canonical.indicator.datetime show-day true
-gsettings set com.canonical.indicator.datetime show-date true
-gsettings set com.canonical.indicator.datetime show-week-numbers true
-gsettings set com.canonical.indicator.datetime show-calendar true
-gsettings set com.canonical.indicator.datetime show-events true
-gsettings set com.canonical.indicator.datetime show-clock true
 gsettings set org.gnome.mutter dynamic-workspaces false
 gsettings set org.gnome.mutter workspaces-only-on-primary true
-gsettings set org.gnome.shell favorite-apps ['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop']
+gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop', 'thunderbird.desktop']"
 gsettings set org.gnome.shell.window-switcher current-workspace-only false
 gsettings set org.gnome.desktop.screensaver lock-delay 120
 gsettings set org.gnome.desktop.privacy report-technical-problems true
