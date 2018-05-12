@@ -48,6 +48,7 @@
 .gnome/
 .gnome2/
 .gnupg/
+.gramps/
 .gstreamer-0.10/
 .gtk-bookmarks
 .gtkboard/
@@ -85,6 +86,7 @@
 .password-store
 .pip/
 .pki/
+.psensor/
 .ptbt1
 .pulse-cookie
 .purple/
