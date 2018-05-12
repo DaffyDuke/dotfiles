@@ -77,7 +77,9 @@ crontab /tmp/crons
 mkdir -p ~/.config/systemd/user/
 systemctl --user enable xscreensaver
 
-
+# Encrypted DVD
+sudo apt install libdvd-pkg
+sudo dpkg-reconfigure libdvd-pkg
 
 # when you need to add users to junior-programming
 # sudo dpkg-reconfigure --force junior-config
