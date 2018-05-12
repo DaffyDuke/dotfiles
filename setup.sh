@@ -235,7 +235,7 @@ dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
 # Some help : https://askubuntu.com/questions/971067/how-can-i-script-the-settings-made-by-gnome-tweak-tool
 # dconf watch / is your friend !
 gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
-gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
 gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinates '(50.633000000000003, 3.0586000000000002)'
 gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
 gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
