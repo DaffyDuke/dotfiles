@@ -37,7 +37,6 @@ sudo apt-get update
 sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair # frogr 
 sudo apt install -y git zsh expect
 # Git help tips now in .gitconfig : https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
-# FIXME : gpg signing error
 
 # Install some packages
 sudo apt install -y \
