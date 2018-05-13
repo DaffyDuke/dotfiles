@@ -1,0 +1,10 @@
+[user]
+	email = daffyduke@lautre.net
+	name = Olivier Duquesne
+	signingkey = 912E6AEEB5D80A1D997F3FF34634239363F60C2C
+[push]
+	default = simple
+[color]
+	ui = always
+# [commit]
+# 	gpgsign = true
