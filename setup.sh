@@ -40,7 +40,7 @@ sudo apt install -y git zsh expect
 
 # Install some packages
 sudo apt install -y \
-  alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
+  asciidoc alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
   baobab bc build-essential bundler \
   ca-certificates checkinstall clipit corkscrew cowsay cpuid curl \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
