@@ -42,7 +42,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   asciidoc alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
   baobab bc build-essential bundler \
-  ca-certificates checkinstall clipit corkscrew cowsay cpuid curl \
+  ca-certificates checkinstall chrome-gnome-shell clipit corkscrew cowsay cpuid curl \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
@@ -512,4 +512,8 @@ pip3 install terminaltables
 pip3 install --upgrade neovim
 go get -u github.com/nsf/gocode
 
-
+# CozyDrive
+mkdir -p ~/Applications
+wget -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
+chmod +x ~/Applications/CozyDrive-3.6.0-x86_64.AppImage
+gnomeshell-extension-manage --install --extension-id 1031
