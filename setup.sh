@@ -42,7 +42,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   asciidoc alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
   baobab bc build-essential bundler \
-  ca-certificates checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n corkscrew cowsay cpuid curl \
+  ca-certificates checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
@@ -263,6 +263,7 @@ gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 gsettings set org.gnome.desktop.screensaver primary-color '#ffffff'
 gsettings set org.gnome.desktop.screensaver secondary-color '#000000'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/gnome/Bokeh_Tails.jpg'
+gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
 
 # Kubernetes
 # https://github.com/kubernetes/minikube
