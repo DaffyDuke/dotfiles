@@ -46,7 +46,7 @@ sudo apt install -y \
   darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
-  gcompris gcstar geary glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz gthumb guake guake-indicator \
+  gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz gthumb guake guake-indicator \
   handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
@@ -63,7 +63,7 @@ sudo apt install -y \
   ubuntu-restricted-extras ukuu unetbootin unrar \
   vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
   weboob-qt whois wireshark \
-  xauth xscreensaver \
+  xauth xscreensaver xsane \
   yamllint yubikey-manager-qt \
   zenmap
 
