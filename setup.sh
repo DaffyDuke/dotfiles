@@ -43,7 +43,7 @@ sudo apt install -y \
   asciidoc alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
   baobab bc build-essential bundler \
   ca-certificates checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
-  darktable debian-goodies default-jre deluge-gtk dfc dnstracer dos2unix \
+  darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
   gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk graphviz gthumb guake guake-indicator \
@@ -518,3 +518,9 @@ mkdir -p ~/Applications
 wget -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
 chmod +x ~/Applications/CozyDrive-3.6.0-x86_64.AppImage
 gnomeshell-extension-manage --install --extension-id 1031
+
+# Douane Firewal
+# Following doc : https://github.com/Douane/Douane
+# sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
+
+
