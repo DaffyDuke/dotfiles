@@ -42,7 +42,7 @@ sudo apt install -y git zsh expect
 sudo apt install -y \
   asciidoc alien androidsdk-ddms ansible ansible-lint apt-file atop awscli \
   baobab bc build-essential bundler \
-  ca-certificates checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
+  ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
   darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
