@@ -62,7 +62,7 @@ sudo apt install -y \
   tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
   ubuntu-restricted-extras ukuu unetbootin unrar \
   vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
-  weboob-qt whois wireshark \
+  weboob-qt whois winbind wireshark \
   xauth xscreensaver xsane \
   yamllint yubikey-manager-qt \
   zenmap
