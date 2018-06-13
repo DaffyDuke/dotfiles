@@ -55,7 +55,7 @@ sudo apt install -y \
   mat mc meld ncdu mono-complete \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable pgtop pinentry-curses pinentry-tty pidcat planfacile playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
   qarte qemu qtpass \
   rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
@@ -529,3 +529,9 @@ cd /tmp || exit
 sudo apt install python3-pyudev
 wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb 
 sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
+
+# RocketChat
+sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev;
+cd /tmp || exit
+hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat;
+make && sudo make install
