@@ -524,4 +524,8 @@ gnomeshell-extension-manage --install --extension-id 1031
 # Following doc : https://github.com/Douane/Douane
 # sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
 
-
+# MultiBootUSB
+cd /tmp || exit
+sudo apt install python3-pyudev
+wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb 
+sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
