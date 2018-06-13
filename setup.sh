@@ -96,6 +96,7 @@ sudo apt-get install -y atom
 wget -O /tmp/dropbox_2015.10.28_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2015.10.28_amd64.deb
 sudo dpkg -i /tmp/dropbox_2015.10.28_amd64.deb
 sudo apt --fix-broken install
+echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
 
 # VirtualBox
 # https://www.virtualbox.org/wiki/Linux_Downloads
