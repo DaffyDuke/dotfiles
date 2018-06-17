@@ -272,7 +272,7 @@ programs:								      \
   Best: 	"Apple Aerial" 	mpv --really-quiet --shuffle --no-audio	      \
 				  --fs --loop=inf --no-stop-screensaver	      \
 				  --wid=$XSCREENSAVER_WINDOW --panscan=1      \
-				  $HOME/Cozy\ Drive/Screensavers/*		    \n\
+				  $HOME/Dropbox/Screensavers/*		    \n\
 
 
 pointerPollTime:    0:00:05
