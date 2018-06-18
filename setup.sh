@@ -543,3 +543,8 @@ sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial mak
 cd /tmp || exit
 hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat;
 make && sudo make install
+
+# WTF
+go get -u github.com/senorprogrammer/wtf
+cd $GOPATH/src/github.com/senorprogrammer/wtf || exit
+make install
