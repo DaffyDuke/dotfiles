@@ -15,6 +15,7 @@
 .aws/
 .bash_history
 .bash_logout
+.bogofilter/
 .byobu/
 .cache/
 .cargo/
@@ -23,6 +24,7 @@
 .cmake/
 .compiz/
 .config/
+.cozy-desktop/
 .cpan/
 .dbus/
 .dia/
@@ -92,7 +94,7 @@
 .purple/
 .PyCharm*
 .pypar2/
-.python_history
+.python_history*
 .rancher/
 .rclone.conf
 .recently-used
@@ -107,6 +109,7 @@
 .scribus/
 .selected_editor
 .shutter/
+.sqlite_history*
 .ssh*
 .ssh/
 .steam/
@@ -122,6 +125,7 @@
 .tor-browser-en/
 .trello-cli/
 .tuxmath/
+.update-timestamp
 .urbackupclientgui_startonce
 .vagrant.d/
 .vault-token
@@ -142,7 +146,9 @@
 .zsh-update
 .zsh_history
 *calibre/
+Applications/
 Bureau/
+Cozy*Drive/
 Documents/
 Dropbox/
 GOPROJECTS
@@ -165,6 +171,7 @@ mypass/
 oauth_data
 own*
 pampi/
+PycharmProjects/
 snap/
 workspace/
 Windows.md~
