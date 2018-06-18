@@ -63,7 +63,7 @@ sudo apt install -y \
   ubuntu-restricted-extras ukuu unetbootin unrar \
   vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
   weboob-qt whois winbind wireshark \
-  xauth xscreensaver xsane \
+  xauth xdg-utils xscreensaver xsane \
   yamllint yubikey-manager-qt \
   zenmap
 
@@ -161,6 +161,14 @@ vim +GoInstallBinaries
 
 # Install oh-my-szh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+# vim-instant-markdown
+sudo npm -g install instant-markdown-d
+cd /tmp || exit
+git clone git@github.com:suan/vim-instant-markdown.git
+mkdir -p ~/.vim/after/ftplugin/markdown/
+cd vim-instant-markdown || exit
+cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
 
 # XAuth
 # https://superuser.com/questions/806637/xauth-not-creating-xauthority-file/941244#941244
