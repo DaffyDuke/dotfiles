@@ -1,10 +1,10 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.36 for daffy on Sat May 12 22:36:10 2018.
+# Written by xscreensaver-demo 5.36 for daffy on Sun Jun 24 19:40:29 2018.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:02:00
 cycle:		0:10:00
-lock:		False
+lock:		True
 lockTimeout:	0:00:00
 passwdTimeout:	0:00:30
 visualID:	default
