@@ -54,7 +54,7 @@ sudo apt install -y \
   jq junior-programming jxplorer \
   keepass2 kerneloops kigo klavaro \
   language-pack-fr ldap-utils lftp libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
-  mat mc meld ncdu mono-complete \
+  mat mc meld ncdu mono-complete mutt \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
   p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile plank playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
@@ -62,7 +62,7 @@ sudo apt install -y \
   rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
   tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
-  ubuntu-restricted-extras ukuu unetbootin unrar \
+  ubuntu-restricted-extras ukuu unetbootin unrar urlview \
   vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
   weboob-qt whois winbind wireshark \
   xauth xdg-utils xscreensaver xsane \

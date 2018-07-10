@@ -79,6 +79,7 @@
 .mozilla/
 .mplayer/
 .multirust
+.mutt*
 .neighbornote/
 .node-gyp/
 .npm/
