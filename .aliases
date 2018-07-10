@@ -5,7 +5,7 @@ alias starwars_pic='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05
 alias starwars_history='telnet towel.blinkenlights.nl'
 alias mapscii='telnet mapscii.me'
 alias ipinfo='curl ipinfo.io'
-alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y;'
+alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y && cleansnap'
 alias getcomposer='curl -sS https://getcomposer.org/installer | php'
 alias random='mktemp -u | cut -d'.' -f2'
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | sed -r "s/\s{2,}//g" | head -n 50 | sort -n'
@@ -41,6 +41,13 @@ dlmp3(){ wget -r -l1 -H -t1 -nd -N -np -A.mp3 -erobots=off "$1"; }
 detach() { sudo umount "/dev/"$1"1"; udisks --detach "/dev/$1"; } 
 debug() { sudo strace -Ff -tt -p $(pidof $1) 2>&1 | tee strace-$1.log; }
 drm() { docker rm $(docker ps -q -a); }
+
+cleansnap() {
+  snap list --all | grep désactivé | while read Nom Version Révision Suivi Développeur Notes
+  do
+    sudo snap remove $Nom --revision $Révision
+  done
+}
 
 live() {
     qemu-img create -f raw live 8G
