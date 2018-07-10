@@ -47,7 +47,7 @@ sudo apt install -y \
   ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
   darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
-  fastboot filezilla fortunes-fr ftp \
+  fastboot filezilla fonts-font-awesome fortunes-fr ftp \
   gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk gparted graphviz gthumb gtk2-engines-murrine gtk2-engines-pixbuf guake guake-indicator \
   handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
@@ -163,6 +163,15 @@ vim +GoInstallBinaries
 
 # Install oh-my-szh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+# Install powerlevel9k
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+# awesome-terminal-fonts
+cd /tmp || exit
+git clone https://github.com/gabrielelana/awesome-terminal-fonts.git
+mkdir -p ~/.fonts
+cp awesome-terminal-fonts/build/*ttf ~/.fonts/
+cp awesome-terminal-fonts/build/*sh ~/.fonts/
+fc-cache -fv ~/.fonts
 
 # vim-instant-markdown
 sudo npm -g install instant-markdown-d
