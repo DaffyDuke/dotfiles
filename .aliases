@@ -30,6 +30,12 @@ alias nexus='emulator -avd Nexus -gpu off'
 alias ip='ip --color'
 alias ipb='ip --color --brief'
 alias full="df -P | awk '0+\$5 >= 80 {print}'"
+alias gitfixmodes=gitfixalls
+
+gitfixalls() {
+  git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x
+  git diff --summary | grep --color 'mode change 100644 => 100755' | cut -d' ' -f7- | xargs -d'\n' chmod -x
+}
 
 monitor() { watch -n1 -t "lsof -i -n|awk '{print \$1, \$2, \$9}'|column -t"; }
 gi() { curl "https://www.gitignore.io/api/$@"; }
