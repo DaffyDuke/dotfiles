@@ -544,6 +544,7 @@ pip3 install virtualenv
 pip3 install docopt
 pip3 install configobj
 pip3 install terminaltables
+pip3 install black
 
 # NeoVIM
 pip3 install --upgrade neovim
