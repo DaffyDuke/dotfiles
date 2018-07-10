@@ -106,3 +106,5 @@ export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/daffy/bin/vault vault
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

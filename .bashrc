@@ -120,3 +120,5 @@ if [[ $TERMINIX_ID ]]; then
 fi
 
 complete -C /home/daffy/bin/vault vault
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

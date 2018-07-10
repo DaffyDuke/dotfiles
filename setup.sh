@@ -566,3 +566,9 @@ make && sudo make install
 go get -u github.com/senorprogrammer/wtf
 cd $GOPATH/src/github.com/senorprogrammer/wtf || exit
 make install
+
+# fzf: Fuzzy Finder
+cd /tmp || exit
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
