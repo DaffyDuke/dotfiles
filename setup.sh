@@ -57,7 +57,7 @@ sudo apt install -y \
   mat mc meld ncdu mono-complete mutt \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile plank playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen \
+  p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile plank playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen pydf \
   qarte qemu qtpass \
   rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
