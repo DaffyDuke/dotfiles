@@ -31,10 +31,22 @@ alias ip='ip --color'
 alias ipb='ip --color --brief'
 alias full="df -P | awk '0+\$5 >= 80 {print}'"
 alias gitfixmodes=gitfixalls
+alias gitrefreshalls=gitrefresh
 
 gitfixalls() {
-  git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x
-  git diff --summary | grep --color 'mode change 100644 => 100755' | cut -d' ' -f7- | xargs -d'\n' chmod -x
+  git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
+  git diff --summary | grep --color 'mode change 100644 => 100755' | cut -d' ' -f7- | xargs -d'\n' chmod -x 2>/dev/null
+}
+
+gitrefresh() {
+  cd ~/ownCloudPerso/Téléchargements/git
+  for dir in $(ls -1)
+  do
+    echo "== ${dir} =="
+    cd ~/ownCloudPerso/Téléchargements/git/${dir}
+    gitfixalls
+    gl
+  done
 }
 
 monitor() { watch -n1 -t "lsof -i -n|awk '{print \$1, \$2, \$9}'|column -t"; }
