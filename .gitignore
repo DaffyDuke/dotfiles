@@ -79,7 +79,8 @@
 .mozilla/
 .mplayer/
 .multirust
-.mutt*
+.muttrc
+.mutt_certificates
 .neighbornote/
 .node-gyp/
 .npm/
