@@ -5,12 +5,16 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
+<<<<<<< HEAD
 POWERLEVEL9K_MODE='awesome-fontconfig'
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
 POWERLEVEL9K_STATUS_SHOW_PIPESTATUS=true
 ZSH_THEME="powerlevel9k/powerlevel9k"
+=======
+ZSH_THEME="robbyrussell"
+>>>>>>> parent of 3cb54d4... add awesome fonts
 #ZSH_THEME="wulve"
 
 # Uncomment the following line to use case-sensitive completion.
