@@ -187,6 +187,18 @@ cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
  mkdir -p ~/.config/tilix/schemes/
  wget -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
 gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
+default=$(gsettings get com.gexperts.Tilix.ProfilesList default)
+dconf write /com/gexperts/Tilix/profiles/${default}/login-shell true
+dconf write /com/gexperts/Tilix/warn-vte-config-issue false
+dconf write /com/gexperts/Tilix/profiles/${default}/use-theme-colors false
+dconf write /com/gexperts/Tilix/profiles/${default}/foreground-color \'#FFFFFF\'
+dconf write /com/gexperts/Tilix/profiles/${default}/background-color \'#333333\'
+dconf write /com/gexperts/Tilix/profiles/${default}/bold-color-set false
+dconf write /com/gexperts/Tilix/profiles/${default}/badge-color-set false
+dconf write /com/gexperts/Tilix/profiles/${default}/highlight-colors-set false
+dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
+dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
+
 
 # Fixed in bionic ttf-mscorefonts-installer
 # http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
