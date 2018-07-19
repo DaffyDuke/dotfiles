@@ -30,13 +30,12 @@ for ppa in ppa:djcj/hybrid \
   ppa:yubico/stable \
   ppa:libreoffice/ppa \
   ppa:yannubuntu/boot-repair \
-  ppa:dyatlov-igor/sierra-theme \
   ppa:dyatlov-igor/la-capitaine
 do
   sudo apt-add-repository -n --yes ${ppa}
 done
 sudo apt-get update
-sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair sierra-gtk-theme la-capitaine-icon-theme
+sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme
 sudo apt install -y git zsh expect
 # Git help tips now in .gitconfig : https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
 
@@ -48,7 +47,7 @@ sudo apt install -y \
   darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
   easytag ethstatus ethtool ettercap-graphical evince \
   fastboot filezilla fortunes-fr ftp \
-  gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk gparted graphviz gthumb gtk2-engines-murrine gtk2-engines-pixbuf guake guake-indicator \
+  gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent google-cloud-sdk gparted graphviz gthumb guake guake-indicator \
   handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
   icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
   jq junior-programming jxplorer \
@@ -57,7 +56,7 @@ sudo apt install -y \
   mat mc meld ncdu mono-complete mutt \
   netcat-openbsd nethogs nmap nmon npm numatop \
   ogmrip openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-  p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile plank playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen pydf \
+  p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop pidgin pidgin-skype pidgin-hangouts pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux postgresql-client psensor pssh putty-tools python python3 python3-pip python3-dev python3-virtualenv pwgen pydf \
   qarte qemu qtpass \
   rdesktop redshift-gtk remmina repo rpm rsync \
   s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
@@ -240,8 +239,6 @@ gnomeshell-extension-manage --install --extension-id 16
 gnomeshell-extension-manage --install --extension-id 1116
 # panel-osd@berend.de.schouwer.gmail.com
 gnomeshell-extension-manage --install --extension-id 708
-# User Themes
-gnomeshell-extension-manage --install --extension-id 19
 dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
 dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
 
@@ -259,8 +256,6 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
 gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
 gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
 gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
-gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
-gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
 gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
 gsettings set org.gnome.gedit.plugins.pythonconsole font 'Monospace 10'
 gsettings set org.gnome.meld custom-font 'monospace, 14'
@@ -275,22 +270,9 @@ gsettings set org.gnome.desktop.privacy report-technical-problems true
 gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
 gsettings set org.gnome.desktop.screensaver primary-color '#ffffff'
 gsettings set org.gnome.desktop.screensaver secondary-color '#000000'
-gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/gnome/Bokeh_Tails.jpg'
 gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
-gsettings set org.gnome.desktop.interface gtk-theme 'Sierra-light-solid-thin'
-gsettings set org.gnome.shell.extensions user-theme.name 'Sierra-light-solid-thin'
 gsettings set org.gnome.desktop.interface icon-theme 'La-Capitaine'
-gsettings set org.gnome.desktop.wm.preferences titlebar-font 'Garuda Bold 11'
-gsettings set org.gnome.desktop.interface font-name 'Garuda 11'
 gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
-gsettings set net.launchpad.plank.docks.dock1 dock-items ['org.gnome.Evolution.dockitem', 'google-chrome-unstable.dockitem', 'thunderbird.dockitem', 'spotify.dockitem', 'mpv.dockitem', 'eog.dockitem', 'ktelnetservice5.dockitem']
-gsettings set /net/launchpad/plank/docks/dock1/theme 'Gnosemite'
-
-# Plank Themes
-mkdir -p ~/.local/share/plank/themes
-cd ~/.local/share/plank/themes || exit
-wget https://www.deviantart.com/download/628809799/gnosemite___theme_for_plank_by_p0umon-daedkqv.zip
-unzip gnosemite___theme_for_plank_by_p0umon-daedkqv.zip
 
 # Kubernetes
 # https://github.com/kubernetes/minikube
