@@ -198,7 +198,13 @@ dconf write /com/gexperts/Tilix/profiles/${default}/badge-color-set false
 dconf write /com/gexperts/Tilix/profiles/${default}/highlight-colors-set false
 dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
 dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
-
+gsettings set org.gnome.settings-daemon.plugins.media-keys terminal ""
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name unset
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command unset
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding '<Primary><Alt>t'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name 'Terminal'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/usr/bin/tilix'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings ['/org/gnome/settings/daemon/plugins/media-keys/custom-keybindings/custom0/']
 
 # Fixed in bionic ttf-mscorefonts-installer
 # http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
