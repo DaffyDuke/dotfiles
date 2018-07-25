@@ -576,3 +576,9 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 cd /tmp || exit
 wget https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
 sudo dpkg -i stacer_1.0.9_amd64.deb
+
+# rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
+cd /tmp || exit
+wget https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
+python3 install.py
+
