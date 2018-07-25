@@ -10,3 +10,5 @@
 	program = /usr/bin/gpg
 [commit]
 	gpgsign = true
+[core]
+	excludesfile = /home/oduquesne/.gitignore_global
