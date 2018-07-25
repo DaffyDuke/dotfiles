@@ -572,3 +572,7 @@ cd /tmp || exit
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
+# Stacer : Ubuntu System Cleaner Stacer Scores a Spring Update
+cd /tmp || exit
+wget https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
+sudo dpkg -i stacer_1.0.9_amd64.deb
