@@ -9,7 +9,7 @@ sudo apt install language-pack-gnome-fr-base
 
 # https://itsfoss.com/things-installing-ubuntu-17-10/
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y tlp tlp-rdw i8kutil
+sudo apt install -y tlp tlp-rdw i8kutils
 sudo tlp start
 
 # this tool aims to be ran from Ubuntu
