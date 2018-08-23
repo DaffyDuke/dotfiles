@@ -582,3 +582,18 @@ cd /tmp || exit
 wget https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
 python3 install.py
 
+# OneDrive : https://github.com/abraunegg/onedrive
+sudo apt install build-essential
+sudo apt install libcurl4-openssl-dev
+sudo apt install libsqlite3-dev
+curl -fsS https://dlang.org/install.sh | bash -s dmd
+source ~/dlang/dmd-2.081.2/activate
+cd /tmp || exit
+git clone https://github.com/abraunegg/onedrive.git
+cd onedrive
+make
+sudo make install
+onedrive --synchronize
+systemctl --user enable onedrive
+systemctl --user start onedrive
+

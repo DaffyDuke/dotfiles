@@ -92,7 +92,7 @@
 .pip/
 .pki/
 .psensor/
-.ptbt1
+.ptbt*
 .pulse-cookie
 .purple/
 .PyCharm*
@@ -162,16 +162,19 @@ Lightworks/
 Mod*
 Musique/
 My GCompris/
+OneDrive/
 OS.js-v2/
 T*chargements/
 Vid*
 VirtualBox*
 bin/
 bookmarks.xml
+dlang
 dotfiles/
 examples.desktop
 mypass/
 oauth_data
+onedrive.log
 own*
 pampi/
 PycharmProjects/
