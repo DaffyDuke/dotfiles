@@ -612,6 +612,7 @@ IssueHelper()
 Feedreader()
 {
   # Feedreader
+  sudo apt install -y libgumbo-dev
   curl https://raw.githubusercontent.com/jangernert/FeedReader/master/scripts/install_ubuntu.sh | bash
 }
 
