@@ -37,12 +37,13 @@ PPA()
     ppa:yubico/stable \
     ppa:libreoffice/ppa \
     ppa:yannubuntu/boot-repair \
-    ppa:dyatlov-igor/la-capitaine
+    ppa:dyatlov-igor/la-capitaine \
+    ppa:peterlevi/ppa
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
-  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme
+  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow
 }
 
 Packages()
