@@ -781,9 +781,17 @@ Multisystem()
   sudo apt-get install -y multisystem
 }
 
+PlayOnLinux()
+{
+  # PlayOnLinux
+  wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
+  sudo add-apt-repository http://deb.playonlinux.com/
+  sudo apt -V install playonlinux wine-stable
+}
+
 Main()
 {
-  Setup
+#  Setup
   PPA
   Packages
 #  Python
@@ -806,9 +814,8 @@ Main()
 #  DVD
 #  Feedreader
 #  Fuzzy
-  GnomeConfigurations
-  GnomeExtensions
-
+#  GnomeConfigurations
+#  GnomeExtensions
 #  GRAPH
 #  Infrakit
 #  IssueHelper
@@ -820,6 +827,7 @@ Main()
 #  Multisystem
 #  NeoVim
 #  OneDrive
+  PlayOnLinux
 #  Powershell
 #  Puppet
 #  rapidphotodownloader
