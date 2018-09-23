@@ -56,10 +56,10 @@ Packages()
     darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince \
     fastboot filezilla fortunes-fr ftp \
-    gcompris gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
+    gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
     icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
-    jq junior-programming jxplorer \
+    jq jxplorer \
     keepass2 kerneloops kigo klavaro \
     language-pack-fr ldap-utils lftp libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
     mat mc meld ncdu mono-complete mutt \
@@ -68,17 +68,14 @@ Packages()
     p7zip parted pass patch pcp perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
     qarte qemu qtpass \
     rdesktop redshift-gtk remmina repo rpm rsync \
-    s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass steam strace stunnel4 synaptic sysstat \
-    tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark tuxmath \
+    s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
+    tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
     vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     weboob-qt whois winbind wireshark \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
     zenmap
-
-  # when you need to add users to junior-programming
-  # sudo dpkg-reconfigure --force junior-config
 }
 
 Screensavers()
@@ -211,7 +208,7 @@ Docker()
 {
   # FIXME Docker
   # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
-  sudo apt-get install linux-image-extra-$(uname -r) linux-image-extra-virtual
+  sudo apt-get install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
   sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -260,7 +257,7 @@ XAuth()
    # only this one key is needed for X11 over SSH 
    xauth generate :0 . trusted 
    # generate our own key, xauth requires 128 bit hex encoding
-   xauth add "${HOST}":0 . $(xxd -l 16 -p /dev/urandom)
+   xauth add "${HOST}":0 . "$(xxd -l 16 -p /dev/urandom)"
    # To view a listing of the .Xauthority file, enter the following 
    xauth list 
 }
@@ -366,7 +363,7 @@ Kubernetes()
   # https://github.com/kubernetes/minikube
   cd ~/bin/ || exit
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
-  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
+  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl && chmod +x kubectl
   export MINIKUBE_WANTUPDATENOTIFICATION=false
   export MINIKUBE_WANTREPORTERRORPROMPT=false
   export MINIKUBE_HOME=$HOME
@@ -377,6 +374,7 @@ Kubernetes()
   sudo -E ./minikube start
   # this for loop waits until kubectl can access the api server that Minikube has created
   for i in {1..150}; do # timeout for 5 minutes
+    echo "$i\c"
     ./kubectl get po &> /dev/null
     if [ $? -ne 1 ]; then
       break
@@ -385,7 +383,7 @@ Kubernetes()
   done
   sudo kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
   sudo kubectl expose deployment hello-minikube --type=NodePort
-  curl $(minikube service hello-minikube --url)
+  curl "$(minikube service hello-minikube --url)"
   # sudo minikube dashboard
   sudo minikube stop
   cd /tmp || exit
@@ -513,7 +511,7 @@ Android()
   sudo cp android-udev-rules/51-android.rules /etc/udev/rules.d/ 
   sudo chmod a+r /etc/udev/rules.d/51-android.rules
   sudo groupadd adbusers
-  sudo usermod -a -G adbusers $(whoami)
+  sudo usermod -a -G adbusers "$(whoami)"
   sudo udevadm control --reload-rules
   sudo service udev restart
 }
@@ -605,7 +603,7 @@ IssueHelper()
   # Issue-helper
   sudo apt remove cargo rustc
   curl https://sh.rustup.rs -sSf | sh
-  source $HOME/.cargo/env
+  source "${HOME}"/.cargo/env
   cargo install gli
 }
 
@@ -665,7 +663,7 @@ bcctools()
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
   echo "deb https://repo.iovisor.org/apt/xenial xenial main" | sudo tee /etc/apt/sources.list.d/iovisor.list
   sudo apt update
-  sudo apt install -y bcc-tools libbcc-examples linux-headers-$(uname -r)
+  sudo apt install -y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
 }
 
 bluegriffon()
@@ -717,7 +715,7 @@ RocketChat()
   # RocketChat
   sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev;
   cd /tmp || exit
-  hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat;
+  hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat || exit
   make && sudo make install
 }
 
@@ -761,10 +759,10 @@ OneDrive()
   sudo apt install -i libcurl4-openssl-dev
   sudo apt install -i libsqlite3-dev
   curl -fsS https://dlang.org/install.sh | bash -s dmd
-  source ~/dlang/dmd-2.081.2/activate
+  source "${HOME}/dlang/dmd-2.081.2/activate"
   cd /tmp || exit
   git clone https://github.com/abraunegg/onedrive.git
-  cd onedrive
+  cd onedrive || exit
   make
   sudo make install
   onedrive --synchronize
@@ -789,10 +787,21 @@ PlayOnLinux()
   sudo apt -V install playonlinux wine-stable
 }
 
+Children()
+{
+  sudo apt install -y \
+    brainparty briquolo cgoban childsplay childsplay-alphabet-sounds-fr colobot connectagram \
+    fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
+    junior-programming opencity pysycache steam supertuxkart tomatoes tuxmath tuxtype
+
+  # when you need to add users to junior-programming
+  # sudo dpkg-reconfigure --force junior-config
+}
+
 Main()
 {
 #  Setup
-  PPA
+#  PPA
   Packages
 #  Python
 #  GO
@@ -802,6 +811,7 @@ Main()
 #  bcctools
 #  bluegriffon
 #  Chaos
+  Children
 #  Chrome
 #  chromeIPass
 #  CLOUD
