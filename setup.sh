@@ -50,14 +50,14 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 atop awscli \
+    asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 aspell-fr atop awscli \
     baobab bc build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution \
     fastboot filezilla fortunes-fr ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
-    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo \
+    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     keepass2 kerneloops kigo klavaro \
