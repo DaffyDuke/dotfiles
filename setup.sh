@@ -53,7 +53,7 @@ Packages()
     asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 atop awscli \
     baobab bc build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
-    darktable debian-goodies default-jre deluge-gtk dfc dkms dnstracer dos2unix \
+    darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince \
     fastboot filezilla fortunes-fr ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
@@ -811,7 +811,7 @@ Main()
 #  bcctools
 #  bluegriffon
 #  Chaos
-  Children
+#   Children
 #  Chrome
 #  chromeIPass
 #  CLOUD
