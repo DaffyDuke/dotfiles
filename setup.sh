@@ -789,6 +789,7 @@ PlayOnLinux()
 
 Children()
 {
+  # Add some games
   sudo apt install -y \
     brainparty briquolo cgoban childsplay childsplay-alphabet-sounds-fr colobot connectagram \
     fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
@@ -796,6 +797,13 @@ Children()
 
   # when you need to add users to junior-programming
   # sudo dpkg-reconfigure --force junior-config
+}
+
+YunoHost()
+{
+  # YunoHost : add SSL CA
+  sudo cp ~/coincoin.crt /usr/local/share/ca-certificates
+  sudo update-ca-certificates
 }
 
 Main()
@@ -858,6 +866,7 @@ Main()
 #  WTF
 #  XAuth
 #  youtube
+  YunoHost
 #  ZSH
 }
 
