@@ -813,6 +813,11 @@ YunoHost()
   sudo update-ca-certificates
 }
 
+Github()
+{
+  snap install --edge github-desktop
+}
+
 Main()
 {
 #  Setup
@@ -829,7 +834,7 @@ Main()
 #  Children
 #  Chrome
 #  chromeIPass
-  CLOUD
+#  CLOUD
 #  coolretroterm
 #  CozyDrive
 #  Ctop
@@ -842,6 +847,7 @@ Main()
 #  GnomeConfigurations
 #  GnomeExtensions
 #  GRAPH
+  Github
 #  Infrakit
 #  IssueHelper
 #  Keybase
