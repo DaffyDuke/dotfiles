@@ -25,7 +25,10 @@ alias gitfat='git rev-list --all --objects|sed -n $(git rev-list --objects --all
 # alias rm='echo "This is not the command you are looking for."; false'
 # alias yank='/usr/bin/yank -- xclip -selection c'
 alias docker-clean="__clean() { docker volume ls -qf dangling=true | xargs -r docker volume rm; docker ps -aq -f status=exited | xargs -r docker rm -f; docker images --no-trunc | grep none | awk '{print $3 }' | xargs -r docker rmi }; __clean"
+alias docker-clean-unused='docker system prune --all --force --volumes'
+alias docker-clean-all='docker stop $(docker container ls -a -q) && docker system prune -a -f --volumes'
 alias fake="curl -s https://randomuser.me/api/ | jq -r .results[0].login.username"
+alias docker-clean-containers='docker container stop $(docker container ls -a -q) && docker container rm $(docker container ls -a -q)'
 alias nexus='emulator -avd Nexus -gpu off'
 alias ip='ip --color'
 alias ipb='ip --color --brief'
