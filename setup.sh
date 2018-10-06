@@ -223,6 +223,7 @@ Docker()
   cd /tmp || exit
   wget https://github.com/DockStation/dockstation/releases/download/v1.3.0/dockstation_1.3.0_amd64.deb
   sudo dpkg -i /tmp/dockstation_1.3.0_amd64.deb && rm /tmp/dockstation_1.3.0_amd64.deb
+  sudo gpasswd -a $USER docker
 }
 
 TLDR()
