@@ -15,6 +15,12 @@ Setup()
   sudo tlp start
   sudo apt install -y git zsh expect
   # Git help tips now in .gitconfig : https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
+  # Laptop mode : https://www.linuxtricks.fr/wiki/optimiser-linux-pour-un-pc-portable
+  sudo bash -c 'cat << EOF > /etc/sysctl.d/98-laptop.conf
+vm.laptop_mode=5
+vm.swappiness=10
+EOF'
+
 }
 
 PPA()
