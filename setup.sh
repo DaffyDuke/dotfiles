@@ -815,7 +815,15 @@ YunoHost()
 
 Github()
 {
+  # Github
   snap install --edge github-desktop
+}
+
+GrafTCP()
+{
+  # GraphTCP : https://github.com/hmgle/graftcp
+  cd /tmp || git clone https://github.com/hmgle/graftcp.git
+  cd graftcp || make
 }
 
 Main()
@@ -847,7 +855,8 @@ Main()
 #  GnomeConfigurations
 #  GnomeExtensions
 #  GRAPH
-  Github
+#  Github
+  GrafTCP
 #  Infrakit
 #  IssueHelper
 #  Keybase
