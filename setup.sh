@@ -784,6 +784,7 @@ Multisystem()
   wget -q http://liveusb.info/multisystem/depot/multisystem.asc -O- | sudo apt-key add -
   sudo apt-get update
   sudo apt-get install -y multisystem
+  sudo usermod -a -G adm ${USER}
 }
 
 PlayOnLinux()
