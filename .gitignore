@@ -80,6 +80,8 @@
 .mozilla/
 .mplayer/
 .multirust
+.multisystem-theme
+.multisystem/
 .muttrc
 .mutt_certificates
 .neighbornote/
@@ -163,6 +165,7 @@ Lightworks/
 Mod*
 Musique/
 My GCompris/
+nohup.out
 OneDrive/
 OS.js-v2/
 T*chargements/
@@ -183,3 +186,4 @@ snap/
 Steam/
 workspace/
 Windows.md~
+
