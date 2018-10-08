@@ -12,3 +12,5 @@
 	gpgsign = true
 [core]
 	excludesfile = /home/oduquesne/.gitignore_global
+# [http]
+# 	proxy = http://proxy.home:3128
