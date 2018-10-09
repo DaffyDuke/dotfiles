@@ -673,11 +673,11 @@ coolretroterm()
 
 bcctools()
 {
-  # FIXME bcc-tools
+  # bcc-tools
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
-  echo "deb https://repo.iovisor.org/apt/xenial xenial main" | sudo tee /etc/apt/sources.list.d/iovisor.list
-  sudo apt update
-  sudo apt install -y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
+  echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic-nightly main" | sudo tee /etc/apt/sources.list.d/iovisor.list
+  sudo apt-get update
+  sudo apt-get install y bcc-tools libbcc-examples linux-headers-$(uname -r)
 }
 
 bluegriffon()
