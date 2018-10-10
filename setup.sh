@@ -834,6 +834,14 @@ GrafTCP()
   cd graftcp || make
 }
 
+STui()
+{
+  # S-Tui : https://www.cyberciti.biz/python-tutorials/monitor-linux-cpu-temperature-frequency-power-in-a-graphical-way/
+  sudo apt install -y python-pip stress
+  sudo pip install s-tui
+  # sudo s-tui
+}
+
 Main()
 {
 #  Setup
@@ -864,7 +872,7 @@ Main()
 #  GnomeExtensions
 #  GRAPH
 #  Github
-  GrafTCP
+#  GrafTCP
 #  Infrakit
 #  IssueHelper
 #  Keybase
@@ -885,6 +893,7 @@ Main()
 #  Speedtest
 #  Spotify
 #  Stacer
+  STui
 #  Terminal
 #  TLDR
 #  Trello
