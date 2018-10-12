@@ -75,7 +75,7 @@ Packages()
     qarte qemu qtpass \
     rdesktop redshift-gtk remmina repo rpm rsync \
     s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
-    tcpdump testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
+    tcpdump tellico testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
     vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     weboob-qt whois winbind wireshark \
