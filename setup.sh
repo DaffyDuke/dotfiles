@@ -160,6 +160,9 @@ VirtualBox()
   echo "deb http://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
   sudo apt-get update
   sudo apt-get install -y virtualbox-5.2
+  sudo usermod -G vboxusers -a $USER
+  version=$(VBoxManage --version|cut -dr -f1|cut -d'_' -f1) && wget -c http://download.virtualbox.org/virtualb … ox-extpack
+  VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$version.vbox-extpack
 }
 
 Keybase()
@@ -378,24 +381,29 @@ Kubernetes()
   mkdir "$HOME"/.kube || true
   touch "$HOME"/.kube/config
   export KUBECONFIG="$HOME"/.kube/config
-  sudo -E ./minikube start
+  minikube start
   # this for loop waits until kubectl can access the api server that Minikube has created
   for i in {1..150}; do # timeout for 5 minutes
     echo "$i\c"
-    ./kubectl get po &> /dev/null
+    kubectl get po &> /dev/null
     if [ $? -ne 1 ]; then
       break
     fi
     sleep 2
   done
-  sudo kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
-  sudo kubectl expose deployment hello-minikube --type=NodePort
+  kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+  kubectl expose deployment hello-minikube --type=NodePort
   curl "$(minikube service hello-minikube --url)"
   # sudo minikube dashboard
-  sudo minikube stop
+  minikube stop
   cd /tmp || exit
-  git clone git clone https://github.com/ahmetb/kubectx.git
-  cp -v kubectx/{kubectx,kubens,utils.bash} ~/bin/ 
+  git clone https://github.com/ahmetb/kubectx.git
+  cp -v kubectx/{kubectx,kubens} ~/bin/ 
+  mkdir -p ~/.oh-my-zsh/completions
+  chmod -R 755 ~/.oh-my-zsh/completions
+  cp kubectx/completion/kubectx.zsh ~/.oh-my-zsh/completions/_kubectx.zsh
+  cp kubectx/completion/kubens.zsh ~/.oh-my-zsh/completions/_kubens.zsh
+
   # Some other tools
   # https://github.com/appscode/kubed
   # https://github.com/heptio/ark
@@ -876,7 +884,7 @@ Main()
 #  Infrakit
 #  IssueHelper
 #  Keybase
-#  Kubernetes
+  Kubernetes
 #  Lightworks
 #  lnav
 #  MultiBootUSB
@@ -893,7 +901,7 @@ Main()
 #  Speedtest
 #  Spotify
 #  Stacer
-  STui
+#  STui
 #  Terminal
 #  TLDR
 #  Trello
