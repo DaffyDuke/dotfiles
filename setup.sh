@@ -411,6 +411,25 @@ Kubernetes()
   # https://github.com/GoogleCloudPlatform/kube-metacontroller
 }
 
+Minishift()
+{
+  # Minishift
+  # https://github.com/MiniShift/minishift#getting-started
+  cd /tmp || exit
+  wget https://github.com/minishift/minishift/releases/download/v1.25.0/minishift-1.25.0-linux-amd64.tgz
+  tar xvfz minishift-1.25.0-linux-amd64.tgz
+  mv minishift-1.25.0-linux-amd64/minishift ~/bin
+  minishift config set vm-driver virtualbox
+  minishift start
+  minishift oc-env
+  eval $(minishift oc-env)
+  oc new-app https://github.com/sclorg/nodejs-ex -l name=myapp
+  oc logs -f bc/nodejs-ex
+  oc expose svc/nodejs-ex
+  minishift openshift service nodejs-ex --in-browser
+  minishift stop
+}
+
 CLOUD()
 {
   # some cloud tools
@@ -884,9 +903,10 @@ Main()
 #  Infrakit
 #  IssueHelper
 #  Keybase
-  Kubernetes
+#  Kubernetes
 #  Lightworks
 #  lnav
+  Minishift
 #  MultiBootUSB
 #  Multisystem
 #  NeoVim
