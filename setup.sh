@@ -4,11 +4,11 @@ Setup()
 {
   # Prerequisite for our .tmuxrc
   rm -rf /tmp/tmux-1000/* && touch /tmp/tmux-1000/default
-  
+
   # Things to do after installing Ubuntu 17.10
   sudo timedatectl set-local-rtc 1
   sudo apt install -y language-pack-gnome-fr-base
-  
+
   # https://itsfoss.com/things-installing-ubuntu-17-10/
   sudo apt update && sudo apt upgrade -y
   sudo apt install -y tlp tlp-rdw i8kutils
@@ -60,7 +60,7 @@ Packages()
     baobab bc build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
-    easytag ethstatus ethtool ettercap-graphical evince evolution \
+    easytag ethstatus ethtool ettercap-graphical evince evolution exuberant-ctags \
     fastboot filezilla fortunes-fr ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
