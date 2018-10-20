@@ -58,7 +58,7 @@ Packages()
   sudo apt install -y \
     asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 aspell-fr atop awscli \
     baobab bc build-essential bundler \
-    ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity corkscrew cowsay cpuid curl \
+    ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution exuberant-ctags \
     fastboot filezilla fortunes-fr ftp \
@@ -242,6 +242,7 @@ VIM()
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
+  cd ~/.vim/plugged/YouCompleteMe && python install.py
 
   # vim-instant-markdown
   sudo npm -g install instant-markdown-d
