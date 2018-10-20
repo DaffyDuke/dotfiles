@@ -92,6 +92,7 @@ Screensavers()
   sudo apt install -y mpv
   cat > /tmp/crons << EOF
 16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
+@reboot cd /home/daffy/ownCloudPerso/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
 EOF
   crontab /tmp/crons
   mkdir -p ~/.config/systemd/user/
