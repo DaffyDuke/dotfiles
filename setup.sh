@@ -20,7 +20,8 @@ Setup()
 vm.laptop_mode=5
 vm.swappiness=10
 EOF'
-
+  # Redshift Geoloc
+  test -f  ~/.config/systemd/user/geoclue-agent.service && systemctl --user enable --now geoclue-agent.service
 }
 
 PPA()
