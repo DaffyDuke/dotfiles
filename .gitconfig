@@ -14,3 +14,13 @@
 	excludesfile = /home/oduquesne/.gitignore_global
 # [http]
 # 	proxy = http://proxy.home:3128
+#
+# https://gist.github.com/mghignet/06e239a312efac607e7a92457387d8a6
+# Discard all changes on your local branch and go back to the version you have on the remote branch
+# Put this in your .gitconfig
+[alias]
+  dammit = !BRANCH=$(git rev-parse --abbrev-ref HEAD) \
+    && git fetch origin $BRANCH \
+    && git reset --hard origin/$BRANCH
+# Usage: git dammit
+
