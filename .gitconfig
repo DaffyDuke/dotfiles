@@ -24,3 +24,11 @@
     && git reset --hard origin/$BRANCH
 # Usage: git dammit
 
+# https://gist.github.com/mghignet/154da1507d53e759f7ed868f1ef87809
+# Modify any commit of your history in one command (shorthand)
+# Put this in your .gitconfig
+  fixup = !sh -c 'SHA=$(git rev-parse $1) \
+       && git commit --fixup $SHA \
+       && git rebase -i --autosquash $SHA~' -
+# Usage: git fixup {sha1}
+
