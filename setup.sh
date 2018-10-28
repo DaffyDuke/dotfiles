@@ -62,7 +62,7 @@ Packages()
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution exuberant-ctags \
-    fastboot filezilla fortunes-fr ftp \
+    fastboot fdupes filezilla fortunes-fr fslint ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
