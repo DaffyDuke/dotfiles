@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: jackett
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# sonarr_enable:    Set to YES to enable sonarr
+#            Default: NO
+# sonarr_user:    The user account used to run the sonarr daemon.
+#            This is optional, however do not specifically set this to an
+#            empty string as this will cause the daemon to run as root.
+#            Default: media
+# sonarr_group:    The group account used to run the sonarr daemon.
+#            This is optional, however do not specifically set this to an
+#            empty string as this will cause the daemon to run with group wheel.
+#            Default: media
+# sonarr_data_dir:    Directory where sonarr configuration
+#            data is stored.
+#            Default: /var/db/sonarr
+
+. /etc/rc.subr
+name=jackett
+rcvar=${name}_enable
+load_rc_config $name
+
+: ${jackett_enable:="NO"}
+: ${jackett_user:="media"}
+: ${jackett_group:="media"}
+: ${jackett_data_dir:=“/opt/jackett“}
+
+pidfile=“${jackett_data_dir}/jackett.pid"
+command="/usr/sbin/daemon"
+procname="/usr/local/bin/mono"
+command_args="-f ${procname} /jackett/JackettConsole.exe --data=${jackett_data_dir} --nobrowser"
+
+start_precmd=jackett_precmd
+jackett_precmd() {
+    if [ ! -d ${jackett_data_dir} ]; then
+        install -d -o ${jackett_user} -g ${jackett_group} ${jackett_data_dir}
+    fi
+
+    export XDG_CONFIG_HOME=${jackett_data_dir}
+}
+
+run_rc_command "$1"
