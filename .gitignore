@@ -75,6 +75,7 @@
 .local/
 .macromedia/
 .minikube/
+.minishift/
 .mono/
 .moby/
 .mozilla/
@@ -160,13 +161,14 @@ Google Drive/
 GOPROJECTS
 go-dist
 Images/
+KVMs/
 LICENSE
 Lightworks/
 Mod*
 Musique/
 My GCompris/
 nohup.out
-OneDrive/
+OneDrive*
 OS.js-v2/
 T*chargements/
 Vid*
