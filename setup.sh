@@ -872,6 +872,12 @@ STui()
   # sudo s-tui
 }
 
+zquests()
+{
+    # Search commandline tool : https://blog.shevarezo.fr/post/2018/10/31/faire-recherches-internet-ligne-de-commande
+    go get -v github.com/zquestz/s
+}
+
 Main()
 {
 #  Setup
@@ -909,7 +915,7 @@ Main()
 #  Kubernetes
 #  Lightworks
 #  lnav
-  Minishift
+#  Minishift
 #  MultiBootUSB
 #  Multisystem
 #  NeoVim
@@ -938,6 +944,7 @@ Main()
 #  youtube
 #  YunoHost
 #  ZSH
+    zquests
 }
 
 Main
