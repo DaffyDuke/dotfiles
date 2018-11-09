@@ -46,6 +46,7 @@ Plugin 'cespare/vim-toml'
 
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 Plugin 'morhetz/gruvbox'
 
@@ -332,7 +333,21 @@ let g:syntastic_html_tidy_ignore_errors = [
     \ ]
 
 " Nerdtree
-"autocmd vimenter * NERDTree
-"autocmd vimenter * wincmd p
+autocmd vimenter * NERDTree
+autocmd vimenter * wincmd p
+" vimscript git-nerdtree
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+
 set background=dark
 colorscheme gruvbox
