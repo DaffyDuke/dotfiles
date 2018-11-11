@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -ex
 echo "Deleting containers ..."
 docker ps -q -a | xargs docker rm
 
