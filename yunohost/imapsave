@@ -1,0 +1,192 @@
+#!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
+
+# Licensed under the Python License (see http://www.python.org/psf/license/)
+# Copyright (C) 2008 Pierre Duquesne <stackp@online.fr>
+#
+# Changelog:
+#   20080722 * disable spinning when output is redirected to a file
+#   20080718 * Use BODY.PEEK[] in the fetch command as specified in RFC 3501
+#              (fix by Stefan)
+#   20080313 * Initial release
+
+import getpass
+import imaplib
+import email
+import email.Parser
+import re
+import sys
+import getopt
+from os.path import basename
+
+USAGE = """\
+usage: %s [--ssl] [--port num] [--password pass] [server] [user]
+
+    server
+        The hostname of your imap server
+
+    user
+        Your login
+     
+    --ssl
+        Use an encrypted connection
+
+    -p num
+    --port num
+        Use port number num instead of default port
+        (Defaults are 143 for unencrypted connection and 993 for ssl)
+
+    -P pass
+    --password pass
+        Password for the server
+
+""" % basename(sys.argv[0])
+
+class Spinner:
+    """A class to show some activity on a character terminal."""
+
+    def __init__(self, message=''):
+        self.message = message
+        self.symbols = list('-\|/')
+        self.nsym = len(self.symbols)
+        self.n = 0
+
+    def spin(self):
+        print '\r', self.message + self.symbols[self.n],
+        sys.stdout.flush()
+        self.n = (self.n + 1) % self.nsym
+        
+    def stop(self, stop_message=''):
+        print '\r', self.message + stop_message
+        
+    def set_message(self, message):
+        self.message = message
+
+class DummySpinner:
+    """A class that mock Spinner and do not spin.
+
+    Used when output is not a character terminal (e.g. a log file).
+
+    """   
+    def __init__(self, message=''):
+        self.message = message
+
+    def spin(self):
+        pass
+        
+    def stop(self, stop_message=''):
+        print self.message + stop_message
+        
+    def set_message(self, message):
+        self.message = message
+
+
+def foldname_to_filename(folder):
+    """Deal with weird characters in folder names."""
+    filename = re.sub('"(.*)"', ur'\1', folder)
+    filename = filename.replace('/', '.')
+    return filename
+
+try:
+    # Parse command line arguments
+    try:
+        opts, args = getopt.gnu_getopt(sys.argv[1:], 'pP:h',
+                                       ['port=', 'password=', 'ssl', 'help'])
+    except getopt.GetoptError, e:
+        print 'Error:', e
+        sys.exit(1)
+        
+    ssl = False
+    port = None
+    password = None
+    for o, a in opts:
+        if o == '--ssl':
+            ssl = True
+        if o == '-p' or o == '--port':
+            port = int(a)
+        if o == '-P' or o == '--password':
+            password = a
+        elif o in ['-h', '--help']:
+            print USAGE
+            sys.exit(0)
+            
+    try:
+        servername = args[0]
+    except IndexError:
+        servername = raw_input("Enter the server hostname: ")
+    try:
+        username = args[1]
+    except IndexError:
+        username = raw_input("Enter your username: ")
+
+    # Connect
+    print 'Connecting to %s as user %s ...' % (servername, username)
+    if ssl:
+        IMAP = imaplib.IMAP4_SSL
+    else:
+        IMAP = imaplib.IMAP4
+    try:
+        if port:
+            server = IMAP(servername, port)
+        else:
+            server = IMAP(servername)
+        if not password:
+            password = getpass.getpass()
+        server.login(username, password)
+    except Exception, e:
+        print 'Error:', e
+        sys.exit(1)
+
+    # Retrieve folder list
+    folders = []
+    foldptn = re.compile('\([^\)]*\) "[^"]*" ([^"]*)')
+    for fold_desc in server.list()[1]:
+        folder = foldptn.sub(ur'\1', fold_desc)
+        folders.append(folder)
+
+    # Save messages in a separate file for each folder
+    if sys.stdout.isatty():
+        spinner = Spinner()
+    else:
+        spinner = DummySpinner()
+    parser = email.Parser.Parser()
+    succeed = []
+    failed = []
+    for folder in folders:
+        msg = '%s ... ' % folder
+        spinner.set_message(msg)
+        try:
+            resp, info = server.select(folder)
+            if resp != 'OK':
+                raise imaplib.IMAP4.error(' - '.join(info))
+            filename = foldname_to_filename(folder)
+            fp = open(filename, 'w')
+            resp, items = server.search(None, "ALL")
+            numbers = items[0].split()
+            for num in numbers:
+                resp, data = server.fetch(num, "(BODY.PEEK[])")
+                text = data[0][1]
+                mess = parser.parsestr(text)
+                fp.write(mess.as_string(unixfrom=True))
+                spinner.spin()
+            succeed.append(folder)
+            spinner.stop('Done.')
+            fp.close()
+        except imaplib.IMAP4.error, e:
+            failed.append(folder)
+            spinner.stop('Error! (' + str(e) + ')')
+    server.logout()
+
+    # Print the folders which failed, if any
+    if failed != []:
+        import textwrap
+        wrapper = textwrap.TextWrapper(initial_indent='    ',
+                                       subsequent_indent='    ')
+        print
+        print 'WARNING - The following folders could not be saved:'
+        print wrapper.fill(', '.join(failed))
+        sys.exit(1)
+
+except KeyboardInterrupt:
+    print ''
+    print '^C received, stopping.'
