@@ -873,6 +873,12 @@ STui()
   # sudo s-tui
 }
 
+YakYak()
+{
+  # YakYak : https://www.omgubuntu.co.uk/2017/10/yakyak-opensource-google-hangouts-desktop-app
+  sudo snap install yakyak
+}
+
 zquests()
 {
     # Search commandline tool : https://blog.shevarezo.fr/post/2018/10/31/faire-recherches-internet-ligne-de-commande
@@ -942,10 +948,11 @@ Main()
 #  WSS
 #  WTF
 #  XAuth
+#  YakYak
 #  youtube
 #  YunoHost
 #  ZSH
-#    zquests
+#  zquests
 }
 
 Main
