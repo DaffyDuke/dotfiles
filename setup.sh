@@ -65,14 +65,14 @@ Packages()
     fastboot fdupes filezilla fonts-powerline fortunes-fr fslint ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
-    icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
+    i2c-tools: icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     keepass2 kerneloops kigo klavaro \
     language-pack-fr ldap-utils lftp libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
     mat mc meld ncdu mono-complete mutt \
     netcat-openbsd nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
     ogmrip openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-    p7zip pandoc parted pass patch pcp perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
+    p7zip pandoc parted pass patch pcp perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
     qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina repo rpm rsync \
     s3cmd scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sosreport spectre-meltdown-checker sshfs sshpass strace stunnel4 synaptic sysstat \
@@ -838,8 +838,8 @@ Children()
   # Add some games
   sudo apt install -y \
     brainparty briquolo cgoban childsplay childsplay-alphabet-sounds-fr colobot connectagram \
-    fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
-    junior-programming opencity pysycache steam supertuxkart tomatoes tuxmath tuxtype
+    extremetuxracer fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
+    junior-programming opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
   # sudo dpkg-reconfigure --force junior-config
