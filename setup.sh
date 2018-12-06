@@ -187,6 +187,7 @@ Spotify()
   # sudo apt-get update
   # sudo apt-get install -y spotify-client
   sudo snap install spotify
+  sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
 }
 
 Slack()
