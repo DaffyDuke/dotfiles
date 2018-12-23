@@ -62,7 +62,7 @@ Packages()
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution exuberant-ctags \
-    fastboot fdupes filezilla fonts-powerline fortunes-fr fslint ftp \
+    fastboot fdupes sudo apt-get install ffmpegthumbnailer filezilla fonts-powerline fortunes-fr fslint ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     i2c-tools: icedtea-plugin iftop ioping iotop iproute2 iptraf iputils-arping iptstate \
@@ -370,6 +370,12 @@ GnomeConfigurations()
   gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
   gsettings set org.gnome.desktop.interface icon-theme 'La-Capitaine'
   gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+  sudo bash -c 'cat << EOF > /usr/share/thumbnailers/ffmpeg.thumbnailer
+[Thumbnailer Entry]
+TryExec=/usr/bin/ffmpegthumbnailer
+Exec=/usr/bin/ffmpegthumbnailer -s %s -i %i -o %o -c png -f -t 10
+MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg;video/quicktime;video/x-avi;video/x-flv;video/x-mp4;video/x-mpeg;video/x-webm;video/x-mkv;application/x-extension-webm;video/x-matroska;video/x-ms-wmv;video/x-msvideo;video/x-msvideo/avi;video/x-theora/ogg;video/x-theora/ogv;video/x-ms-asf;video/x-m4v;
+EOF'
 }
 
 Kubernetes()
