@@ -880,6 +880,13 @@ STui()
   # sudo s-tui
 }
 
+Taskfile()
+{
+  # Taskfile : Task is a task runner / build tool that aims to be simpler and easier to use than, for example, GNU Make.
+  # https://taskfile.org/#/
+  go get -u -v github.com/go-task/task/cmd/task
+}
+
 YakYak()
 {
   # YakYak : https://www.omgubuntu.co.uk/2017/10/yakyak-opensource-google-hangouts-desktop-app
@@ -945,6 +952,7 @@ Main()
 #  Spotify
 #  Stacer
 #  STui
+  Taskfile
 #  Terminal
 #  TLDR
 #  Trello
