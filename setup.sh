@@ -82,7 +82,7 @@ Packages()
     weboob-qt whois winbind wireshark \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
-    zenmap
+    zenmap zmap
 }
 
 Screensavers()
