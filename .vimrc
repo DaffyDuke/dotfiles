@@ -54,6 +54,8 @@ Plugin 'morhetz/gruvbox'
 
 " vim as PyCharm
 Plugin 'JetBrains/ideavim'
+Plugin 'luochen1990/rainbow'
+let g:rainbow_active = 1
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
