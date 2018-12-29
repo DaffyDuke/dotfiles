@@ -57,6 +57,9 @@ Plugin 'JetBrains/ideavim'
 Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1
 
+Plugin 'RRethy/vim-illuminate'
+hi link illuminatedWord Visual
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
