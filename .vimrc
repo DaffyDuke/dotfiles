@@ -24,6 +24,8 @@ let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 
 Plugin 'matthewsimo/angular-vim-snippets'
 Plugin 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_enable_on_vim_startup = 1
+
 " for json
 Plugin 'elzr/vim-json'
 
