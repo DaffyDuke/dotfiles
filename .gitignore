@@ -21,6 +21,7 @@
 .cargo/
 .ccnet/
 .cert/
+.certspotter/
 .cmake/
 .compiz/
 .config/
@@ -36,6 +37,7 @@
 .dvdcss/
 .electron/
 .electron-gyp/
+.etr/
 .everpad/
 .flickr/
 .flickrfs/
@@ -92,7 +94,9 @@
 .nylas-mail/
 .oh-my-zsh/
 .password-store
+.pingus/
 .pip/
+.pkey
 .pki/
 .psensor/
 .ptbt*
@@ -135,8 +139,11 @@
 .urbackupclientgui_startonce
 .vagrant.d/
 .vault-token
+.vim-*
+.vimrc-*
 .vim/
 .viminfo
+.vscode/
 .vmware/
 .wget-hsts
 .Windows.md.un~ 
@@ -188,4 +195,3 @@ snap/
 Steam/
 workspace/
 Windows.md~
-
