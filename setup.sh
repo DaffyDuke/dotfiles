@@ -333,6 +333,9 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1116
   # panel-osd@berend.de.schouwer.gmail.com
   gnomeshell-extension-manage --install --extension-id 708
+  # cast-to-tv@rafostar.github.com                                    - enabled    
+  gnomeshell-extension-manage --install --extension-id 1544
+  # other params
   dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
   dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
 }
