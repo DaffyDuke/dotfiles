@@ -335,6 +335,9 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 708
   # cast-to-tv@rafostar.github.com                                    - enabled    
   gnomeshell-extension-manage --install --extension-id 1544
+  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com
+  npm install
+
   # other params
   dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
   dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
