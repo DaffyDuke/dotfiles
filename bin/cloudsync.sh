@@ -9,6 +9,11 @@ OneDriveTechsys()
     done
 }
 
+SyncKimsufiToPassport()
+{
+  rclone -v copy Local:/media/daffy/My\ Passport/Freenas/Backups Dropbox:Freenas/
+}
+
 GoogleDrive()
 {
     rclone --size-only --drive-acknowledge-abuse --ignore-checksum -v copy GoogleDrive:/ Google\ Drive
@@ -35,6 +40,7 @@ then
     OneDriveTechsys
     GoogleDrive
     SyncDropboxNextcloud
+#   SyncKimsufiToPassport
 else
     echo "Please install rclone, "
     echo "then configure it with rclone config"
