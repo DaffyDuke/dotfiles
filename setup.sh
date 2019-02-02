@@ -513,6 +513,21 @@ CLOUD()
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   # Update the package list and install the Cloud SDK
   sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+
+  # AZURE
+  # Install prerequisite packages: 
+  sudo apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y
+  # Modify your sources list:
+  AZ_REPO=$(lsb_release -cs)
+  echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+  sudo tee /etc/apt/sources.list.d/azure-cli.list
+  # Get the Microsoft signing key:
+  sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
+     --keyserver packages.microsoft.com \
+     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+  # Install the CLI:
+  sudo apt-get update
+  sudo apt-get install azure-cli
 }
 
 GO()
@@ -909,7 +924,7 @@ Main()
 {
 #  Setup
 #  PPA
-  Packages
+#  Packages
 #  Python
 #  GO
 #  Android
@@ -921,7 +936,7 @@ Main()
 #  Children
 #  Chrome
 #  chromeIPass
-#  CLOUD
+  CLOUD
 #  coolretroterm
 #  CozyDrive
 #  Ctop
