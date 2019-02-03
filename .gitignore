@@ -13,6 +13,7 @@
 .asciinema/
 .atom/
 .aws/
+.azure/
 .bash_history
 .bash_logout
 .bogofilter/
