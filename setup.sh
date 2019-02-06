@@ -528,6 +528,12 @@ CLOUD()
   # Install the CLI:
   sudo apt-get update
   sudo apt-get install azure-cli
+  # Install Azure Functions Core Tools
+  cd /tmp || exit
+  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+  sudo dpkg -i packages-microsoft-prod.deb
+  sudo apt-get update
+  sudo apt-get install -y azure-functions-core-tools
 }
 
 GO()
