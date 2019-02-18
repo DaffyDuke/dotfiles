@@ -142,6 +142,15 @@ Atom()
   echo "apm complete"
 }
 
+Bat()
+{
+  # Bat
+  # https://twitter.com/fdevillamil/status/1095785002791550977?s=09
+  cd /tmp || exit 1
+  wget https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
+  sudo dpkg -i bat_0.10.0_amd64.deb
+}
+
 Dropbox()
 {
   # Dropbox
@@ -946,6 +955,7 @@ Main()
 #  Android
 #  Ansible
 #  Atom
+  Bat
 #  bcctools
 #  bluegriffon
 #  Chaos
@@ -978,7 +988,7 @@ Main()
 #  Multisystem
 #  NeoVim
 #  OneDrive
-  OSQuery
+#  OSQuery
 #  PlayOnLinux
 #  Powershell
 #  Puppet
