@@ -11,6 +11,7 @@
 .apport-ignore.xml
 .aptitude/
 .asciinema/
+.aspnet/
 .atom/
 .aws/
 .azure/
@@ -42,6 +43,7 @@
 .everpad/
 .flickr/
 .flickrfs/
+.fontconfig/
 .freerdp/
 .fzf/
 .gconf/
