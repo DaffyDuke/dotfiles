@@ -85,6 +85,12 @@ Packages()
     zenmap zmap
 }
 
+Music()
+{
+  # Music Software
+  sudo apt install -y guitarix mixxx rosegarden
+}
+
 Screensavers()
 {
   # Screensavers
@@ -250,6 +256,7 @@ TLDR()
 VIM()
 {
   # Install vundle
+  pip install flake8
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
@@ -955,7 +962,7 @@ Main()
 #  Android
 #  Ansible
 #  Atom
-  Bat
+#  Bat
 #  bcctools
 #  bluegriffon
 #  Chaos
@@ -986,6 +993,7 @@ Main()
 #  Minishift
 #  MultiBootUSB
 #  Multisystem
+  Music
 #  NeoVim
 #  OneDrive
 #  OSQuery

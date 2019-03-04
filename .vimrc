@@ -14,6 +14,9 @@ Plugin 'VundleVim/Vundle.vim'
 
 "
 "
+"vim-flake8 is a Vim plugin that runs the currently open file through Flake8, a static syntax and style checker for Python source code
+Plugin 'nvie/vim-flake8'
+
 Plugin 'fatih/vim-go'
 " for javascript
 " Plugin 'jelera/vim-javascript-syntax'
