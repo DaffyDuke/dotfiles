@@ -437,6 +437,13 @@ Kubernetes()
   cp kubectx/completion/kubectx.zsh ~/.oh-my-zsh/completions/_kubectx.zsh
   cp kubectx/completion/kubens.zsh ~/.oh-my-zsh/completions/_kubens.zsh
 
+  # kubeval : Validate your Kubernetes configuration files, supports multiple Kubernetes versions
+  cd /tmp || exit
+  wget https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
+  tar xvfz kubeval-linux-amd64.tar.gz
+  mv kubeval ~/bin/
+  rm kubeval-linux-amd64.tar.gz
+
   # Some other tools
   # https://github.com/appscode/kubed
   # https://github.com/heptio/ark
