@@ -113,6 +113,17 @@ DVD()
   sudo dpkg-reconfigure libdvd-pkg
 }
 
+Argbash()
+{
+  # Argbash : https://github.com/matejak/argbash/
+  cd /tmp || exit 1
+  wget https://github.com/matejak/argbash/archive/2.8.0.zip
+  unzip 2.8.0.zip
+  cd argbash-2.8.0 || exit 1
+  cd resources || exit 1
+  make install PREFIX=$HOME/.local
+}
+
 Atom()
 {
   # Atom
@@ -968,6 +979,7 @@ Main()
 #  GO
 #  Android
 #  Ansible
+  Argbash
 #  Atom
 #  Bat
 #  bcctools
@@ -1000,7 +1012,7 @@ Main()
 #  Minishift
 #  MultiBootUSB
 #  Multisystem
-  Music
+#  Music
 #  NeoVim
 #  OneDrive
 #  OSQuery
