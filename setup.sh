@@ -68,7 +68,7 @@ Packages()
     i2c-tools: icedtea-plugin iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     keepass2 kerneloops kigo klavaro \
-    language-pack-fr ldap-utils lftp libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
+    language-pack-fr ldap-utils lftp libimage-exiftool-perl libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
     mat mc meld ncdu mono-complete mutt \
     netcat-openbsd nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
     ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
