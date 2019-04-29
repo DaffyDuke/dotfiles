@@ -136,6 +136,12 @@ set incsearch
 nnoremap <LEADER><SPACE> :noh<CR>
 vnoremap // y/<C-R>"<CR>
 
+" Solving git merge conflicts with VIM
+" Fugitive Conflict Resolution
+nnoremap <leader>gd :Gvdiff<CR>
+nnoremap gdh :diffget //2<CR>
+nnoremap gdl :diffget //3<CR>
+
 " Don't redraw while executing macros (good performance config)
 " set lazyredraw
 

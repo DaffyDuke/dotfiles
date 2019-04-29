@@ -78,7 +78,7 @@ Packages()
     s3cmd screen scribus seahorse scdaemon shellcheck shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker sshfs sshpass sslscan strace stunnel4 synaptic sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
-    vagrant vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     weboob-qt whois winbind wireshark \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
