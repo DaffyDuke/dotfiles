@@ -107,3 +107,4 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /home/daffy/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /home/daffy/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
