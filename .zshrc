@@ -45,7 +45,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby ssh-agent terraform thefuck tmuxinator ubuntu )
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby ssh-agent terraform thefuck tmuxinator ubuntu z)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
