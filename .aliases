@@ -35,6 +35,7 @@ alias ipb='ip --color --brief'
 alias full="df -P | awk '0+\$5 >= 80 {print}'"
 alias gitfixmodes=gitfixalls
 alias gitrefreshalls=gitrefresh
+alias code=vscodium
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
