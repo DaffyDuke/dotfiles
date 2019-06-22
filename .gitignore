@@ -65,6 +65,7 @@
 .hugin
 .httpie/
 .hugindata/
+.ipython/
 .java/
 .joe_state
 .juniper_networks/
@@ -147,7 +148,7 @@
 .vimrc-*
 .vim/
 .viminfo
-.vscode/
+.vscode*
 .vmware/
 .wget-hsts
 .Windows.md.un~ 
@@ -159,6 +160,7 @@
 .xsel.log
 .xsession-errors
 .xsession-errors.old
+.z
 .zcompdump*
 .zsh-update
 .zsh_history
