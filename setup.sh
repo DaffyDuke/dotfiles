@@ -22,6 +22,8 @@ vm.swappiness=10
 EOF'
   # Redshift Geoloc
   test -f  ~/.config/systemd/user/geoclue-agent.service && systemctl --user enable --now geoclue-agent.service
+  # Add CDROM Roles
+  sudo usermod -a -G cdrom daffy
 }
 
 PPA()
@@ -58,7 +60,7 @@ Packages()
   # Install some packages
   sudo apt install -y \
     asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 aspell-fr atop awscli \
-    baobab bc build-essential bundler \
+    baobab bc brasero build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
