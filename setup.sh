@@ -365,7 +365,7 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 708
   # cast-to-tv@rafostar.github.com                                    - enabled    
   gnomeshell-extension-manage --install --extension-id 1544
-  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com
+  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
   # other params
@@ -476,7 +476,7 @@ Minishift()
   minishift config set vm-driver virtualbox
   minishift start
   minishift oc-env
-  eval $(minishift oc-env)
+  eval "$(minishift oc-env)"
   oc new-app https://github.com/sclorg/nodejs-ex -l name=myapp
   oc logs -f bc/nodejs-ex
   oc expose svc/nodejs-ex
@@ -779,7 +779,7 @@ bcctools()
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
   echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic-nightly main" | sudo tee /etc/apt/sources.list.d/iovisor.list
   sudo apt-get update
-  sudo apt-get install y bcc-tools libbcc-examples linux-headers-$(uname -r)
+  sudo apt-get install y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
 }
 
 bluegriffon()
@@ -815,6 +815,13 @@ Douane()
 # Douane Firewal
 # Following doc : https://github.com/Douane/Douane
 sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
+}
+
+fx()
+{
+  # FX json parser
+  # https://www.youtube.com/watch?v=LMIeaIpZnJI&feature=em-uploademail
+  sudo npm install -g fx
 }
 
 MultiBootUSB()
@@ -982,7 +989,7 @@ Main()
 #  GO
 #  Android
 #  Ansible
-  Argbash
+#  Argbash
 #  Atom
 #  Bat
 #  bcctools
@@ -1001,6 +1008,7 @@ Main()
 #  DVD
 #  Feedreader
 #  Fuzzy
+  fx
 #  GnomeConfigurations
 #  GnomeExtensions
 #  GRAPH
