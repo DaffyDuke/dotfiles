@@ -72,7 +72,7 @@ Packages()
     keepass2 kerneloops kigo klavaro \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
     mat mc meld ncdu mono-complete mutt \
-    netcat-openbsd nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
+    netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
     ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
     qalc qarte qemu qtpass \
