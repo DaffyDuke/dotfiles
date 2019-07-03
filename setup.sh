@@ -59,29 +59,29 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    asciidoc alien androidsdk-ddms ansible ansible-lint apt-file aria2 aspell-fr atop awscli \
+    asciidoc alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
     baobab bc brasero build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
-    darktable debian-goodies default-jre deluge-gtk deluged dfc dkms dnstracer dos2unix \
+    darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes-fr fslint ftp \
+    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes-fr fslint ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     i2c-tools: icedtea-plugin iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     keepass2 kerneloops kigo klavaro \
-    language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lynx \
+    language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lxc lxc-utils python3-lxc lynis lynx \
     mat mc meld ncdu mono-complete mutt \
-    netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
+    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
     ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename repo rpm rsync \
-    s3cmd screen scribus seahorse scap-workbench scdaemon shellcheck shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker sshfs ssg-base sshpass sslscan strace stunnel4 synaptic sysstat \
+    s3cmd screen scribus seahorse scap-workbench scdaemon shellcheck shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
     vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
-    weboob-qt whois winbind wireshark \
+    weboob-qt whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
     zenmap zmap
@@ -817,7 +817,7 @@ Douane()
 sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
 }
 
-fx()
+npmfx()
 {
   # FX json parser
   # https://www.youtube.com/watch?v=LMIeaIpZnJI&feature=em-uploademail
@@ -984,7 +984,7 @@ Main()
 {
 #  Setup
 #  PPA
-#  Packages
+  Packages
 #  Python
 #  GO
 #  Android
@@ -1008,7 +1008,7 @@ Main()
 #  DVD
 #  Feedreader
 #  Fuzzy
-  fx
+#  npmfx
 #  GnomeConfigurations
 #  GnomeExtensions
 #  GRAPH
