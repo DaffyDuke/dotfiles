@@ -26,6 +26,52 @@ EOF'
   sudo usermod -a -G cdrom daffy
 }
 
+WIFI()
+{
+  # Wifi do not refresh after suspend
+  # power on wifi card
+  # https://askubuntu.com/questions/452826/wireless-networking-not-working-after-resume-in-ubuntu-14-04?noredirect=1&lq=1
+  (cat << 10_resume_wifi
+ #!/bin/sh
+
+case "${1}" in
+  resume|thaw)
+    nmcli r wifi off && nmcli r wifi on ;;
+esac
+10_resume_wifi
+) | sudo tee -e /etc/pm/sleep.d/10_resume_wifi
+  chmod 755 /etc/pm/sleep.d/10_resume_wifi
+
+  # Restart Network after suspend
+  # https://www.malachisoord.com/2017/02/18/ubuntu-fix-wifi-after-suspend/
+  (cat << wifi-resume.service
+[Unit]
+Description=Restart NetworkManager at resume
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
+[Service]
+ExecStart=/bin/systemctl --no-block restart network-manager.service
+
+[Install]
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target
+wifi-resume.service
+) | sudo tee -a /etc/systemd/system/wifi-resume.service
+  sudo systemctl enable wifi-resume.service
+
+  # Move shitty iwlwifi file
+  # https://askubuntu.com/questions/524088/is-this-a-bad-wireless-card
+  sudo mv /etc/modprobe.d/iwlwifi.conf /etc/modprobe.d/iwlwifi.conf-dist
+  echo "options iwlwifi wd_disable=1 bt_coex_active=0 11n_disable=1" | sudo tee -a /etc/modprobe.d/iwlwifi.conf
+
+  # Take care to suspend module
+  # http://www.webupd8.org/2013/01/fix-wireless-or-wired-network-not.html
+  echo "SUSPEND_MODULES=\"\$SUSPEND_MODULES iwldvm iwlwifi\"" | sudo tee -a /etc/pm/config.d/unload_modules
+}
+
 PPA()
 {
   # this tool aims to be ran from Ubuntu
@@ -983,6 +1029,7 @@ zquests()
 Main()
 {
 #  Setup
+#  WIFI
 #  PPA
   Packages
 #  Python
