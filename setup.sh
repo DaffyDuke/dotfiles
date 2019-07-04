@@ -116,7 +116,7 @@ Packages()
     i2c-tools: icedtea-plugin iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     keepass2 kerneloops kigo klavaro \
-    language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lxc lxc-utils python3-lxc lynis lynx \
+    language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mutt \
     needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
     ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
@@ -792,6 +792,17 @@ lnav()
   unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
 }
 
+lynis()
+{
+  # lynis update is really major from ubuntu packages
+  sudo apt install -y apt-transport-https
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C80E383C3DE9F082E01391A0366C67DE91CA5D5F
+  echo 'Acquire::Languages "none";' | sudo tee /etc/apt/apt.conf.d/99disable-translations
+  echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
+  sudo apt update
+  sudo apt install -y lynis
+}
+
 youtube()
 {
   # youtube-dlg
@@ -1069,6 +1080,7 @@ Main()
 #  Kubernetes
 #  Lightworks
 #  lnav
+#  lynis
 #  Minishift
 #  MultiBootUSB
 #  Multisystem
