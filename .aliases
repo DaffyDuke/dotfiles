@@ -5,7 +5,7 @@ alias starwars_pic='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05
 alias starwars_history='telnet towel.blinkenlights.nl'
 alias mapscii='telnet mapscii.me'
 alias ipinfo='curl ipinfo.io'
-alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y && cleansnap'
+alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y && snap list|grep -v Name | while read Name Trash; do sudo snap refresh $Name; done && cleansnap'
 alias getcomposer='curl -sS https://getcomposer.org/installer | php'
 alias random='mktemp -u | cut -d'.' -f2'
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | sed -r "s/\s{2,}//g" | head -n 50 | sort -n'
@@ -36,7 +36,7 @@ alias full="df -P | awk '0+\$5 >= 80 {print}'"
 alias gitfixmodes=gitfixalls
 alias gitrefreshalls=gitrefresh
 alias code=vscodium
-alias eth="echo $(ip r|grep ^default | awk '{print $5}' )"
+alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
