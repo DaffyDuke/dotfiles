@@ -133,6 +133,11 @@ Packages()
     zenmap zmap
 
   sudo snap install --channel=edge shellcheck
+
+  # Python alternatives
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
+  sudo update-alternatives  --set python /usr/bin/python3.6
 }
 
 Music()
@@ -707,6 +712,9 @@ Python()
   # git clone https://github.com/maxpumperla/betago
   # cd betago
   # python run_demo.py
+
+  # Git Pull Request
+  pip3 install git-pull-request
 }
 
 WSS()

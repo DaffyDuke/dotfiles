@@ -30,5 +30,7 @@
   fixup = !sh -c 'SHA=$(git rev-parse $1) \
        && git commit --fixup $SHA \
        && git rebase -i --autosquash $SHA~' -
+	pr = pull-request
+	nb = !git checkout --track $(git config branch.$(git rev-parse --abbrev-ref HEAD).remote)/$(git rev-parse --abbrev-ref HEAD) -b
 # Usage: git fixup {sha1}
 
