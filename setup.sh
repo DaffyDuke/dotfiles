@@ -248,6 +248,34 @@ VirtualBox()
   VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$version.vbox-extpack
 }
 
+VSCodium()
+{
+  # VSCodium : libre version of Microsoft VSCode
+  # https://vscodium.com/
+  # Setup
+  wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
+  echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
+  sudo apt update && sudo apt install -y codium
+  # Extensions
+  for extension in be5invis.toml \
+    esbenp.prettier-vscode \
+    fabianlauer.vs-code-xml-format \
+    jpogran.puppet-vscode \
+    jpotterm.simple-vim \
+    mauve.terraform \
+    mohsen1.prettify-json \
+    ms-python.python \
+    ms-vscode.Go \
+    ms-vscode.powershell \
+    redhat.vscode-yaml \
+    timonwong.shellcheck \
+    vscodevim.vim \
+    vscoss.vscode-ansible
+    do
+      code --install-extension ${extension}
+    done
+
+
 Keybase()
 {
   # Keybase
@@ -1115,6 +1143,7 @@ Main()
 #  urbackup
 #  VIM
 #  VirtualBox
+#  VSCodium
 #  WSS
 #  WTF
 #  XAuth
