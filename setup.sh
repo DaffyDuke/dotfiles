@@ -257,20 +257,29 @@ VSCodium()
   echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
   sudo apt update && sudo apt install -y codium
   # Extensions
-  for extension in be5invis.toml \
+  for extension in DavidAnson.vscode-markdownlint \
+    be5invis.toml \
+    eamodio.gitlens \
     esbenp.prettier-vscode \
     fabianlauer.vs-code-xml-format \
+    foxundermoon.shell-format \
+    joaompinto.asciidoctor-vscode \
     jpogran.puppet-vscode \
     jpotterm.simple-vim \
     mauve.terraform \
     mohsen1.prettify-json \
+    ms-mssql.mssql \
     ms-python.python \
     ms-vscode.Go \
     ms-vscode.powershell \
+    mycelo.oracle-plsql \
+    oderwat.indent-rainbow \
     redhat.vscode-yaml \
+    samuelcolvin.jinjahtml \
+    sleistner.vscode-fileutils \
     timonwong.shellcheck \
     vscodevim.vim \
-    vscoss.vscode-ansible
+    vscoss.vscode-ansible \
     do
       code --install-extension ${extension}
     done
