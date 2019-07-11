@@ -279,10 +279,11 @@ VSCodium()
     sleistner.vscode-fileutils \
     timonwong.shellcheck \
     vscodevim.vim \
-    vscoss.vscode-ansible \
+    vscoss.vscode-ansible
     do
-      code --install-extension ${extension}
+      vscodium --install-extension ${extension}
     done
+}
 
 
 Keybase()
