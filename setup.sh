@@ -407,6 +407,7 @@ Terminal()
   default=$(gsettings get com.gexperts.Tilix.ProfilesList default)
   dconf write /com/gexperts/Tilix/profiles/${default}/login-shell true
   dconf write /com/gexperts/Tilix/warn-vte-config-issue false
+  dconf write /com/gexperts/Tilix/control-scroll-zoom true
   dconf write /com/gexperts/Tilix/profiles/${default}/use-theme-colors false
   dconf write /com/gexperts/Tilix/profiles/${default}/foreground-color \'#FFFFFF\'
   dconf write /com/gexperts/Tilix/profiles/${default}/background-color \'#333333\'
