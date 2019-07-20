@@ -105,7 +105,7 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    asciidoc alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
+    asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
     baobab bc brasero build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
@@ -349,6 +349,8 @@ Docker()
   wget https://github.com/DockStation/dockstation/releases/download/v1.3.0/dockstation_1.3.0_amd64.deb
   sudo dpkg -i /tmp/dockstation_1.3.0_amd64.deb && rm /tmp/dockstation_1.3.0_amd64.deb
   sudo gpasswd -a $USER docker
+  # https://github.com/jesseduffield/lazydocker#installation
+  go get github.com/jesseduffield/lazydocker
 }
 
 TLDR()

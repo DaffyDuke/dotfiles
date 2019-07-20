@@ -37,6 +37,7 @@ alias gitfixmodes=gitfixalls
 alias gitrefreshalls=gitrefresh
 alias code=vscodium
 alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
+alias lzd='lazydocker'
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
