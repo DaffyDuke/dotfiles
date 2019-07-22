@@ -133,6 +133,7 @@ Packages()
     zenmap zmap
 
   sudo snap install --channel=edge shellcheck
+  sudo snap install yq
 
   # Python alternatives
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
