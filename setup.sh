@@ -759,6 +759,14 @@ Python()
   pip3 install git-pull-request
 }
 
+FlatPack()
+{
+  # New Package system
+  sudo apt install -y flatpak
+  sudo apt install -y gnome-software-plugin-flatpak
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
 WSS()
 {
   # WSS by Netflix
@@ -824,8 +832,8 @@ IssueHelper()
 Feedreader()
 {
   # Feedreader
-  sudo apt install -y libgumbo-dev
-  curl https://raw.githubusercontent.com/jangernert/FeedReader/master/scripts/install_ubuntu.sh | bash
+  FlatPack
+  flatpak install flathub org.gnome.FeedReader
 }
 
 urbackup()
@@ -1116,7 +1124,7 @@ Main()
 #  Douane
 #  Dropbox
 #  DVD
-#  Feedreader
+  Feedreader
 #  Fuzzy
 #  npmfx
 #  GnomeConfigurations
