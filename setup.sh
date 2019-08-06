@@ -93,12 +93,13 @@ PPA()
     ppa:libreoffice/ppa \
     ppa:yannubuntu/boot-repair \
     ppa:dyatlov-igor/la-capitaine \
-    ppa:peterlevi/ppa
+    ppa:peterlevi/ppa \
+    ppa:danielrichter2007/grub-customizer
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
-  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow
+  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow grub-customizer
 }
 
 Packages()
@@ -1101,7 +1102,7 @@ Main()
 {
 #  Setup
 #  WIFI
-#  PPA
+  PPA
   Packages
 #  Python
 #  GO
@@ -1124,7 +1125,7 @@ Main()
 #  Douane
 #  Dropbox
 #  DVD
-  Feedreader
+#  Feedreader
 #  Fuzzy
 #  npmfx
 #  GnomeConfigurations
