@@ -1050,6 +1050,7 @@ Github()
 {
   # Github
   snap install --edge github-desktop
+  snap install hub --classic
 }
 
 GrafTCP()
