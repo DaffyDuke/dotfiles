@@ -125,7 +125,7 @@ Packages()
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename repo rpm rsync \
     s3cmd screen scribus seahorse scap-workbench scdaemon shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic sysstat \
-    tcpdump tellico testssl.sh thefuck thunderbird tilix toilet torbrowser-launcher traceroute tshark \
+    tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
     vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     weboob-qt whois winbind wireshark wkhtmltopdf \
