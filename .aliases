@@ -112,6 +112,13 @@ genssl(){
     fi
 }
 
+passcli(){ 
+  # Prerequisite : secret-tool store --label=KeePass name keepass_password
+  # passcli locate entry
+  # passcli show entry
+  secret-tool lookup name keepass_password | keepassxc-cli $(echo $1 | sed -e "s+search+locate+g") ~/Dropbox/Certificats/Database.kdbx -k ~/Dropbox/keepass.key $2
+}
+
 whitespace() { sed -i 's/[[:space:]]*$//' $1 }
 when() { zgrep -h " installed " /var/log/dpkg.log* | sort | grep $1 }
 envof() { sed 's/\x0/\n/g' /proc/${1}/environ; }
