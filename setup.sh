@@ -1034,10 +1034,25 @@ Children()
   sudo apt install -y \
     brainparty briquolo cgoban childsplay childsplay-alphabet-sounds-fr colobot connectagram \
     extremetuxracer fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
-    junior-programming opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
+    junior-programming mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
   # sudo dpkg-reconfigure --force junior-config
+}
+
+Students()
+{
+  # Add some scientific Tools
+  sudo apt install -y \
+    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo step tkgate zegrapher
+
+  cd /tmp || exit 1
+  wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
+  sudo dpkg -i filius_1.7.4_all.deb
+  # Logiciels PlayOnLinux
+  # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
+  # Filius : https://www.lernsoftware-filius.de/Herunterladen
+  # Regressi : http://regressi.fr/WordPress/download/
 }
 
 YunoHost()
@@ -1146,6 +1161,7 @@ Main()
 #  Slack
 #  Spotify
 #  Stacer
+  Students
 #  STui
 #  Taskfile
 #  Terminal
