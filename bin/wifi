@@ -1,0 +1,45 @@
+#!/bin/bash -e
+
+WHOAMI=$(basename $0)
+IFACE="$1"; shift
+ACTION="$1"; shift
+
+log() {
+    level="$1"; shift
+
+    logger -p daemon.$level -t "$WHOAMI" $@
+}
+
+if [ "$ACTION" != "up" ]; then
+    log debug ignoring action $ACTION
+    exit 0
+fi
+
+state=$(cat /sys/module/iwlwifi/parameters/11n_disable)
+
+log notice previous 11n_disable state is $state
+
+if [ "$CONNECTION_ID" = "bad-wifi-network-name" ]; then
+    want_state=2
+else
+    want_state=0
+fi
+
+if [ "$state" != "$want_state" ]; then
+    log notice reloading iwlwifi with 11n_disable=$want_state
+    if ! rmmod iwlmvm iwlwifi; then
+        log err rmmod iwlmvm iwlwifi failed
+        exit 1
+    fi
+    if ! modprobe iwlwifi 11n_disable=$want_state; then
+        log err modprobe iwlwifi 11n_disable=$want_state failed
+        exit 1
+    fi
+    if ! modprobe iwlmvm; then
+        log err modprobe iwlmvm failed
+        exit 1
+    fi
+    log notice finished reloading iwlwifi with 11n_disable=$want_state
+else
+    log notice 11n_disable is correct, taking no action
+fi

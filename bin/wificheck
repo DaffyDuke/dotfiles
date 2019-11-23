@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# 2012 → 2016 - cracolinux
+#
+# v0.9
+#
+# LICENCE:
+#
+# 		LICENCE PUBLIQUE RIEN À BRANLER
+# 		Version 1, Mars 2009
+# 		Copyright (C) 2009 Sam Hocevar
+# 		14 rue de Plaisance, 75014 Paris, France
+# 
+# 			La copie et la distribution de copies exactes de cette licence sont
+# 			autorisées, et toute modification est permise à condition de changer
+# 			le nom de la licence. 
+# 
+# 		CONDITIONS DE COPIE, DISTRIBUTION ET MODIFICATION
+# 		DE LA LICENCE PUBLIQUE RIEN À BRANLER
+# 
+# 		0. Faites ce que vous voulez, j’en ai RIEN À BRANLER.
+
+exec 3>&1
+exec 1>~/wificheck.log
+
+echo [code]
+
+# cat /etc/lsb-release
+echo -e "\n>>    cat /etc/lsb-release \n"
+cat /etc/lsb-release
+
+# lsusb
+echo -e "\n>>    lsusb \n"
+lsusb
+
+# lspci -k -nn | grep -A 3 -i net
+echo -e "\n>>    lspci -k -nn | grep -A 3 -i net \n"
+lspci -k -nn | grep -A 3 -i net
+
+# sudo lshw -C network
+echo -e "\n>>    sudo lshw -C network \n"
+sudo lshw -C network
+
+# lsmod
+echo -e "\n>>    lsmod | sort \n"
+lsmod | sort
+
+echo [/code]
+
+echo [code]
+
+# iwconfig
+echo -e "\n>>    iwconfig \n"
+iwconfig
+
+# ifconfig -a (merci à toutafai)
+echo -e "\n>>    ifconfig -a \n"
+ifconfig -a
+
+# sudo iwlist scan
+echo -e "\n>>    sudo iwlist scan \n"
+sudo iwlist scan
+
+# uname -r -m
+echo -e "\n>>    uname -r -m \n"
+uname -r -m
+
+# cat /etc/network/interfaces
+echo -e "\n>>    cat /etc/network/interfaces \n"
+cat /etc/network/interfaces
+
+# nm-tool
+echo -e "\n>>    nm-tool \n"
+nm-tool
+
+# nmcli dev wifi
+echo -e "\n>>    nmcli dev wifi \n"
+nmcli dev wifi
+
+# nmcli connection
+echo -e "\n>>    nmcli connection list (< 15.04) ou nmcli connection show (>= 15.04) \n"
+nmcli c show 2>/dev/null || nmcli c list
+
+# nmcli connection status
+echo -e "\n>>    nmcli connection status \n"
+nmcli c status
+
+# sudo rfkill list
+echo -e "\n>>    sudo rfkill list \n"
+sudo rfkill list
+
+echo [/code]
+
+exec >&3-
+
+echo "Le fichier wificheck.log a été crée dans "$HOME""
+echo "Vous n'avez plus qu'à copier/coller son contenu sur le forum"
+echo " accès →→ file:/"$HOME"/wificheck.log"
