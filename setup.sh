@@ -111,7 +111,7 @@ Packages()
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes-fr fslint ftp \
+    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fslint ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     i2c-tools: icedtea-plugin iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
