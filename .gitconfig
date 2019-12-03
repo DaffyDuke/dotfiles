@@ -4,14 +4,25 @@
 	signingkey = 63F60C2C
 [push]
 	default = simple
+[merge]
+        ff = only
+[gc]
+        reflogExpire = never
+        reflogExpireUnreachable = never
+[rerere]
+        enabled = true
+[rebase]
+        autosquash = true
 [color]
 	ui = always
 [gpg]
 	program = /usr/bin/gpg
 [commit]
 	gpgsign = true
+        verbose = true
 [core]
 	excludesfile = /home/oduquesne/.gitignore_global
+        whitespace = trailing-space,space-before-tab
 # [http]
 # 	proxy = http://proxy.home:3128
 #
