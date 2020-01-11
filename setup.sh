@@ -125,7 +125,7 @@ Packages()
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf \
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename repo rpm rsync \
-    s3cmd screen scribus seahorse scap-workbench scdaemon shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic sysstat \
+    s3cmd screen scribus seahorse scap-workbench scdaemon shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unetbootin unrar urlview \
     vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
