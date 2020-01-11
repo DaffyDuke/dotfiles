@@ -102,11 +102,12 @@ PPA()
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow grub-customizer
 }
 
+
 Packages()
 {
   # Install some packages
   sudo apt install -y \
-    asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
+    aeskulap asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
     baobab bc brasero build-essential bundler \
     ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
