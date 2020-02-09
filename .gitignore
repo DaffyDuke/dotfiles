@@ -98,7 +98,7 @@
 .nvpy/
 .nylas-mail/
 .oh-my-zsh/
-.password-store
+.passw*
 .pingus/
 .pip/
 .pkey
@@ -110,6 +110,7 @@
 .PyCharm*
 .pypar2/
 .python_history*
+.pvpn-cli/
 .rancher/
 .rclone.conf
 .recently-used
@@ -132,10 +133,12 @@
 .steampid
 .sudo_as_admin_successful
 .synaptic/
+.synfig/
 .t4k_common/
 .terraform.d/
 .terraform/
 .thumbnails/
+.tig_history
 .thunderbird/
 .tor-browser-en/
 .trello-cli/
