@@ -260,26 +260,42 @@ VSCodium()
   echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
   sudo apt update && sudo apt install -y codium
   # Extensions
-  for extension in DavidAnson.vscode-markdownlint \
+  for extension in AlanWalk.markdown-toc \
     be5invis.toml \
+    bierner.markdown-preview-github-styles \
+    bmarkovic.haproxy \
+    CoenraadS.bracket-pair-colorizer-2 \
+    DavidAnson.vscode-markdownlint \
+    DavidWang.ini-for-vscode \
     eamodio.gitlens \
+    Equinusocio.vsc-material-theme \
     esbenp.prettier-vscode \
+    espresso3389.unicode-normalizer \
     fabianlauer.vs-code-xml-format \
     foxundermoon.shell-format \
+    gistart.theme-desert-dawn \
+    heptio.jsonnet \
+    HookyQR.beautify \
     joaompinto.asciidoctor-vscode \
     jpogran.puppet-vscode \
-    jpotterm.simple-vim \
+    kenhowardpdx.vscode-gist \
+    kisstkondoros.typelens \
     mauve.terraform \
+    medo64.render-crlf \
     mohsen1.prettify-json \
     ms-mssql.mssql \
     ms-python.python \
     ms-vscode.Go \
     ms-vscode.powershell \
+    ms-vsliveshare.vsliveshare \
     mycelo.oracle-plsql \
     oderwat.indent-rainbow \
+    PKief.material-icon-theme \
+    Prisma.vscode-graphql \
     redhat.vscode-yaml \
-    samuelcolvin.jinjahtml \
+    shakram02.bash-beautify \
     sleistner.vscode-fileutils \
+    streetsidesoftware.code-spell-checker \
     timonwong.shellcheck \
     vscodevim.vim \
     vscoss.vscode-ansible

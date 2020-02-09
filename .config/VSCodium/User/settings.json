@@ -1,0 +1,9 @@
+{
+    "workbench.colorTheme": "DesertDawn",
+    "vim.camelCaseMotion.enable": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "editor.renderWhitespace": "all",
+    "workbench.startupEditor": "newUntitledFile",
+}
