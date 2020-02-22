@@ -23,6 +23,7 @@
 [core]
 	excludesfile = /home/oduquesne/.gitignore_global
         whitespace = trailing-space,space-before-tab
+	autocrlf = input
 # [http]
 # 	proxy = http://proxy.home:3128
 #
