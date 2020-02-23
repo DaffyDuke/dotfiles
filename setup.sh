@@ -326,6 +326,8 @@ Spotify()
   # sudo apt-get install -y spotify-client
   sudo snap install spotify
   sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
+  pip install spotify-cli-linux
+  pip install lyricwikia
 }
 
 Slack()
