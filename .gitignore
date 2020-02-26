@@ -98,6 +98,8 @@
 .npm/
 .nvpy/
 .nylas-mail/
+.offlineimap.pyc
+.offlineimap/
 .oh-my-zsh/
 .passw*
 .pingus/
