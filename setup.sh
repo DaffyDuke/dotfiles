@@ -256,33 +256,50 @@ VSCodium()
   # VSCodium : libre version of Microsoft VSCode
   # https://vscodium.com/
   # Setup
-  wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
-  echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-  sudo apt update && sudo apt install -y codium
+  # wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
+  # echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
+  # sudo apt update && sudo apt install -y codium
   # Extensions
-  for extension in AlanWalk.markdown-toc \
+  for extension in \
+    abusaidm.html-snippets \
+    AlanWalk.markdown-toc \
+    ban.spellright \
     be5invis.toml \
     bierner.markdown-preview-github-styles \
+    bung87.vscode-gemfile \
     bmarkovic.haproxy \
     CoenraadS.bracket-pair-colorizer-2 \
+    coolbear.systemd-unit-file \
+    CraigMaslowski.erb \
     DavidAnson.vscode-markdownlint \
     DavidWang.ini-for-vscode \
+    dracula-theme.theme-dracula \
     eamodio.gitlens \
     Equinusocio.vsc-material-theme \
     esbenp.prettier-vscode \
     espresso3389.unicode-normalizer \
     fabianlauer.vs-code-xml-format \
+    fimars.github-plus-theme-elixir-adapted \
     foxundermoon.shell-format \
     gistart.theme-desert-dawn \
+    GrapeCity.gc-excelviewer \
+    Gruntfuggly.todo-tree \
+    hangxingliu.vscode-nginx-conf-hint \
     heptio.jsonnet \
     HookyQR.beautify \
     joaompinto.asciidoctor-vscode \
     jpogran.puppet-vscode \
     kenhowardpdx.vscode-gist \
+    kirozen.wordcounter \
     kisstkondoros.typelens \
     mauve.terraform \
+    mechatroner.rainbow-csv \
     medo64.render-crlf \
+    neilding.language-liquid \
+    mikestead.dotenv \
+    mjmcloug.vscode-elixir \
     mohsen1.prettify-json \
+    mrorz.language-gettext \
     ms-mssql.mssql \
     ms-python.python \
     ms-vscode.Go \
@@ -290,15 +307,23 @@ VSCodium()
     ms-vsliveshare.vsliveshare \
     mycelo.oracle-plsql \
     oderwat.indent-rainbow \
+    PeterJausovec.vscode-docker \
     PKief.material-icon-theme \
     Prisma.vscode-graphql \
     redhat.vscode-yaml \
+    ryu1kn.partial-diff \
+    shanoor.vscode-nginx \
+    samuelcolvin.jinjahtml \
     shakram02.bash-beautify \
+    slevesque.vscode-autohotkey \
     sleistner.vscode-fileutils \
     streetsidesoftware.code-spell-checker \
     timonwong.shellcheck \
     vscodevim.vim \
-    vscoss.vscode-ansible
+    vscoss.vscode-ansible \
+    wholroyd.jinja \
+    zkirkland.vscode-firstupper
+
     do
       vscodium --install-extension ${extension}
     done
@@ -1184,7 +1209,7 @@ Main()
 #  Slack
 #  Spotify
 #  Stacer
-  Students
+#  Students
 #  STui
 #  Taskfile
 #  Terminal
