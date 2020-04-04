@@ -207,3 +207,9 @@ snap/
 Steam/
 workspace/
 Windows.md~
+# Wine
+dosdevices/
+drive_c/
+system.reg
+user.reg
+userdef.reg
