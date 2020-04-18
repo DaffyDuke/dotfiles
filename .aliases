@@ -123,3 +123,11 @@ whitespace() { sed -i 's/[[:space:]]*$//' $1 }
 when() { zgrep -h " installed " /var/log/dpkg.log* | sort | grep $1 }
 envof() { sed 's/\x0/\n/g' /proc/${1}/environ; }
 gi() { curl -L -s https://www.gitignore.io/api/\$@ ;}
+master() {
+  if git rev-parse --git-dir > /dev/null 2>&1; then
+    git checkout master && git pull upstream master
+  else
+    hg pull && hg checkout "last(public())"
+  fi
+}
+
