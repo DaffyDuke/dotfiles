@@ -1152,6 +1152,12 @@ zquests()
     go get -v github.com/zquestz/s
 }
 
+Annexes()
+{
+  # OOo extension
+  # https://github.com/seanyeh/vibreoffice
+}
+
 Main()
 {
 #  Setup
