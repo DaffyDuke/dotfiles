@@ -94,12 +94,13 @@ PPA()
     ppa:yannubuntu/boot-repair \
     ppa:dyatlov-igor/la-capitaine \
     ppa:peterlevi/ppa \
-    ppa:danielrichter2007/grub-customizer
+    ppa:danielrichter2007/grub-customizer \
+    ppa:bashtop-monitor/bashtop
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
-  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow grub-customizer
+  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety variety-slideshow grub-customizer bashtop
 }
 
 
