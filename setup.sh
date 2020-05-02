@@ -734,6 +734,7 @@ GO()
   go get -u github.com/golang/lint/golint
   # tips cross compilation
   # CGO_ENABLED=yes go build
+  go get github.com/claudiodangelis/qrcp
 }
 
 Powershell()
