@@ -39,7 +39,7 @@ if [ -x $(which rclone) ]
 then
     OneDriveTechsys
     GoogleDrive
-    SyncDropboxNextcloud
+#    SyncDropboxNextcloud
 #   SyncKimsufiToPassport
 else
     echo "Please install rclone, "
