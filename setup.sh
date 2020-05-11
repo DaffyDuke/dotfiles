@@ -410,6 +410,7 @@ VIM()
 {
   # Install vundle
   pip install flake8
+  pip install wakatime
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries

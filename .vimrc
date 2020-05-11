@@ -368,3 +368,4 @@ let g:NERDTreeIndicatorMapCustom = {
 
 set background=dark
 colorscheme gruvbox
+Plugin 'wakatime/vim-wakatime'
