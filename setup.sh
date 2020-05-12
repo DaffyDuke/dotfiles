@@ -113,7 +113,7 @@ Packages()
   sudo apt install -y \
     aeskulap asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
     baobab bc brasero build-essential bundler \
-    ca-certificates calibre checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
+    ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fslint ftp \
@@ -145,6 +145,11 @@ Packages()
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
   sudo update-alternatives  --set python /usr/bin/python3.6
+
+  # Initiate Cargo cache
+  rustup install stable
+  rustup default stable
+  cargo install dutree
 }
 
 Music()
