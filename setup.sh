@@ -101,9 +101,10 @@ PPA()
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
-  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt oqapy indicator-kdeconnect \
+  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
     y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
     variety-slideshow grub-customizer bashtop piper
+  # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
 
@@ -113,30 +114,30 @@ Packages()
   sudo apt install -y \
     aeskulap asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
     baobab bc brasero build-essential bundler \
-    ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake corkscrew cowsay cpuid curl \
-    darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms dnstracer dos2unix \
+    ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils corkscrew cowsay cpuid curl \
+    darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fslint ftp \
+    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
-    i2c-tools: icedtea-plugin iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
+    i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
-    keepass2 keepassxc kerneloops kigo klavaro \
+    keepass2 keepassxc kerneloops kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
-    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop \
-    ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-    p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pidgin pidgin-skype pidgin-encryption pidgin-openpgp pidgin-gnome-keyring pinentry-curses pinentry-tty pidcat planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python python3 python-pip python3-dev python3-virtualenv pwgen pydf python3-gpg python-gpg \
+    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop npm \
+    ocrfeeder offlineimap ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
+    p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
-    rclone rdesktop redshift-gtk remmina rename repo rpm rsync \
-    s3cmd screen scribus seahorse scap-workbench scdaemon shotwell shutter simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
+    rclone rdesktop redshift-gtk remmina rename rpm rsync \
+    s3cmd screen scribus seahorse scdaemon shotwell simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
-    ubuntu-restricted-extras ukuu unetbootin unrar urlview \
+    ubuntu-restricted-extras ukuu unrar urlview \
     vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
-    weboob-qt whois winbind wireshark wkhtmltopdf \
+    whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
-    zenmap zmap
+    zmap
 
   sudo snap install --channel=edge shellcheck
   sudo snap install yq
@@ -242,8 +243,9 @@ Dropbox()
 {
   # Dropbox
   # https://www.dropbox.com/install-linux
-  wget -O /tmp/dropbox_2015.10.28_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2015.10.28_amd64.deb
-  sudo dpkg -i /tmp/dropbox_2015.10.28_amd64.deb
+  cd /tmp || exit 1
+  wget -O dropbox_2020.03.04_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2020.03.04_amd64.deb
+  sudo dpkg -i dropbox_2020.03.04_amd64.deb
   sudo apt --fix-broken install
   echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
 }
@@ -255,9 +257,9 @@ VirtualBox()
   wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
   wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
   sudo rm /etc/apt/sources.list.d/virtualbox.list
-  echo "deb http://download.virtualbox.org/virtualbox/debian bionic contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
+  echo "deb http://download.virtualbox.org/virtualbox/debian eoan contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
   sudo apt-get update
-  sudo apt-get install -y virtualbox-5.2
+  sudo apt-get install -y virtualbox-6.1
   sudo usermod -G vboxusers -a $USER
   version=$(VBoxManage --version|cut -dr -f1|cut -d'_' -f1) && wget -c http://download.virtualbox.org/virtualb … ox-extpack
   VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$version.vbox-extpack
@@ -422,6 +424,7 @@ VIM()
   # Install vundle
   pip install flake8
   pip install wakatime
+  pip install pidcat-pip
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
@@ -1095,8 +1098,8 @@ Children()
 {
   # Add some games
   sudo apt install -y \
-    brainparty briquolo cgoban childsplay childsplay-alphabet-sounds-fr colobot connectagram \
-    extremetuxracer fgo fretsonfire frozen-bubble gbrainy gcompris grhino \
+    brainparty briquolo cgoban childsplay colobot connectagram \
+    extremetuxracer fretsonfire frozen-bubble gbrainy gcompris grhino \
     junior-programming mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
@@ -1169,14 +1172,14 @@ zquests()
 Annexes()
 {
   # OOo extension
-  # https://github.com/seanyeh/vibreoffice
+  echo https://github.com/seanyeh/vibreoffice
 }
 
 Main()
 {
 #  Setup
 #  WIFI
-  PPA
+#  PPA
   Packages
 #  Python
 #  GO
