@@ -122,7 +122,7 @@ Packages()
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
-    keepass2 keepassxc kerneloops kigo klavaro kodi \
+    kerneloops kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
     needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop npm \
@@ -141,6 +141,9 @@ Packages()
 
   sudo snap install --channel=edge shellcheck
   sudo snap install yq
+  sudo snap install keepassxc
+  sudo apt-get install -y libquazip5-1 libqrencode4
+  sudo ln -s /usr/lib/x86_64-linux-gnu/libqrencode.so.4 /usr/lib/x86_64-linux-gnu/libqrencode.so.3
 
   # Python alternatives
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
