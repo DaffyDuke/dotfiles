@@ -117,7 +117,7 @@ passcli(){
   # Prerequisite : secret-tool store --label=KeePass name keepass_password
   # passcli locate entry
   # passcli show entry
-  secret-tool lookup name keepass_password | /snap/keepassxc/784/usr/bin/keepassxc-cli $(echo $1 | sed -e "s+search+locate+g") ~/Dropbox/Certificats/database.kdbx -k ~/Dropbox/keepass.key $2
+  secret-tool lookup name keepass_password | /snap/keepassxc/784/usr/bin/keepassxc-cli $(echo $1 | sed -e "s+search+locate+g" -e "s+show+show --show-protected+g") ~/Dropbox/Certificats/database.kdbx -k ~/Dropbox/keepass.key $2
 }
 
 treee(){
