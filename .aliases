@@ -39,6 +39,7 @@ alias gitrefreshalls=gitrefresh
 alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
 alias lzd='lazydocker'
 alias dust="dust -t 10"
+alias bat=batcat
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
