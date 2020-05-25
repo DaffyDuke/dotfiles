@@ -628,6 +628,9 @@ Kubernetes()
   # https://github.com/heptio/ark
   # https://github.com/cloudnativelabs/kube-router
   # https://github.com/GoogleCloudPlatform/kube-metacontroller
+
+  # kustomizer
+  curl -s https://kustomizer.dev/install/kustomizer.sh | sudo bash
 }
 
 Minishift()
