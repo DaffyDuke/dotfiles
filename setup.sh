@@ -112,8 +112,8 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    aeskulap asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
-    baobab bc brasero build-essential bundler \
+    aeskulap alot asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
+    baobab bc blueman brasero build-essential bundler \
     ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
@@ -125,7 +125,7 @@ Packages()
     kerneloops kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
-    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon npm numatop npm \
+    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch nnotmuch-vim pm numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
@@ -133,7 +133,7 @@ Packages()
     s3cmd screen scribus seahorse scdaemon shotwell simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unrar urlview \
-    vagrant vim-fugitive vim-gnome vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
@@ -424,6 +424,8 @@ TLDR()
 
 VIM()
 {
+  # Add Ruby Support to vim
+  sudo update-alternatives --set vim /usr/bin/vim.nox
   # Install vundle
   pip install flake8
   pip install wakatime
@@ -1186,7 +1188,7 @@ Main()
 #  Setup
 #  WIFI
 #  PPA
-  Packages
+#  Packages
 #  Python
 #  GO
 #  Android
@@ -1207,7 +1209,7 @@ Main()
 #  Docker
 #  Douane
 #  Dropbox
-#  DVD
+  DVD
 #  Feedreader
 #  Fuzzy
 #  npmfx
