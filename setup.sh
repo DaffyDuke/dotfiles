@@ -1108,7 +1108,7 @@ Children()
   sudo apt install -y \
     brainparty briquolo cgoban childsplay colobot connectagram \
     extremetuxracer fretsonfire frozen-bubble gbrainy gcompris grhino \
-    junior-programming mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
+    junior-programming khangman mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
   # sudo dpkg-reconfigure --force junior-config
