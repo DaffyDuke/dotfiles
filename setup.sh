@@ -74,6 +74,8 @@ wifi-resume.service
 
 PPA()
 {
+  # Add keys
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
   # this tool aims to be ran from Ubuntu
   # install additionnal repositories
   for ppa in ppa:djcj/hybrid \
@@ -96,14 +98,15 @@ PPA()
     ppa:peterlevi/ppa \
     ppa:danielrichter2007/grub-customizer \
     ppa:bashtop-monitor/bashtop \
-    ppa:libratbag-piper/piper-libratbag-git
+    ppa:libratbag-piper/piper-libratbag-git \
+    https://cli.github.com/packages
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
     y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
-    variety-slideshow grub-customizer bashtop piper
+    variety-slideshow grub-customizer bashtop piper gh
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
