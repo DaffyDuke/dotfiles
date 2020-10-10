@@ -116,7 +116,7 @@ Packages()
   # Install some packages
   sudo apt install -y \
     aeskulap alot asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
-    baobab bc blueman brasero build-essential bundler \
+    baobab barrier bc blueman brasero build-essential bundler \
     ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
