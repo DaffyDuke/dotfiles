@@ -76,6 +76,7 @@
 .keras/
 .kismet/
 .kpcli-history
+.krew/
 .kube/
 .launchpadlib/
 .lesshst

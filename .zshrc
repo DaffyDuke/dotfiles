@@ -50,7 +50,7 @@ plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake rub
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
+export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
 export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
 export RUST_USER_BIN=HOME/.cargo/bin
 
