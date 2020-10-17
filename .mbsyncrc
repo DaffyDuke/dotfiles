@@ -1,0 +1,31 @@
+IMAPAccount protonmail
+Host localhost
+Port 1143
+User daffyduke@protonmail.com
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.passwd/protonmail.gpg"
+SSLType None
+#SSLVersions TLSv1.2
+#UseIMAPS yes
+#UseTLSv1 yes
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+DisableExtension COMPRESS=DEFLATE
+
+IMAPStore protonmail-remote
+Account protonmail
+
+MaildirStore protonmail-local
+Subfolders verbatim
+Flatten .
+Path ~/Mail/
+Inbox ~/Mail/INBOX
+
+Channel protonmail-inbox
+Master :protonmail-remote:
+Slave :protonmail-local:
+Patterns * !"All Mail"
+Create Both
+Expunge Both
+SyncState *
+
+Group protonmail
+Channel protonmail-inbox
