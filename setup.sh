@@ -614,8 +614,10 @@ Kubernetes()
     fi
     sleep 2
   done
-  kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
-  kubectl expose deployment hello-minikube --type=NodePort
+  kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+  kubectl expose deployment hello-minikube --type=NodePort --port=8080
+  kubectl get pod
+  minikube service hello-minikube --url
   curl "$(minikube service hello-minikube --url)"
   # sudo minikube dashboard
   minikube stop
