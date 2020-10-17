@@ -10,3 +10,4 @@ text/html; qutebrowser %s && sleep 5 ; test=test -n "$DISPLAY";
 nametemplate=%s.html; needsterminal
 # text/html; lynx -dump %s ; copiousoutput; nametemplate=%s.html
 text/html; w3m -I %{charset} -T text/html ; copiousoutput; nametemplate=%s.html
+text/html; w3m -dump -o -document_charset=%{charset} %s; nametemplate=%s.html; copiousoutput
