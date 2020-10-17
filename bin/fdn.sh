@@ -7,7 +7,8 @@ case $1 in
         echo "nameserver 80.67.169.40" | sudo tee -a /etc/resolv.conf
         ;;
     'stop')
-        sudo ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+        # sudo ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+        sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
         ;;
     'status')
         if [ -h /etc/resolv.conf ]
