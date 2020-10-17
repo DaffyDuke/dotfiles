@@ -1,0 +1,4 @@
+set ftps:initial-prot ""; \
+set ftp:ssl-force true; \
+set ftp:ssl-protect-data true; \
+set ssl:ca-file "/etc/ssl/certs/ca-certificates.crt"
