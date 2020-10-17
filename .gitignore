@@ -26,6 +26,7 @@
 .cert/
 .certspotter/
 .cmake/
+.composer/
 .compiz/
 .config/
 .cozy-desktop/
@@ -44,6 +45,7 @@
 .everpad/
 .flickr/
 .flickrfs/
+.fltk/
 .fontconfig/
 .freerdp/
 .fzf/
@@ -75,6 +77,7 @@
 .kismet/
 .kpcli-history
 .kube/
+.launchpadlib/
 .lesshst
 .libquicktime_codecs
 .license/
@@ -94,6 +97,7 @@
 .muttrc
 .mutt_certificates
 .neighbornote/
+.netrc
 .node-gyp/
 .npm/
 .nvpy/
@@ -102,6 +106,7 @@
 .offlineimap/
 .oh-my-zsh/
 .passw*
+.pEp*
 .pingus/
 .pip/
 .pkey
@@ -128,6 +133,7 @@
 .scribus/
 .selected_editor
 .shutter/
+.snap/
 .sqlite_history*
 .ssh*
 .ssh/
@@ -143,12 +149,15 @@
 .thumbnails/
 .tig_history
 .thunderbird/
+.tmux/
 .tor-browser-en/
 .trello-cli/
 .tuxmath/
+.tuxtype/
 .update-timestamp
 .urbackupclientgui_startonce
 .vagrant.d/
+.var/
 .vault-token
 .vim-*
 .vimrc-*
@@ -156,17 +165,21 @@
 .viminfo
 .vscode*
 .vmware/
+.wakatime*
 .wget-hsts
 .Windows.md.un~ 
 .wine-pipelight/
 .wine/
 .wireshark/
 .xchat2/
+.xournalpp/
 .xinputrc
 .xsel.log
 .xsession-errors
 .xsession-errors.old
 .z
+.z.*
+.zoom
 .zcompdump*
 .zsh-update
 .zsh_history
@@ -183,6 +196,7 @@ Images/
 KVMs/
 LICENSE
 Lightworks/
+Mail*
 Mod*
 Musique/
 My GCompris/
@@ -198,6 +212,7 @@ dlang
 dotfiles/
 examples.desktop
 mypass/
+node_modules/
 oauth_data
 onedrive.log
 own*
