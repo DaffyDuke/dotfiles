@@ -353,7 +353,7 @@ let g:syntastic_html_tidy_ignore_errors = [
 autocmd vimenter * NERDTree
 autocmd vimenter * wincmd p
 " vimscript git-nerdtree
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
     \ "Untracked" : "✭",
