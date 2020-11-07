@@ -143,6 +143,7 @@
 .thumbnails/
 .tig_history
 .thunderbird/
+.tmux
 .tor-browser-en/
 .trello-cli/
 .tuxmath/
@@ -155,6 +156,7 @@
 .vim/
 .viminfo
 .vscode*
+.wakatime*
 .vmware/
 .wget-hsts
 .Windows.md.un~ 
