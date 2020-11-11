@@ -27,4 +27,4 @@ Type=Application
 Categories=Utility;
 Keywords=Screensaver,Power,Saving,Blank
 StartupNotify=false
-X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-enabled=false
