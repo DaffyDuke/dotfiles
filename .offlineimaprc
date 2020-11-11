@@ -35,4 +35,4 @@ remoteuser = daffyduke@protonmail.com
 remoteport = 1143
 ssl = no
 remotepasseval = mailpasswd("protonmail")
-folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning)', folder)
+folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|RedHat|SuSE)', folder)
