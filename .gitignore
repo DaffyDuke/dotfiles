@@ -229,3 +229,5 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
+.codestream
+.dotnet
