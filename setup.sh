@@ -1200,6 +1200,16 @@ zquests()
     go get -v github.com/zquestz/s
 }
 
+Rust()
+{
+  # Install rust and other cargo tools
+  curl https://sh.rustup.rs -sSf | sh
+  for rustpkg in bat delta-git dog dust dutree just gping
+  do
+    cargo install "$[rustpkg}"
+  done
+}
+
 Annexes()
 {
   # OOo extension
@@ -1232,7 +1242,7 @@ Main()
 #  Docker
 #  Douane
 #  Dropbox
-  DVD
+#  DVD
 #  Feedreader
 #  Fuzzy
 #  npmfx
@@ -1260,6 +1270,7 @@ Main()
 #  Puppet
 #  rapidphotodownloader
 #  RocketChat
+  Rust
 #  Screensavers
 #  Slack
 #  Spotify
