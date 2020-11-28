@@ -1173,6 +1173,16 @@ GrafTCP()
   cd graftcp || make
 }
 
+Rust()
+{
+  # Install rust and other cargo tools
+  curl https://sh.rustup.rs -sSf | sh
+  for rustpkg in bat delta-git dog dust dutree just gping
+  do
+    cargo install "$[rustpkg}"
+  done
+}
+
 STui()
 {
   # S-Tui : https://www.cyberciti.biz/python-tutorials/monitor-linux-cpu-temperature-frequency-power-in-a-graphical-way/
@@ -1198,16 +1208,6 @@ zquests()
 {
     # Search commandline tool : https://blog.shevarezo.fr/post/2018/10/31/faire-recherches-internet-ligne-de-commande
     go get -v github.com/zquestz/s
-}
-
-Rust()
-{
-  # Install rust and other cargo tools
-  curl https://sh.rustup.rs -sSf | sh
-  for rustpkg in bat delta-git dog dust dutree just gping
-  do
-    cargo install "$[rustpkg}"
-  done
 }
 
 Annexes()
