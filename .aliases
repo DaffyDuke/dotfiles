@@ -58,6 +58,8 @@ alias cpuinfo='lscpu'
 ##alias cpuinfo='less /proc/cpuinfo' ##
 ## get GPU ram on desktop / laptop##
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+## List the tasks using the most CPU time
+alias hogs='ps uxga | sort --key=4.1 -n'
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
