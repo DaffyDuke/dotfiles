@@ -290,6 +290,15 @@ bluegriffon()
   sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
 }
 
+browsh()
+{
+  # browsh Text Web browser
+  # Needs Firefox
+  cd /tmp || exit
+  wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
+  sudo dpkg -i browsh_1.6.4_linux_amd64.deb
+}
+
 Calibre()
 {
   # Install Calibre
@@ -1250,6 +1259,7 @@ Main()
 #  Bat
 #  bcctools
 #  bluegriffon
+#  browsh
 #  Chaos
 #  Children
 #  Chrome
