@@ -474,6 +474,19 @@ Douane()
 sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
 }
 
+DroidCAM()
+{
+  # DroiCAM : use smartphone as webcam on computer
+  # https://www.dev47apps.com/droidcam/linux/
+  cd /tmp/ || exit 1
+  wget https://files.dev47apps.net/linux/droidcam_latest.zip
+  unzip droidcam_latest.zip -d droidcam
+  cd droidcam && sudo ./install-client
+  sudo apt install linux-headers-`uname -r` gcc make
+  sudo ./install-video
+  sudo ./install-sound
+}
+
 Dropbox()
 {
   # Dropbox
@@ -1242,6 +1255,7 @@ Main()
 #  Docker
 #  Douane
 #  Dropbox
+#  DroidCAM
 #  DVD
 #  FlatPack
 #  Feedreader
