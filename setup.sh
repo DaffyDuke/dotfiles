@@ -131,7 +131,7 @@ Packages()
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
-    rclone rdesktop redshift-gtk remmina rename rpm rsync \
+    rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
     s3cmd screen scribus seahorse scdaemon shotwell simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unrar urlview \
@@ -1061,6 +1061,12 @@ VIM()
   mkdir -p ~/.vim/after/ftplugin/markdown/
   cd vim-instant-markdown || exit
   cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
+
+  # vim-fugitive
+  mkdir -p ~/.vim/pack/tpope/start
+  cd ~/.vim/pack/tpope/start
+  git clone https://tpope.io/vim/fugitive.git
+  vim -u NONE -c "helptags fugitive/doc" -c q
 }
 
 VirtualBox()
