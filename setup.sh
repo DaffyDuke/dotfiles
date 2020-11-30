@@ -173,6 +173,12 @@ Python()
 
   # Git Pull Request
   pip3 install git-pull-request
+
+  # Install some other pip cool stuff
+  for pkg in bpytop
+  do
+    pip3 install "${pkg}" --upgrade
+  done
 }
 
 GO()
