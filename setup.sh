@@ -919,7 +919,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree just gping
+  for rustpkg in bat delta-git dog dust dutree just gping mdcat
   do
     cargo install "$[rustpkg}"
   done
