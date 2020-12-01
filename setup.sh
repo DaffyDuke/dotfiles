@@ -132,7 +132,7 @@ Packages()
     p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen scribus seahorse scdaemon shotwell simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen scribus seahorse scdaemon shotwell sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unrar urlview \
     vagrant vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
@@ -153,6 +153,16 @@ Packages()
   sudo update-alternatives  --set python /usr/bin/python3.6
 
 }
+
+snap()
+[
+  for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape \
+    keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
+    rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
+  do
+    snap install "${snap}"
+  done
+]
 
 Python()
 {
@@ -1310,6 +1320,7 @@ Main()
 #  Rust
 #  Screensavers
 #  Slack
+#  snap
 #  Spotify
 #  Stacer
 #  Students
