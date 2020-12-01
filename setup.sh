@@ -121,7 +121,7 @@ Packages()
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gthumb guake guake-indicator \
-    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
+    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     kerneloops kigo klavaro kodi \
