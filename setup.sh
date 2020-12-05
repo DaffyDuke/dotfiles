@@ -174,18 +174,13 @@ Python()
   pip3 install terminaltables
 
   # Try alphago .....
-  pip install tenserflow
-  pip install betago
   # cd /tmp
   # git clone https://github.com/maxpumperla/betago
   # cd betago
   # python run_demo.py
 
-  # Git Pull Request
-  pip3 install git-pull-request
-
   # Install some other pip cool stuff
-  for pkg in bpytop
+  for pkg in bpytop betago git-pull-request icdiff tenserflow
   do
     pip3 install "${pkg}" --upgrade
   done
