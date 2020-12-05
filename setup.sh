@@ -180,7 +180,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bpytop betago git-pull-request icdiff tenserflow
+  for pkg in bpytop betago git-pull-request icdiff mycli tenserflow
   do
     pip3 install "${pkg}" --upgrade
   done
