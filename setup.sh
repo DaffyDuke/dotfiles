@@ -201,6 +201,11 @@ GO()
   # tips cross compilation
   # CGO_ENABLED=yes go build
   go get github.com/claudiodangelis/qrcp
+  # cd /tmp || exit
+  git clone https://github.com/rs/curlie.git
+  cd curlie
+  go build .
+  go install .
 }
 
 Android()
