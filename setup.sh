@@ -921,7 +921,7 @@ Rust()
 
   for rustpkg in bat delta-git dog dust dutree just gping mdcat
   do
-    cargo install "$[rustpkg}"
+    cargo install "${rustpkg}"
   done
 }
 
@@ -975,7 +975,7 @@ Students()
 {
   # Add some scientific Tools
   sudo apt install -y \
-    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo step tkgate zegrapher
+    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo qalculate step tkgate zegrapher
 
   cd /tmp || exit 1
   wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
