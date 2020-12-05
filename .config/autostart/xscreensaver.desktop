@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Exec=/usr/bin/xscreensaver -nosplash
+Exec="/usr/bin/xscreensaver" "-nosplash"
 Hidden=false
 NoDisplay=false
-X-GNOME-Autostart-enabled=false
+X-GNOME-Autostart-enabled=true
 Name[fr_FR]=Screensaver
 Name=Screensaver
 Comment[fr_FR]=Ecran de Veille
