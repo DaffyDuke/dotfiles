@@ -372,6 +372,8 @@ Plugin 'wakatime/vim-wakatime'
 Plugin 'imain/notmuch-vim'
 Plugin 'itchyny/calendar.vim'
 
+Plugin 'google/vim-jsonnet'
+
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],
       \ [ 'inbox', 'tag:inbox' ],
