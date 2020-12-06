@@ -740,6 +740,14 @@ Kubernetes()
   do 
     kubectl krew install ${plugin}
   done
+
+  # Popeye - A Kubernetes Cluster Sanitizer
+  git clone https://github.com/derailed/popeye
+  cd popeye
+  # Build and install
+  go install
+  # Run
+  # popeye
 }
 
 Lightworks()
