@@ -141,9 +141,6 @@ Packages()
     yamllint yubikey-manager-qt \
     zmap
 
-  sudo snap install --channel=edge shellcheck
-  sudo snap install yq
-  sudo snap install keepassxc
   sudo apt-get install -y libquazip5-1 libqrencode4
   sudo ln -s /usr/lib/x86_64-linux-gnu/libqrencode.so.4 /usr/lib/x86_64-linux-gnu/libqrencode.so.3
 
@@ -156,7 +153,7 @@ Packages()
 
 snap()
 [
-  for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape \
+  for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape ipfs-desktop\
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
     rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
   do
