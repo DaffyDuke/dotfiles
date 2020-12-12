@@ -119,7 +119,7 @@ Packages()
     ca-certificates cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
+    fail2ban fastboot fd fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
@@ -177,7 +177,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bpytop betago git-pull-request icdiff jsonnet kapitan litecli mycli tenserflow
+  for pkg in bpytop betago git-pull-request icdiff jsonnet kapitan litecli mycli tenserflow spotify-cli-linux
   do
     pip3 install "${pkg}" --upgrade
   done
