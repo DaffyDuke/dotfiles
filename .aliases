@@ -60,6 +60,7 @@ alias cpuinfo='lscpu'
 alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## List the tasks using the most CPU time
 alias hogs='ps uxga | sort --key=4.1 -n'
+alias curlv='curl -w "@curl-format.txt" -o /dev/null -s '
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
