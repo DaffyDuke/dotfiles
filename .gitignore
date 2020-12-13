@@ -187,8 +187,10 @@
 *calibre/
 Applications/
 Bureau/
+Calibre Library/
 Cozy*Drive/
 Documents/
+Downloads/
 Dropbox/
 Google Drive/
 GOPROJECTS
@@ -218,6 +220,7 @@ oauth_data
 onedrive.log
 own*
 pampi/
+PlayOnLinux's virtual drives
 PycharmProjects/
 snap/
 Steam/
