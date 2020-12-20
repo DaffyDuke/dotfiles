@@ -74,6 +74,7 @@
 .juniper_networks/
 .kde/
 .keras/
+.keychain
 .kismet/
 .kpcli-history
 .krew/
