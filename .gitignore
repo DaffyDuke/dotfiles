@@ -151,6 +151,7 @@
 .urbackupclientgui_startonce
 .vagrant.d/
 .vault-token
+.viking/
 .vim-*
 .vimrc-*
 .vim/
