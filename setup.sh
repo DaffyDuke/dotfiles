@@ -119,7 +119,7 @@ Packages()
     ca-certificates cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fd fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
+    fail2ban fastboot fd-find fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
@@ -924,7 +924,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree just gping mdcat ripgrep
+  for rustpkg in bat delta-git dog dust dutree fd-find just gping mdcat ripgrep
   do
     cargo install "${rustpkg}"
   done
