@@ -12,3 +12,5 @@ Actions=Next;Previous;PauseResume;History;Preferences;
 Keywords=Wallpaper;Changer;Change;Download;Downloader;Variety;
 X-GNOME-Autostart-Delay=20
 StartupWMClass=Variety
+Hidden=false
+

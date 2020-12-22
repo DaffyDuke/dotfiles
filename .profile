@@ -22,8 +22,8 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 # Go variables
-export GOROOT=$HOME/ownCloudPerso/go-dist
-export GOPATH=$HOME/ownCloudPerso/GOPROJECTS
+export GOROOT=$HOME/go-dist
+export GOPATH=$HOME/GOPROJECTS
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 export PATH="$HOME/.cargo/bin:$PATH"

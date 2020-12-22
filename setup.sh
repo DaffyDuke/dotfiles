@@ -74,6 +74,8 @@ wifi-resume.service
 
 PPA()
 {
+  # Add keys
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
   # this tool aims to be ran from Ubuntu
   # install additionnal repositories
   for ppa in ppa:djcj/hybrid \
@@ -96,42 +98,42 @@ PPA()
     ppa:peterlevi/ppa \
     ppa:danielrichter2007/grub-customizer \
     ppa:bashtop-monitor/bashtop \
-    ppa:libratbag-piper/piper-libratbag-git
+    ppa:libratbag-piper/piper-libratbag-git \
+    https://cli.github.com/packages
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
     y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
-    variety-slideshow grub-customizer bashtop piper
+    variety-slideshow grub-customizer bashtop piper gh
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
-
 
 Packages()
 {
   # Install some packages
   sudo apt install -y \
     aeskulap alot asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher apt-listchanges aria2 aspell-fr atop awscli auditd \
-    baobab bc blueman brasero build-essential bundler \
-    ca-certificates calibre cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils corkscrew cowsay cpuid curl \
+    baobab barrier bc blueman brasero build-essential bundler \
+    ca-certificates cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr ftp \
-    gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gthumb guake guake-indicator \
-    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie hugin hugo hunspell-fr hunspell-fr-comprehensive \
+    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
+    gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    handbrake hddtemp heimdall-flash-frontend htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
-    kerneloops kigo klavaro kodi \
+    kerneloops keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
     needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch nnotmuch-vim pm numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
-    p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty planfacile playonlinux pm-utils postgresql-client psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
+    p7zip pandoc parallel parted pass patch pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
-    rclone rdesktop redshift-gtk remmina rename rpm rsync \
-    s3cmd screen scribus seahorse scdaemon shotwell simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
-    tcpdump tellico testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
+    rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
+    s3cmd screen scribus seahorse scdaemon shotwell sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
+    tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
     ubuntu-restricted-extras ukuu unrar urlview \
     vagrant vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
@@ -139,9 +141,6 @@ Packages()
     yamllint yubikey-manager-qt \
     zmap
 
-  sudo snap install --channel=edge shellcheck
-  sudo snap install yq
-  sudo snap install keepassxc
   sudo apt-get install -y libquazip5-1 libqrencode4
   sudo ln -s /usr/lib/x86_64-linux-gnu/libqrencode.so.4 /usr/lib/x86_64-linux-gnu/libqrencode.so.3
 
@@ -150,38 +149,83 @@ Packages()
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
   sudo update-alternatives  --set python /usr/bin/python3.6
 
-  # Initiate Cargo cache
-  rustup install stable
-  rustup default stable
-  cargo install dutree
 }
 
-Music()
+snap()
+[
+  for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape ipfs-desktop\
+    keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
+    rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
+  do
+    snap install "${snap}"
+  done
+]
+
+Python()
 {
-  # Music Software
-  sudo apt install -y guitarix mixxx rosegarden
+  # Python
+  snap install pycharm-community --classic
+  pip3 install virtualenv
+  pip3 install docopt
+  pip3 install configobj
+  pip3 install terminaltables
+
+  # Try alphago .....
+  # cd /tmp
+  # git clone https://github.com/maxpumperla/betago
+  # cd betago
+  # python run_demo.py
+
+  # Install some other pip cool stuff
+  for pkg in bpytop betago git-pull-request icdiff jsonnet kapitan litecli mycli tenserflow
+  do
+    pip3 install "${pkg}" --upgrade
+  done
 }
 
-Screensavers()
+GO()
 {
-  # Screensavers
-  sudo apt remove gnome-screensaver
-  sudo add-apt-repository ppa:mc3man/mpv-tests
-  sudo apt install -y mpv
-  cat > /tmp/crons << EOF
-16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
-@reboot cd /home/daffy/ownCloudPerso/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
-EOF
-  crontab /tmp/crons
-  mkdir -p ~/.config/systemd/user/
-  systemctl --user enable xscreensaver
+  # GO
+  # https://golang.org/dl/
+  mkdir -p "$GOROOT" "$GOPATH"
+  cd "$GOROOT" || exit
+  wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
+  tar xvfz go1.9.2.linux-amd64.tar.gz
+  rm go1.9.2.linux-amd64.tar.gz
+  go get golang.org/x/tools/cmd/godoc
+  go get golang.org/x/tools/cmd/goimports
+  go get -u github.com/golang/lint/golint
+  # tips cross compilation
+  # CGO_ENABLED=yes go build
+  go get github.com/claudiodangelis/qrcp
+  # cd /tmp || exit
+  git clone https://github.com/rs/curlie.git
+  cd curlie
+  go build .
+  go install .
 }
 
-DVD()
+Android()
 {
-  # Encrypted DVD
-  sudo apt install -y libdvd-pkg
-  sudo dpkg-reconfigure libdvd-pkg
+  # Android Rules
+  cd /tmp || exit
+  git clone git@github.com:M0Rf30/android-udev-rules.git
+  sudo cp android-udev-rules/51-android.rules /etc/udev/rules.d/ 
+  sudo chmod a+r /etc/udev/rules.d/51-android.rules
+  sudo groupadd adbusers
+  sudo usermod -a -G adbusers "$(whoami)"
+  sudo udevadm control --reload-rules
+  sudo service udev restart
+}
+
+Ansible()
+{
+  # molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
+  sudo pip install molecule
+  cd /tmp || exit
+  git clone https://github.com/metacloud/molecule
+  cd /tmp/molecule/test/scenarios/driver/docker || exit
+  molecule test
 }
 
 Argbash()
@@ -242,6 +286,229 @@ Bat()
   sudo dpkg -i delta_0.1.1-1_amd64_debian_buster.deb
 }
 
+bcctools()
+{
+  # bcc-tools
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
+  echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic-nightly main" | sudo tee /etc/apt/sources.list.d/iovisor.list
+  sudo apt-get update
+  sudo apt-get install y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
+}
+
+bluegriffon()
+{
+  #- FIXME bluegriffon
+  cd /tmp || exit
+  wget http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
+  sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
+}
+
+browsh()
+{
+  # browsh Text Web browser
+  # Needs Firefox
+  cd /tmp || exit
+  wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
+  sudo dpkg -i browsh_1.6.4_linux_amd64.deb
+}
+
+Calibre()
+{
+  # Install Calibre
+  sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin
+}
+
+Chaos()
+{
+  # Chaos toolkit : https://medium.com/chaos-toolkit/announcing-chaos-discover-and-chaos-init-ff2bf02c5a85
+  docker pull chaostoolkit/chaostoolkit
+  docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
+}
+
+Children()
+{
+  # Add some games
+  sudo apt install -y \
+    brainparty briquolo cgoban childsplay colobot connectagram \
+    extremetuxracer fretsonfire frozen-bubble gbrainy gcompris grhino \
+    junior-programming khangman mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
+
+  # when you need to add users to junior-programming
+  sudo dpkg-reconfigure --force junior-config
+}
+
+Chrome()
+{
+  # Chrome
+  # https://doc.ubuntu-fr.org/google_chrome
+  # https://www.google.com/chrome/browser/desktop/index.html
+  sudo sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  sudo apt-get update
+  sudo apt-get install -y google-chrome-unstable
+}
+
+chromeIPass()
+{
+  # chromeIPass : https://github.com/pfn/passifox/
+  sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
+}
+
+CLOUD()
+{
+  # some cloud tools
+  # Packer
+  # https://www.packer.io/downloads.html
+  cd ~/bin || exit
+  wget https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
+  unzip -f packer_1.1.1_linux_amd64.zip
+  rm packer_1.1.1_linux_amd64.zip
+  
+  # terraform
+  # https://www.terraform.io/downloads.html
+  cd ~/bin || exit
+  wget https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
+  unzip -f terraform_0.10.8_linux_amd64.zip
+  rm -f terraform_0.10.8_linux_amd64.zip getTerraformProviders.sh
+  wget https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
+  sudo mkdir -p /usr/local/terraform/toolbox/providers/
+  sudo bash ~/bin/getTerraformProviders.sh
+  cd "$HOME" || exit
+  terraform init -plugin-dir=/usr/local/terraform/toolbox/providers/
+  # terraform graph | dot -Tpng > terraform-graph.png
+  
+  # rancher
+  # https://github.com/rancher/cli/release
+  cd ~/bin || exit
+  wget https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
+  tar xvfz rancher-linux-amd64-v0.6.5-rc4.tar.gz
+  rm rancher-linux-amd64-v0.6.5-rc4.tar.gz
+  # https://github.com/rancher/rancher-compose/releases
+  cd ~/bin || exit
+  wget https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
+  tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
+  rm rancher-compose-linux-amd64-v0.12.5.tar.gz
+  
+  # ack-grep
+  # https://beyondgrep.com/install/
+  curl https://beyondgrep.com/ack-2.22-single-file > ~/bin/ack && chmod 0755 ~/bin/ack
+
+  # CloudConvert
+  sudo npm install -g cloudconvert-cli
+  export CLOUDCONVERT_API_KEY=changeme
+
+  # Gandi Client
+  cd /tmp || exit
+  sudo apt-get install -y python-nose python3-nose python-ipy
+  git clone https://github.com/Gandi/gandi.cli.git
+  cd gandi.cli  || exit
+  ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
+
+  # Vault
+  wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/vault_0.9.3_linux_amd64.zip
+  unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
+  vault -autocomplete-install
+  export VAULT_ADDR='http://127.0.0.1:8200'
+  # setup https://github.com/Caiyeon/goldfish/wiki/Production-Deployment
+
+  # GCP
+  # Create environment variable for correct distribution
+  export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+  # Add the Cloud SDK distribution URI as a package source
+  echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+  # Import the Google Cloud Platform public key
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  # Update the package list and install the Cloud SDK
+  sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+
+  # AZURE
+  # Install prerequisite packages: 
+  sudo apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y
+  # Modify your sources list:
+  AZ_REPO=$(lsb_release -cs)
+  echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
+  sudo tee /etc/apt/sources.list.d/azure-cli.list
+  # Get the Microsoft signing key:
+  sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
+    --keyserver packages.microsoft.com \
+    --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+  # Install the CLI:
+  sudo apt-get update
+  sudo apt-get install azure-cli
+  # Install Azure Functions Core Tools
+  cd /tmp || exit
+  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+  sudo dpkg -i packages-microsoft-prod.deb
+  sudo apt-get update
+  sudo apt-get install -y azure-functions-core-tools
+}
+
+coolretroterm()
+{
+  # FIXME cool-retro-term
+  cd /tmp || exit
+  sudo apt -y install build-essential qml-module-qtgraphicaleffects qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qtquick-controls qml-module-qtquick-dialogs qmlscene qt5-default qt5-qmake qtdeclarative5-dev qtdeclarative5-localstorage-plugin qtdeclarative5-qtquick2-plugin qtdeclarative5-window-plugin
+  git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
+  cd cool-retro-term || exit
+  qmake && make
+  sudo make install
+}
+
+CozyDrive()
+{
+  # CozyDrive
+  mkdir -p ~/Applications
+  wget -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
+  chmod +x ~/Applications/CozyDrive-3.6.0-x86_64.AppImage
+  GnomeExtensions
+  gnomeshell-extension-manage --install --extension-id 1031
+}
+
+Ctop()
+{
+  # Top-like interface for container metrics https://ctop.sh
+  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
+  sudo chmod +x /usr/local/bin/ctop
+}
+
+Docker()
+{
+  # FIXME Docker
+  # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+  sudo apt-get install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
+  sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-compose
+  cd /tmp || exit
+  wget https://github.com/DockStation/dockstation/releases/download/v1.3.0/dockstation_1.3.0_amd64.deb
+  sudo dpkg -i /tmp/dockstation_1.3.0_amd64.deb && rm /tmp/dockstation_1.3.0_amd64.deb
+  sudo gpasswd -a $USER docker
+  # https://github.com/jesseduffield/lazydocker#installation
+  go get github.com/jesseduffield/lazydocker
+}
+
+Douane()
+{
+# Douane Firewal
+# Following doc : https://github.com/Douane/Douane
+sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
+}
+
+DroidCAM()
+{
+  # DroiCAM : use smartphone as webcam on computer
+  # https://www.dev47apps.com/droidcam/linux/
+  cd /tmp/ || exit 1
+  wget https://files.dev47apps.net/linux/droidcam_latest.zip
+  unzip droidcam_latest.zip -d droidcam
+  cd droidcam && sudo ./install-client
+  sudo apt install linux-headers-`uname -r` gcc make
+  sudo ./install-video
+  sudo ./install-sound
+}
+
 Dropbox()
 {
   # Dropbox
@@ -251,6 +518,585 @@ Dropbox()
   sudo dpkg -i dropbox_2020.03.04_amd64.deb
   sudo apt --fix-broken install
   echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
+}
+
+DVD()
+{
+  # Encrypted DVD
+  sudo apt install -y libdvd-pkg
+  sudo dpkg-reconfigure libdvd-pkg
+}
+
+Feedreader()
+{
+  # Feedreader
+  FlatPack
+  flatpak install flathub org.gnome.FeedReader
+}
+
+FlatPack()
+{
+  # New Package system
+  sudo apt install -y flatpak
+  sudo apt install -y gnome-software-plugin-flatpak
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+Fuzzy()
+{
+  # fzf: Fuzzy Finder
+  cd /tmp || exit
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
+}
+
+Github()
+{
+  # Github
+  snap install --edge github-desktop
+  snap install hub --classic
+}
+
+GnomeExtensions()
+{
+  # Install Gnome-extensions
+  # https://wiki.gnome.org/Projects/GnomeShell/Extensions#Enabling_extensions
+  # https://github.com/cyberalex4life/gnome-shell-extension-cl/blob/master/gnome-shell-extension-cl
+  # alternate-tab@gnome-shell-extensions.gcampax.github.com           - enabled    
+  gnomeshell-extension-manage --install --extension-id 15
+  # drive-menu@gnome-shell-extensions.gcampax.github.com              - enabled    
+  gnomeshell-extension-manage --install --extension-id 7
+  # windowsNavigator@gnome-shell-extensions.gcampax.github.com        - enabled    
+  gnomeshell-extension-manage --install --extension-id 10
+  # refresh-wifi@kgshank.net                                          - enabled    
+  gnomeshell-extension-manage --install --extension-id 905
+  # extensions@abteil.org                                             - enabled    
+  gnomeshell-extension-manage --install --extension-id 1036
+  # auto-move-windows@gnome-shell-extensions.gcampax.github.com       - enabled    
+  gnomeshell-extension-manage --install --extension-id 16
+  # workspace-switch-wraparound@theychx.org                           - enabled    
+  gnomeshell-extension-manage --install --extension-id 1116
+  # panel-osd@berend.de.schouwer.gmail.com
+  gnomeshell-extension-manage --install --extension-id 708
+  # cast-to-tv@rafostar.github.com                                    - enabled    
+  gnomeshell-extension-manage --install --extension-id 1544
+  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
+  npm install
+
+  # other params
+  dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
+  dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
+}
+
+GnomeConfigurations()
+{
+  # Misc Gnome configurations
+  # Some help : https://askubuntu.com/questions/971067/how-can-i-script-the-settings-made-by-gnome-tweak-tool
+  # dconf watch / is your friend !
+  gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinates '(50.633000000000003, 3.0586000000000002)'
+  gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
+  gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
+  gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
+  gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
+  gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
+  gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
+  gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
+  gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
+  gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
+  gsettings set org.gnome.gedit.plugins.pythonconsole font 'Monospace 10'
+  gsettings set org.gnome.meld custom-font 'monospace, 14'
+  gsettings set org.gnome.gedit.plugins.externaltools font 'Monospace 10'
+  gsettings set org.gnome.desktop.interface clock-show-date true
+  gsettings set org.gnome.mutter dynamic-workspaces false
+  gsettings set org.gnome.mutter workspaces-only-on-primary true
+  gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop', 'thunderbird.desktop']"
+  gsettings set org.gnome.shell.window-switcher current-workspace-only false
+  gsettings set org.gnome.desktop.screensaver lock-delay 120
+  gsettings set org.gnome.desktop.privacy report-technical-problems true
+  gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
+  gsettings set org.gnome.desktop.screensaver primary-color '#ffffff'
+  gsettings set org.gnome.desktop.screensaver secondary-color '#000000'
+  gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
+  gsettings set org.gnome.desktop.interface icon-theme 'La-Capitaine'
+  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
+  sudo bash -c 'cat << EOF > /usr/share/thumbnailers/ffmpeg.thumbnailer
+[Thumbnailer Entry]
+TryExec=/usr/bin/ffmpegthumbnailer
+Exec=/usr/bin/ffmpegthumbnailer -s %s -i %i -o %o -c png -f -t 10
+MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg;video/quicktime;video/x-avi;video/x-flv;video/x-mp4;video/x-mpeg;video/x-webm;video/x-mkv;application/x-extension-webm;video/x-matroska;video/x-ms-wmv;video/x-msvideo;video/x-msvideo/avi;video/x-theora/ogg;video/x-theora/ogv;video/x-ms-asf;video/x-m4v;
+EOF'
+}
+
+GrafTCP()
+{
+  # GraphTCP : https://github.com/hmgle/graftcp
+  cd /tmp || git clone https://github.com/hmgle/graftcp.git
+  cd graftcp || make
+}
+
+GRAPH()
+{
+  # dgraph
+  curl https://get.dgraph.io -sSf | bash
+}
+
+Infrakit()
+{
+  # Infrakit : A toolkit for creating and managing declarative, self-healing infrastructure.
+  mkdir -p $GOPATH/src/github.com/docker || true
+  cd $GOPATH/src/github.com/docker || exit
+  git clone git@github.com:docker/infrakit.git
+  cd infrakit && make get-tools & make ci && make binaries
+  cp build/* ~/bin/
+}
+
+IssueHelper()
+{
+  # Issue-helper
+  sudo apt remove cargo rustc
+  curl https://sh.rustup.rs -sSf | sh
+  source "${HOME}"/.cargo/env
+  cargo install gli
+}
+
+Keybase()
+{
+  # Keybase
+  # https://keybase.io/docs/the_app/install_linux
+  curl -o /tmp/keybase_amd64.deb -O https://prerelease.keybase.io/keybase_amd64.deb
+  sudo dpkg -i /tmp/keybase_amd64.deb
+  sudo apt-get install -f
+}
+
+Kubernetes()
+{
+  # Kubernetes
+  # https://github.com/kubernetes/minikube
+  cd ~/bin/ || exit
+  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
+  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl && chmod +x kubectl
+  curl -Lo karto https://github.com/Zenika/karto/releases/download/v1.1.0/karto && chmod +x karto
+  export MINIKUBE_WANTUPDATENOTIFICATION=false
+  export MINIKUBE_WANTREPORTERRORPROMPT=false
+  export MINIKUBE_HOME=$HOME
+  export CHANGE_MINIKUBE_NONE_USER=true
+  mkdir "$HOME"/.kube || true
+  touch "$HOME"/.kube/config
+  export KUBECONFIG="$HOME"/.kube/config
+  minikube start
+  # this for loop waits until kubectl can access the api server that Minikube has created
+  for i in {1..150}; do # timeout for 5 minutes
+    echo "$i\c"
+    kubectl get po &> /dev/null
+    if [ $? -ne 1 ]; then
+      break
+    fi
+    sleep 2
+  done
+  kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+  kubectl expose deployment hello-minikube --type=NodePort --port=8080
+  kubectl get pod
+  minikube service hello-minikube --url
+  curl "$(minikube service hello-minikube --url)"
+  # sudo minikube dashboard
+  minikube stop
+  cd /tmp || exit
+  git clone https://github.com/ahmetb/kubectx.git
+  cp -v kubectx/{kubectx,kubens} ~/bin/ 
+  mkdir -p ~/.oh-my-zsh/completions
+  chmod -R 755 ~/.oh-my-zsh/completions
+  cp kubectx/completion/kubectx.zsh ~/.oh-my-zsh/completions/_kubectx.zsh
+  cp kubectx/completion/kubens.zsh ~/.oh-my-zsh/completions/_kubens.zsh
+
+  # kubeval : Validate your Kubernetes configuration files, supports multiple Kubernetes versions
+  cd /tmp || exit
+  wget https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
+  tar xvfz kubeval-linux-amd64.tar.gz
+  mv kubeval ~/bin/
+  rm kubeval-linux-amd64.tar.gz
+
+  # Some other tools
+  # https://github.com/appscode/kubed
+  # https://github.com/heptio/ark
+  # https://github.com/cloudnativelabs/kube-router
+  # https://github.com/GoogleCloudPlatform/kube-metacontroller
+
+  # kustomizer
+  curl -s https://kustomizer.dev/install/kustomizer.sh | sudo bash
+
+  # Install kubectl plugins krew
+  set -x; cd "$(mktemp -d)" &&
+  curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew.tar.gz" &&
+  tar zxvf krew.tar.gz &&
+  KREW=./krew-"$(uname | tr '[:upper:]' '[:lower:]')_$(uname -m | sed -e 's/x86_64/amd64/' -e 's/arm.*$/arm/')" && "$KREW" install krew
+  export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+  kubectl krew update
+  for plugin in debug rbac-lookup who-can flame
+  do 
+    kubectl krew install ${plugin}
+  done
+
+  # Popeye - A Kubernetes Cluster Sanitizer
+  git clone https://github.com/derailed/popeye
+  cd popeye
+  # Build and install
+  go install
+  # Run
+  # popeye
+}
+
+Lightworks()
+{
+  # FIXME Lightworks
+  cd /tmp || exit
+  wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
+  sudo dpkg -i lightworks.deb && rm lightworks.deb
+  sudo apt --fix-broken install -y
+}
+
+lnav()
+{
+  # lnav
+  cd ~/bin || exit
+  wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin/lnav-0.8.3-linux-64bit.zip
+  unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
+}
+
+lynis()
+{
+  # lynis update is really major from ubuntu packages
+  sudo apt install -y apt-transport-https
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C80E383C3DE9F082E01391A0366C67DE91CA5D5F
+  echo 'Acquire::Languages "none";' | sudo tee /etc/apt/apt.conf.d/99disable-translations
+  echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
+  sudo apt update
+  sudo apt install -y lynis
+}
+
+Minishift()
+{
+  # Minishift
+  # https://github.com/MiniShift/minishift#getting-started
+  cd /tmp || exit
+  wget https://github.com/minishift/minishift/releases/download/v1.25.0/minishift-1.25.0-linux-amd64.tgz
+  tar xvfz minishift-1.25.0-linux-amd64.tgz
+  mv minishift-1.25.0-linux-amd64/minishift ~/bin
+  minishift config set vm-driver virtualbox
+  minishift start
+  minishift oc-env
+  eval "$(minishift oc-env)"
+  oc new-app https://github.com/sclorg/nodejs-ex -l name=myapp
+  oc logs -f bc/nodejs-ex
+  oc expose svc/nodejs-ex
+  minishift openshift service nodejs-ex --in-browser
+  minishift stop
+}
+
+MultiBootUSB()
+{
+  # MultiBootUSB
+  cd /tmp || exit
+  sudo apt install python3-pyudev
+  wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb 
+  sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
+}
+
+Multisystem()
+{
+  # Multisystem
+  sudo apt-add-repository 'deb http://liveusb.info/multisystem/depot all main'
+  wget -q http://liveusb.info/multisystem/depot/multisystem.asc -O- | sudo apt-key add -
+  sudo apt-get update
+  sudo apt-get install -y multisystem
+  sudo usermod -a -G adm ${USER}
+}
+
+Music()
+{
+  # Music Software
+  sudo apt install -y guitarix mixxx rosegarden
+}
+
+NeoVim()
+{
+  VIM
+  Python
+  GO
+  # NeoVIM
+  pip3 install --upgrade neovim
+  go get -u github.com/nsf/gocode
+}
+
+npmfx()
+{
+  # FX json parser
+  # https://www.youtube.com/watch?v=LMIeaIpZnJI&feature=em-uploademail
+  sudo npm install -g fx
+}
+
+OneDrive()
+{
+  # OneDrive : https://github.com/abraunegg/onedrive
+  sudo apt install -i build-essential
+  sudo apt install -i libcurl4-openssl-dev
+  sudo apt install -i libsqlite3-dev
+  curl -fsS https://dlang.org/install.sh | bash -s dmd
+  source "${HOME}/dlang/dmd-2.081.2/activate"
+  cd /tmp || exit
+  git clone https://github.com/abraunegg/onedrive.git
+  cd onedrive || exit
+  make
+  sudo make install
+  onedrive --synchronize
+  systemctl --user enable onedrive
+  systemctl --user start onedrive
+}
+
+OSQuery()
+{
+  # OSQuery : https://itnext.io/auditing-containers-with-osquery-389636f8c420
+  export OSQUERY_KEY=1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $OSQUERY_KEY
+  sudo add-apt-repository 'deb [arch=amd64] https://pkg.osquery.io/deb deb main'
+  sudo apt-get update
+  sudo apt-get install osquery
+}
+
+PlayOnLinux()
+{
+  # PlayOnLinux
+  wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
+  sudo add-apt-repository http://deb.playonlinux.com/
+  sudo apt -V install playonlinux wine-stable
+}
+
+Powershell()
+{
+  # Powershell
+  # https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md
+  # Import the public repository GPG keys
+  curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+  # Register the Microsoft Ubuntu repository
+  curl https://packages.microsoft.com/config/ubuntu/17.10/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+  # Update the list of products
+  sudo apt-get update
+  # Install PowerShell
+  sudo apt-get install -y powershell
+  # as repo is not available for the moment ....
+  cd /tmp || exit
+  wget -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
+  sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
+}
+
+Puppet()
+{
+  # Puppet
+  # https://docs.puppet.com/puppet/4.5/install_linux.html#installing-release-packages-on-apt-based-systems
+  wget http://apt.puppetlabs.com/puppet-release-xenial.deb;
+  sudo dpkg -i puppet-release-xenial.deb && rm -f puppet-release-xenial.deb
+}
+
+rapidphotodownloader()
+{
+  # rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
+  cd /tmp || exit
+  wget https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
+  python3 install.py
+}
+
+RocketChat()
+{
+  # RocketChat
+  sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev;
+  cd /tmp || exit
+  hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat || exit
+  make && sudo make install
+}
+
+Rust()
+{
+  # Install rust and other cargo tools
+  curl https://sh.rustup.rs -sSf | sh
+
+  # Initiate Cargo cache
+  rustup install stable
+  rustup default stable
+
+  for rustpkg in bat delta-git dog dust dutree just gping mdcat
+  do
+    cargo install "${rustpkg}"
+  done
+}
+
+Screensavers()
+{
+  # Screensavers
+  sudo apt remove gnome-screensaver
+  sudo add-apt-repository ppa:mc3man/mpv-tests
+  sudo apt install -y mpv
+  cat > /tmp/crons << EOF
+16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
+@reboot cd /home/daffy/ownCloudPerso/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
+EOF
+  crontab /tmp/crons
+  mkdir -p ~/.config/systemd/user/
+  systemctl --user enable xscreensaver
+}
+
+Slack()
+{
+  # Slack
+  # https://slack.com/intl/fr-fr/downloads/Linux
+  sudo snap install slack --classic
+}
+
+Spotify()
+{
+  # Spotify
+  # https://doc.ubuntu-fr.org/spotify
+  # sudo rm /etc/apt/sources.list.d/spotify.list
+  # sudo sh -c 'echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list'
+  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2C19886
+  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EFDC8610341D9410
+  # sudo apt-get update
+  # sudo apt-get install -y spotify-client
+  sudo snap install spotify
+  sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
+  pip install spotify-cli-linux
+  pip install lyricwikia
+}
+
+Stacer()
+{
+  # Stacer : Ubuntu System Cleaner Stacer Scores a Spring Update
+  cd /tmp || exit
+  wget https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
+  sudo dpkg -i stacer_1.0.9_amd64.deb
+}
+
+Students()
+{
+  # Add some scientific Tools
+  sudo apt install -y \
+    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo qalculate step tkgate zegrapher
+
+  cd /tmp || exit 1
+  wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
+  sudo dpkg -i filius_1.7.4_all.deb
+  # Logiciels PlayOnLinux
+  # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
+  # Filius : https://www.lernsoftware-filius.de/Herunterladen
+  # Regressi : http://regressi.fr/WordPress/download/
+}
+
+STui()
+{
+  # S-Tui : https://www.cyberciti.biz/python-tutorials/monitor-linux-cpu-temperature-frequency-power-in-a-graphical-way/
+  sudo apt install -y python-pip stress
+  sudo pip install s-tui
+  # sudo s-tui
+}
+
+Taskfile()
+{
+  # Taskfile : Task is a task runner / build tool that aims to be simpler and easier to use than, for example, GNU Make.
+  # https://taskfile.org/#/
+  go get -u -v github.com/go-task/task/cmd/task
+}
+
+Terminal()
+{
+  # Install Tilix Theme
+  mkdir -p ~/.config/tilix/schemes/
+  wget -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
+  gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
+  default=$(gsettings get com.gexperts.Tilix.ProfilesList default | tr -d \')
+  dconf write /com/gexperts/Tilix/profiles/${default}/login-shell true
+  dconf write /com/gexperts/Tilix/warn-vte-config-issue false
+  dconf write /com/gexperts/Tilix/control-scroll-zoom true
+  dconf write /com/gexperts/Tilix/profiles/${default}/use-theme-colors false
+  dconf write /com/gexperts/Tilix/profiles/${default}/foreground-color \'#FFFFFF\'
+  dconf write /com/gexperts/Tilix/profiles/${default}/background-color \'#333333\'
+  dconf write /com/gexperts/Tilix/profiles/${default}/bold-color-set false
+  dconf write /com/gexperts/Tilix/profiles/${default}/badge-color-set false
+  dconf write /com/gexperts/Tilix/profiles/${default}/highlight-colors-set false
+  dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
+  dconf write /com/gexperts/Tilix/profiles/${default}/default-size-columns '200'
+  dconf write /com/gexperts/Tilix/profiles/${default}/default-size-rows '50'
+  dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
+  dconf write /com/gexperts/Tilix/copy-on-select true
+  gsettings set org.gnome.settings-daemon.plugins.media-keys terminal ""
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name unset
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command unset
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding '<Primary><Alt>t'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name 'Terminal'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/usr/bin/tilix'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings ['/org/gnome/settings/daemon/plugins/media-keys/custom-keybindings/custom0/']
+  gsettings set org.gnome.desktop.interface enable-animations true
+  # Tmux
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+}
+
+TLDR()
+{
+  # TLDR
+  go get 4d63.com/tldr
+}
+
+Trello()
+{
+  # Trello Client
+  # git clone https://github.com/mheap/trello-cli.git # best but badly installed
+  # https://github.com/qcam/3llo
+  sudo em install 3llo
+  export TRELLO_USER=your_username
+  export TRELLO_KEY=your_key
+  export TRELLO_TOKEN=your_token
+}
+
+ttfmscorefontsinstaller()
+{
+# Fixed in bionic ttf-mscorefonts-installer
+# http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
+# wget -o /tmp/ttf-mscorefonts-installer_3.6_all.deb -O http://ftp.fr.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
+# sudo dpkg -i /tmp/ttf-mscorefonts-installer_3.6_all.deb
+  sudo apt install -f
+}
+
+urbackup()
+{
+  # urbackup
+  TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF; rm $TF
+}
+
+VIM()
+{
+  # Add Ruby Support to vim
+  sudo update-alternatives --set vim /usr/bin/vim.nox
+  # Install vundle
+  pip install flake8
+  pip install wakatime
+  pip install pidcat-pip
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  vim +BundleInstall
+  vim +GoInstallBinaries
+  cd ~/.vim/plugged/YouCompleteMe && python install.py
+
+  # vim-instant-markdown
+  sudo npm -g install instant-markdown-d
+  cd /tmp || exit
+  git clone git@github.com:suan/vim-instant-markdown.git
+  mkdir -p ~/.vim/after/ftplugin/markdown/
+  cd vim-instant-markdown || exit
+  cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
+
+  # vim-fugitive
+  mkdir -p ~/.vim/pack/tpope/start
+  cd ~/.vim/pack/tpope/start
+  git clone https://tpope.io/vim/fugitive.git
+  vim -u NONE -c "helptags fugitive/doc" -c q
 }
 
 VirtualBox()
@@ -346,682 +1192,11 @@ VSCodium()
     done
 }
 
-
-Keybase()
-{
-  # Keybase
-  # https://keybase.io/docs/the_app/install_linux
-  curl -o /tmp/keybase_amd64.deb -O https://prerelease.keybase.io/keybase_amd64.deb
-  sudo dpkg -i /tmp/keybase_amd64.deb
-  sudo apt-get install -f
-}
-
-Spotify()
-{
-  # Spotify
-  # https://doc.ubuntu-fr.org/spotify
-  # sudo rm /etc/apt/sources.list.d/spotify.list
-  # sudo sh -c 'echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list'
-  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2C19886
-  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EFDC8610341D9410
-  # sudo apt-get update
-  # sudo apt-get install -y spotify-client
-  sudo snap install spotify
-  sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
-  pip install spotify-cli-linux
-  pip install lyricwikia
-}
-
-Slack()
-{
-  # Slack
-  # https://slack.com/intl/fr-fr/downloads/Linux
-  sudo snap install slack --classic
-}
-
-Chrome()
-{
-  # Chrome
-  # https://doc.ubuntu-fr.org/google_chrome
-  # https://www.google.com/chrome/browser/desktop/index.html
-  sudo sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
-  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  sudo apt-get update
-  sudo apt-get install -y google-chrome-unstable
-}
-
-Puppet()
-{
-  # Puppet
-  # https://docs.puppet.com/puppet/4.5/install_linux.html#installing-release-packages-on-apt-based-systems
-  wget http://apt.puppetlabs.com/puppet-release-xenial.deb;
-  sudo dpkg -i puppet-release-xenial.deb && rm -f puppet-release-xenial.deb
-}
-
-Docker()
-{
-  # FIXME Docker
-  # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
-  sudo apt-get install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
-  sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  sudo apt-get update
-  sudo apt-get install docker-ce docker-compose
-  cd /tmp || exit
-  wget https://github.com/DockStation/dockstation/releases/download/v1.3.0/dockstation_1.3.0_amd64.deb
-  sudo dpkg -i /tmp/dockstation_1.3.0_amd64.deb && rm /tmp/dockstation_1.3.0_amd64.deb
-  sudo gpasswd -a $USER docker
-  # https://github.com/jesseduffield/lazydocker#installation
-  go get github.com/jesseduffield/lazydocker
-}
-
-TLDR()
-{
-  # TLDR
-  go get 4d63.com/tldr
-}
-
-VIM()
-{
-  # Add Ruby Support to vim
-  sudo update-alternatives --set vim /usr/bin/vim.nox
-  # Install vundle
-  pip install flake8
-  pip install wakatime
-  pip install pidcat-pip
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  vim +BundleInstall
-  vim +GoInstallBinaries
-  cd ~/.vim/plugged/YouCompleteMe && python install.py
-
-  # vim-instant-markdown
-  sudo npm -g install instant-markdown-d
-  cd /tmp || exit
-  git clone git@github.com:suan/vim-instant-markdown.git
-  mkdir -p ~/.vim/after/ftplugin/markdown/
-  cd vim-instant-markdown || exit
-  cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
-}
-
-ZSH()
-{
-  # Install oh-my-szh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-  cd ~/.oh-my-zsh && git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
-}
-
-XAuth()
-{
-  # XAuth
-  # https://superuser.com/questions/806637/xauth-not-creating-xauthority-file/941244#941244
-   rm -f .Xauthority
-   # xauth with complain unless ~/.Xauthority exists
-   touch ~/.Xauthority
-   # only this one key is needed for X11 over SSH 
-   xauth generate :0 . trusted 
-   # generate our own key, xauth requires 128 bit hex encoding
-   xauth add "${HOST}":0 . "$(xxd -l 16 -p /dev/urandom)"
-   # To view a listing of the .Xauthority file, enter the following 
-   xauth list 
-}
-
-Terminal()
-{
-  # Install Tilix Theme
-  mkdir -p ~/.config/tilix/schemes/
-  wget -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
-  gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
-  default=$(gsettings get com.gexperts.Tilix.ProfilesList default | tr -d \')
-  dconf write /com/gexperts/Tilix/profiles/${default}/login-shell true
-  dconf write /com/gexperts/Tilix/warn-vte-config-issue false
-  dconf write /com/gexperts/Tilix/control-scroll-zoom true
-  dconf write /com/gexperts/Tilix/profiles/${default}/use-theme-colors false
-  dconf write /com/gexperts/Tilix/profiles/${default}/foreground-color \'#FFFFFF\'
-  dconf write /com/gexperts/Tilix/profiles/${default}/background-color \'#333333\'
-  dconf write /com/gexperts/Tilix/profiles/${default}/bold-color-set false
-  dconf write /com/gexperts/Tilix/profiles/${default}/badge-color-set false
-  dconf write /com/gexperts/Tilix/profiles/${default}/highlight-colors-set false
-  dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
-  dconf write /com/gexperts/Tilix/profiles/${default}/default-size-columns '200'
-  dconf write /com/gexperts/Tilix/profiles/${default}/default-size-rows '50'
-  dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
-  dconf write /com/gexperts/Tilix/copy-on-select true
-  gsettings set org.gnome.settings-daemon.plugins.media-keys terminal ""
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name unset
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command unset
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding '<Primary><Alt>t'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name 'Terminal'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/usr/bin/tilix'
-  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings ['/org/gnome/settings/daemon/plugins/media-keys/custom-keybindings/custom0/']
-  gsettings set org.gnome.desktop.interface enable-animations true
-  # Tmux
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-}
-
-ttfmscorefontsinstaller()
-{
-# Fixed in bionic ttf-mscorefonts-installer
-# http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
-# wget -o /tmp/ttf-mscorefonts-installer_3.6_all.deb -O http://ftp.fr.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
-# sudo dpkg -i /tmp/ttf-mscorefonts-installer_3.6_all.deb
- sudo apt install -f
-}
-
-GnomeExtensions()
-{
-  # Install Gnome-extensions
-  # https://wiki.gnome.org/Projects/GnomeShell/Extensions#Enabling_extensions
-  # https://github.com/cyberalex4life/gnome-shell-extension-cl/blob/master/gnome-shell-extension-cl
-  # alternate-tab@gnome-shell-extensions.gcampax.github.com           - enabled    
-  gnomeshell-extension-manage --install --extension-id 15
-  # drive-menu@gnome-shell-extensions.gcampax.github.com              - enabled    
-  gnomeshell-extension-manage --install --extension-id 7
-  # windowsNavigator@gnome-shell-extensions.gcampax.github.com        - enabled    
-  gnomeshell-extension-manage --install --extension-id 10
-  # refresh-wifi@kgshank.net                                          - enabled    
-  gnomeshell-extension-manage --install --extension-id 905
-  # extensions@abteil.org                                             - enabled    
-  gnomeshell-extension-manage --install --extension-id 1036
-  # auto-move-windows@gnome-shell-extensions.gcampax.github.com       - enabled    
-  gnomeshell-extension-manage --install --extension-id 16
-  # workspace-switch-wraparound@theychx.org                           - enabled    
-  gnomeshell-extension-manage --install --extension-id 1116
-  # panel-osd@berend.de.schouwer.gmail.com
-  gnomeshell-extension-manage --install --extension-id 708
-  # cast-to-tv@rafostar.github.com                                    - enabled    
-  gnomeshell-extension-manage --install --extension-id 1544
-  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
-  npm install
-
-  # other params
-  dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
-  dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
-}
-
-GnomeConfigurations()
-{
-  # Misc Gnome configurations
-  # Some help : https://askubuntu.com/questions/971067/how-can-i-script-the-settings-made-by-gnome-tweak-tool
-  # dconf watch / is your friend !
-  gsettings set org.gnome.desktop.peripherals.touchpad natural-scroll false
-  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
-  gsettings set org.gnome.settings-daemon.plugins.color night-light-last-coordinates '(50.633000000000003, 3.0586000000000002)'
-  gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
-  gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
-  gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
-  gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
-  gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
-  gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
-  gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
-  gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
-  gsettings set org.gnome.gedit.preferences.editor editor-font 'Monospace 12'
-  gsettings set org.gnome.gedit.plugins.pythonconsole font 'Monospace 10'
-  gsettings set org.gnome.meld custom-font 'monospace, 14'
-  gsettings set org.gnome.gedit.plugins.externaltools font 'Monospace 10'
-  gsettings set org.gnome.desktop.interface clock-show-date true
-  gsettings set org.gnome.mutter dynamic-workspaces false
-  gsettings set org.gnome.mutter workspaces-only-on-primary true
-  gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'google-chrome.desktop', 'rhythmbox.desktop', 'shotwell.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'youtube-dlg.desktop', 'cacher.desktop', 'spotify.desktop', 'atom.desktop', 'keepass2.desktop', 'com.gexperts.Tilix.desktop', 'QOwnNotes.desktop', 'thunderbird.desktop']"
-  gsettings set org.gnome.shell.window-switcher current-workspace-only false
-  gsettings set org.gnome.desktop.screensaver lock-delay 120
-  gsettings set org.gnome.desktop.privacy report-technical-problems true
-  gsettings set org.gnome.desktop.screensaver picture-options 'zoom'
-  gsettings set org.gnome.desktop.screensaver primary-color '#ffffff'
-  gsettings set org.gnome.desktop.screensaver secondary-color '#000000'
-  gsettings set org.gnome.nautilus.preferences show-image-thumbnails 'always'
-  gsettings set org.gnome.desktop.interface icon-theme 'La-Capitaine'
-  gsettings set org.gnome.desktop.screensaver picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png'
-  sudo bash -c 'cat << EOF > /usr/share/thumbnailers/ffmpeg.thumbnailer
-[Thumbnailer Entry]
-TryExec=/usr/bin/ffmpegthumbnailer
-Exec=/usr/bin/ffmpegthumbnailer -s %s -i %i -o %o -c png -f -t 10
-MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg;video/quicktime;video/x-avi;video/x-flv;video/x-mp4;video/x-mpeg;video/x-webm;video/x-mkv;application/x-extension-webm;video/x-matroska;video/x-ms-wmv;video/x-msvideo;video/x-msvideo/avi;video/x-theora/ogg;video/x-theora/ogv;video/x-ms-asf;video/x-m4v;
-EOF'
-}
-
-Kubernetes()
-{
-  # Kubernetes
-  # https://github.com/kubernetes/minikube
-  cd ~/bin/ || exit
-  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
-  curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl && chmod +x kubectl
-  curl -Lo karto https://github.com/Zenika/karto/releases/download/v1.1.0/karto && chmod +x karto
-  export MINIKUBE_WANTUPDATENOTIFICATION=false
-  export MINIKUBE_WANTREPORTERRORPROMPT=false
-  export MINIKUBE_HOME=$HOME
-  export CHANGE_MINIKUBE_NONE_USER=true
-  mkdir "$HOME"/.kube || true
-  touch "$HOME"/.kube/config
-  export KUBECONFIG="$HOME"/.kube/config
-  minikube start
-  # this for loop waits until kubectl can access the api server that Minikube has created
-  for i in {1..150}; do # timeout for 5 minutes
-    echo "$i\c"
-    kubectl get po &> /dev/null
-    if [ $? -ne 1 ]; then
-      break
-    fi
-    sleep 2
-  done
-  kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
-  kubectl expose deployment hello-minikube --type=NodePort
-  curl "$(minikube service hello-minikube --url)"
-  # sudo minikube dashboard
-  minikube stop
-  cd /tmp || exit
-  git clone https://github.com/ahmetb/kubectx.git
-  cp -v kubectx/{kubectx,kubens} ~/bin/ 
-  mkdir -p ~/.oh-my-zsh/completions
-  chmod -R 755 ~/.oh-my-zsh/completions
-  cp kubectx/completion/kubectx.zsh ~/.oh-my-zsh/completions/_kubectx.zsh
-  cp kubectx/completion/kubens.zsh ~/.oh-my-zsh/completions/_kubens.zsh
-
-  # kubeval : Validate your Kubernetes configuration files, supports multiple Kubernetes versions
-  cd /tmp || exit
-  wget https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
-  tar xvfz kubeval-linux-amd64.tar.gz
-  mv kubeval ~/bin/
-  rm kubeval-linux-amd64.tar.gz
-
-  # Some other tools
-  # https://github.com/appscode/kubed
-  # https://github.com/heptio/ark
-  # https://github.com/cloudnativelabs/kube-router
-  # https://github.com/GoogleCloudPlatform/kube-metacontroller
-
-  # kustomizer
-  curl -s https://kustomizer.dev/install/kustomizer.sh | sudo bash
-}
-
-Minishift()
-{
-  # Minishift
-  # https://github.com/MiniShift/minishift#getting-started
-  cd /tmp || exit
-  wget https://github.com/minishift/minishift/releases/download/v1.25.0/minishift-1.25.0-linux-amd64.tgz
-  tar xvfz minishift-1.25.0-linux-amd64.tgz
-  mv minishift-1.25.0-linux-amd64/minishift ~/bin
-  minishift config set vm-driver virtualbox
-  minishift start
-  minishift oc-env
-  eval "$(minishift oc-env)"
-  oc new-app https://github.com/sclorg/nodejs-ex -l name=myapp
-  oc logs -f bc/nodejs-ex
-  oc expose svc/nodejs-ex
-  minishift openshift service nodejs-ex --in-browser
-  minishift stop
-}
-
-CLOUD()
-{
-  # some cloud tools
-  # Packer
-  # https://www.packer.io/downloads.html
-  cd ~/bin || exit
-  wget https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
-  unzip -f packer_1.1.1_linux_amd64.zip
-  rm packer_1.1.1_linux_amd64.zip
-  
-  # terraform
-  # https://www.terraform.io/downloads.html
-  cd ~/bin || exit
-  wget https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
-  unzip -f terraform_0.10.8_linux_amd64.zip
-  rm -f terraform_0.10.8_linux_amd64.zip getTerraformProviders.sh
-  wget https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
-  sudo mkdir -p /usr/local/terraform/toolbox/providers/
-  sudo bash ~/bin/getTerraformProviders.sh
-  cd "$HOME" || exit
-  terraform init -plugin-dir=/usr/local/terraform/toolbox/providers/
-  # terraform graph | dot -Tpng > terraform-graph.png
-  
-  # rancher
-  # https://github.com/rancher/cli/release
-  cd ~/bin || exit
-  wget https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
-  tar xvfz rancher-linux-amd64-v0.6.5-rc4.tar.gz
-  rm rancher-linux-amd64-v0.6.5-rc4.tar.gz
-  # https://github.com/rancher/rancher-compose/releases
-  cd ~/bin || exit
-  wget https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
-  tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
-  rm rancher-compose-linux-amd64-v0.12.5.tar.gz
-  
-  # ack-grep
-  # https://beyondgrep.com/install/
-  curl https://beyondgrep.com/ack-2.22-single-file > ~/bin/ack && chmod 0755 ~/bin/ack
-
-  # CloudConvert
-  sudo npm install -g cloudconvert-cli
-  export CLOUDCONVERT_API_KEY=changeme
-
-  # Gandi Client
-  cd /tmp || exit
-  sudo apt-get install -y python-nose python3-nose python-ipy
-  git clone https://github.com/Gandi/gandi.cli.git
-  cd gandi.cli  || exit
-  ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
-
-  # Vault
-  wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/vault_0.9.3_linux_amd64.zip
-  unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
-  vault -autocomplete-install
-  export VAULT_ADDR='http://127.0.0.1:8200'
-  # setup https://github.com/Caiyeon/goldfish/wiki/Production-Deployment
-
-  # GCP
-  # Create environment variable for correct distribution
-  export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-  # Add the Cloud SDK distribution URI as a package source
-  echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-  # Import the Google Cloud Platform public key
-  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-  # Update the package list and install the Cloud SDK
-  sudo apt-get update && sudo apt-get install -y google-cloud-sdk
-
-  # AZURE
-  # Install prerequisite packages: 
-  sudo apt-get install apt-transport-https lsb-release software-properties-common dirmngr -y
-  # Modify your sources list:
-  AZ_REPO=$(lsb_release -cs)
-  echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | \
-  sudo tee /etc/apt/sources.list.d/azure-cli.list
-  # Get the Microsoft signing key:
-  sudo apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv \
-     --keyserver packages.microsoft.com \
-     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
-  # Install the CLI:
-  sudo apt-get update
-  sudo apt-get install azure-cli
-  # Install Azure Functions Core Tools
-  cd /tmp || exit
-  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
-  sudo dpkg -i packages-microsoft-prod.deb
-  sudo apt-get update
-  sudo apt-get install -y azure-functions-core-tools
-}
-
-GO()
-{
-  # GO
-  # https://golang.org/dl/
-  mkdir -p "$GOROOT" "$GOPATH"
-  cd "$GOROOT" || exit
-  wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
-  tar xvfz go1.9.2.linux-amd64.tar.gz
-  rm go1.9.2.linux-amd64.tar.gz
-  go get golang.org/x/tools/cmd/godoc
-  go get golang.org/x/tools/cmd/goimports
-  go get -u github.com/golang/lint/golint
-  # tips cross compilation
-  # CGO_ENABLED=yes go build
-  go get github.com/claudiodangelis/qrcp
-}
-
-Powershell()
-{
-  # Powershell
-  # https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md
-  # Import the public repository GPG keys
-  curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-   # Register the Microsoft Ubuntu repository
-  curl https://packages.microsoft.com/config/ubuntu/17.10/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
-   # Update the list of products
-   sudo apt-get update
-   # Install PowerShell
-   sudo apt-get install -y powershell
-  # as repo is not available for the moment ....
-  cd /tmp || exit
-  wget -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
-  sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
-}
-
-Android()
-{
-  # Android Rules
-  cd /tmp || exit
-  git clone git@github.com:M0Rf30/android-udev-rules.git
-  sudo cp android-udev-rules/51-android.rules /etc/udev/rules.d/ 
-  sudo chmod a+r /etc/udev/rules.d/51-android.rules
-  sudo groupadd adbusers
-  sudo usermod -a -G adbusers "$(whoami)"
-  sudo udevadm control --reload-rules
-  sudo service udev restart
-}
-
-Trello()
-{
-  # Trello Client
-  # git clone https://github.com/mheap/trello-cli.git # best but badly installed
-  # https://github.com/qcam/3llo
-  sudo em install 3llo
-  export TRELLO_USER=your_username
-  export TRELLO_KEY=your_key
-  export TRELLO_TOKEN=your_token
-}
-
-Python()
-{
-  # Python
-  snap install pycharm-community --classic
-  pip3 install virtualenv
-  pip3 install docopt
-  pip3 install configobj
-  pip3 install terminaltables
-
-  # Try alphago .....
-  pip install tenserflow
-  pip install betago
-  # cd /tmp
-  # git clone https://github.com/maxpumperla/betago
-  # cd betago
-  # python run_demo.py
-
-  # Git Pull Request
-  pip3 install git-pull-request
-}
-
-FlatPack()
-{
-  # New Package system
-  sudo apt install -y flatpak
-  sudo apt install -y gnome-software-plugin-flatpak
-  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-}
-
 WSS()
 {
   # WSS by Netflix
   # https://github.com/brendangregg/wss.git
   echo ""
-}
-
-GRAPH()
-{
-  # dgraph
-  curl https://get.dgraph.io -sSf | bash
-}
-
-Chaos()
-{
-  # Chaos toolkit : https://medium.com/chaos-toolkit/announcing-chaos-discover-and-chaos-init-ff2bf02c5a85
-  docker pull chaostoolkit/chaostoolkit
-  docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
-}
-
-Ctop()
-{
-  # Top-like interface for container metrics https://ctop.sh
-  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
-  sudo chmod +x /usr/local/bin/ctop
-}
-
-Infrakit()
-{
-  # Infrakit : A toolkit for creating and managing declarative, self-healing infrastructure.
-  mkdir -p $GOPATH/src/github.com/docker || true
-  cd $GOPATH/src/github.com/docker || exit
-  git clone git@github.com:docker/infrakit.git
-  cd infrakit && make get-tools & make ci && make binaries
-  cp build/* ~/bin/
-}
-
-Ansible()
-{
-  # molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
-  sudo pip install molecule
-  cd /tmp || exit
-  git clone https://github.com/metacloud/molecule
-  cd /tmp/molecule/test/scenarios/driver/docker || exit
-  molecule test
-}
-
-chromeIPass()
-{
-  # chromeIPass : https://github.com/pfn/passifox/
-  sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
-}
-
-IssueHelper()
-{
-  # Issue-helper
-  sudo apt remove cargo rustc
-  curl https://sh.rustup.rs -sSf | sh
-  source "${HOME}"/.cargo/env
-  cargo install gli
-}
-
-Feedreader()
-{
-  # Feedreader
-  FlatPack
-  flatpak install flathub org.gnome.FeedReader
-}
-
-urbackup()
-{
-  # urbackup
-  TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF; rm $TF
-}
-
-lnav()
-{
-  # lnav
-  cd ~/bin || exit
-  wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin/lnav-0.8.3-linux-64bit.zip
-  unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
-}
-
-lynis()
-{
-  # lynis update is really major from ubuntu packages
-  sudo apt install -y apt-transport-https
-  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C80E383C3DE9F082E01391A0366C67DE91CA5D5F
-  echo 'Acquire::Languages "none";' | sudo tee /etc/apt/apt.conf.d/99disable-translations
-  echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
-  sudo apt update
-  sudo apt install -y lynis
-}
-
-youtube()
-{
-  # youtube-dlg
-  sudo add-apt-repository -n -y ppa:nilarimogard/webupd8
-  sudo sed -i -e "s+bionic+xenial+g" /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8-bionic.list
-  sudo apt update
-  sudo apt install -y youtube-dlg
-}
-
-Lightworks()
-{
-  # FIXME Lightworks
-  cd /tmp || exit
-  wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
-  sudo dpkg -i lightworks.deb && rm lightworks.deb
-  sudo apt --fix-broken install -y
-}
-
-coolretroterm()
-{
-  # FIXME cool-retro-term
-  cd /tmp || exit
-  sudo apt -y install build-essential qml-module-qtgraphicaleffects qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qtquick-controls qml-module-qtquick-dialogs qmlscene qt5-default qt5-qmake qtdeclarative5-dev qtdeclarative5-localstorage-plugin qtdeclarative5-qtquick2-plugin qtdeclarative5-window-plugin
-  git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
-  cd cool-retro-term || exit
-  qmake && make
-  sudo make install
-}
-
-bcctools()
-{
-  # bcc-tools
-  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
-  echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic-nightly main" | sudo tee /etc/apt/sources.list.d/iovisor.list
-  sudo apt-get update
-  sudo apt-get install y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
-}
-
-bluegriffon()
-{
-  #- FIXME bluegriffon
-  cd /tmp || exit
-  wget http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
-  sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
-}
-
-NeoVim()
-{
-  VIM
-  Python
-  GO
-  # NeoVIM
-  pip3 install --upgrade neovim
-  go get -u github.com/nsf/gocode
-}
-
-CozyDrive()
-{
-  # CozyDrive
-  mkdir -p ~/Applications
-  wget -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
-  chmod +x ~/Applications/CozyDrive-3.6.0-x86_64.AppImage
-  GnomeExtensions
-  gnomeshell-extension-manage --install --extension-id 1031
-}
-
-Douane()
-{
-# Douane Firewal
-# Following doc : https://github.com/Douane/Douane
-sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
-}
-
-npmfx()
-{
-  # FX json parser
-  # https://www.youtube.com/watch?v=LMIeaIpZnJI&feature=em-uploademail
-  sudo npm install -g fx
-}
-
-MultiBootUSB()
-{
-  # MultiBootUSB
-  cd /tmp || exit
-  sudo apt install python3-pyudev
-  wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb 
-  sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
-}
-
-RocketChat()
-{
-  # RocketChat
-  sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev;
-  cd /tmp || exit
-  hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat || exit
-  make && sudo make install
 }
 
 WTF()
@@ -1033,101 +1208,34 @@ WTF()
   make install
 }
 
-Fuzzy()
+XAuth()
 {
-  # fzf: Fuzzy Finder
-  cd /tmp || exit
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install
+  # XAuth
+  # https://superuser.com/questions/806637/xauth-not-creating-xauthority-file/941244#941244
+  rm -f .Xauthority
+  # xauth with complain unless ~/.Xauthority exists
+  touch ~/.Xauthority
+  # only this one key is needed for X11 over SSH 
+  xauth generate :0 . trusted 
+  # generate our own key, xauth requires 128 bit hex encoding
+  xauth add "${HOST}":0 . "$(xxd -l 16 -p /dev/urandom)"
+  # To view a listing of the .Xauthority file, enter the following 
+  xauth list 
 }
 
-Stacer()
+YakYak()
 {
-  # Stacer : Ubuntu System Cleaner Stacer Scores a Spring Update
-  cd /tmp || exit
-  wget https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
-  sudo dpkg -i stacer_1.0.9_amd64.deb
+  # YakYak : https://www.omgubuntu.co.uk/2017/10/yakyak-opensource-google-hangouts-desktop-app
+  sudo snap install yakyak
 }
 
-rapidphotodownloader()
+youtube()
 {
-  # rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
-  cd /tmp || exit
-  wget https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
-  python3 install.py
-}
-
-OneDrive()
-{
-  # OneDrive : https://github.com/abraunegg/onedrive
-  sudo apt install -i build-essential
-  sudo apt install -i libcurl4-openssl-dev
-  sudo apt install -i libsqlite3-dev
-  curl -fsS https://dlang.org/install.sh | bash -s dmd
-  source "${HOME}/dlang/dmd-2.081.2/activate"
-  cd /tmp || exit
-  git clone https://github.com/abraunegg/onedrive.git
-  cd onedrive || exit
-  make
-  sudo make install
-  onedrive --synchronize
-  systemctl --user enable onedrive
-  systemctl --user start onedrive
-}
-
-Multisystem()
-{
-  # Multisystem
-  sudo apt-add-repository 'deb http://liveusb.info/multisystem/depot all main'
-  wget -q http://liveusb.info/multisystem/depot/multisystem.asc -O- | sudo apt-key add -
-  sudo apt-get update
-  sudo apt-get install -y multisystem
-  sudo usermod -a -G adm ${USER}
-}
-
-OSQuery()
-{
-  # OSQuery : https://itnext.io/auditing-containers-with-osquery-389636f8c420
-  export OSQUERY_KEY=1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
-  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $OSQUERY_KEY
-  sudo add-apt-repository 'deb [arch=amd64] https://pkg.osquery.io/deb deb main'
-  sudo apt-get update
-  sudo apt-get install osquery
-}
-
-PlayOnLinux()
-{
-  # PlayOnLinux
-  wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
-  sudo add-apt-repository http://deb.playonlinux.com/
-  sudo apt -V install playonlinux wine-stable
-}
-
-Children()
-{
-  # Add some games
-  sudo apt install -y \
-    brainparty briquolo cgoban childsplay colobot connectagram \
-    extremetuxracer fretsonfire frozen-bubble gbrainy gcompris grhino \
-    junior-programming khangman mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
-
-  # when you need to add users to junior-programming
-  # sudo dpkg-reconfigure --force junior-config
-}
-
-Students()
-{
-  # Add some scientific Tools
-  sudo apt install -y \
-    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo step tkgate zegrapher
-
-  cd /tmp || exit 1
-  wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
-  sudo dpkg -i filius_1.7.4_all.deb
-  # Logiciels PlayOnLinux
-  # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
-  # Filius : https://www.lernsoftware-filius.de/Herunterladen
-  # Regressi : http://regressi.fr/WordPress/download/
+  # youtube-dlg
+  sudo add-apt-repository -n -y ppa:nilarimogard/webupd8
+  sudo sed -i -e "s+bionic+xenial+g" /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8-bionic.list
+  sudo apt update
+  sudo apt install -y youtube-dlg
 }
 
 YunoHost()
@@ -1137,45 +1245,18 @@ YunoHost()
   sudo update-ca-certificates
 }
 
-Github()
-{
-  # Github
-  snap install --edge github-desktop
-  snap install hub --classic
-}
-
-GrafTCP()
-{
-  # GraphTCP : https://github.com/hmgle/graftcp
-  cd /tmp || git clone https://github.com/hmgle/graftcp.git
-  cd graftcp || make
-}
-
-STui()
-{
-  # S-Tui : https://www.cyberciti.biz/python-tutorials/monitor-linux-cpu-temperature-frequency-power-in-a-graphical-way/
-  sudo apt install -y python-pip stress
-  sudo pip install s-tui
-  # sudo s-tui
-}
-
-Taskfile()
-{
-  # Taskfile : Task is a task runner / build tool that aims to be simpler and easier to use than, for example, GNU Make.
-  # https://taskfile.org/#/
-  go get -u -v github.com/go-task/task/cmd/task
-}
-
-YakYak()
-{
-  # YakYak : https://www.omgubuntu.co.uk/2017/10/yakyak-opensource-google-hangouts-desktop-app
-  sudo snap install yakyak
-}
-
 zquests()
 {
     # Search commandline tool : https://blog.shevarezo.fr/post/2018/10/31/faire-recherches-internet-ligne-de-commande
     go get -v github.com/zquestz/s
+}
+
+ZSH()
+{
+  # Install oh-my-szh
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+  cd ~/.oh-my-zsh && git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
 }
 
 Annexes()
@@ -1189,7 +1270,7 @@ Main()
 #  Setup
 #  WIFI
 #  PPA
-#  Packages
+  Packages
 #  Python
 #  GO
 #  Android
@@ -1199,6 +1280,7 @@ Main()
 #  Bat
 #  bcctools
 #  bluegriffon
+#  browsh
 #  Chaos
 #  Children
 #  Chrome
@@ -1210,15 +1292,16 @@ Main()
 #  Docker
 #  Douane
 #  Dropbox
-  DVD
+#  DroidCAM
+#  DVD
+#  FlatPack
 #  Feedreader
 #  Fuzzy
-#  npmfx
+#  Github
 #  GnomeConfigurations
 #  GnomeExtensions
-#  GRAPH
-#  Github
 #  GrafTCP
+#  GRAPH
 #  Infrakit
 #  IssueHelper
 #  Keybase
@@ -1231,6 +1314,7 @@ Main()
 #  Multisystem
 #  Music
 #  NeoVim
+#  npmfx
 #  OneDrive
 #  OSQuery
 #  PlayOnLinux
@@ -1238,8 +1322,10 @@ Main()
 #  Puppet
 #  rapidphotodownloader
 #  RocketChat
+#  Rust
 #  Screensavers
 #  Slack
+#  snap
 #  Spotify
 #  Stacer
 #  Students

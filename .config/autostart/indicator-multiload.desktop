@@ -110,4 +110,4 @@ Terminal=false
 Type=Application
 Icon=utilities-system-monitor
 Categories=GNOME;System;
-X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-enabled=false

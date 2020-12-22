@@ -4,6 +4,7 @@ alias meteo='curl wttr.in/Lille'
 alias starwars_pic='clear ; while : ; do ack --bar | lolcat --force ; sleep 0.05 ; printf "\e[0;0H" ; done'
 alias starwars_history='telnet towel.blinkenlights.nl'
 alias mapscii='telnet mapscii.me'
+alias mkdir='mkdir -pv'
 alias ipinfo='curl ipinfo.io'
 alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y && flatpak update -y; snap list|grep -v -E "Name|Nom" | while read Name Trash; do sudo snap refresh $Name; done && cleansnap'
 alias getcomposer='curl -sS https://getcomposer.org/installer | php'
@@ -39,6 +40,27 @@ alias gitrefreshalls=gitrefresh
 alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
 alias lzd='lazydocker'
 alias dust="dust -t 10"
+alias diff='colordiff'
+alias mount='mount |column -t'
+#Get system memory, cpu usage, and gpu memory info quickly
+## pass options to free ##
+alias meminfo='free -m -l -t'
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+## Get server cpu info ##
+alias cpuinfo='lscpu'
+## older system use /proc/cpuinfo ##
+##alias cpuinfo='less /proc/cpuinfo' ##
+## get GPU ram on desktop / laptop##
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+## List the tasks using the most CPU time
+alias hogs='ps uxga | sort --key=4.1 -n'
+alias curlv='curl -w "@curl-format.txt" -o /dev/null -s '
+# alias bat=batcat
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null

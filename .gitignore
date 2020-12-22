@@ -26,6 +26,8 @@
 .cert/
 .certspotter/
 .cmake/
+.codestream
+.composer/
 .compiz/
 .config/
 .cozy-desktop/
@@ -35,6 +37,7 @@
 .disruptive innovations sarl/
 .dmrc
 .docker/
+.dotnet
 .dropbox-dist/
 .dropbox/
 .dvdcss/
@@ -44,6 +47,7 @@
 .everpad/
 .flickr/
 .flickrfs/
+.fltk/
 .fontconfig/
 .freerdp/
 .fzf/
@@ -72,9 +76,12 @@
 .juniper_networks/
 .kde/
 .keras/
+.keychain
 .kismet/
 .kpcli-history
+.krew/
 .kube/
+.launchpadlib/
 .lesshst
 .libquicktime_codecs
 .license/
@@ -94,6 +101,7 @@
 .muttrc
 .mutt_certificates
 .neighbornote/
+.netrc
 .node-gyp/
 .npm/
 .nvpy/
@@ -102,6 +110,7 @@
 .offlineimap/
 .oh-my-zsh/
 .passw*
+.pEp*
 .pingus/
 .pip/
 .pkey
@@ -128,6 +137,7 @@
 .scribus/
 .selected_editor
 .shutter/
+.snap/
 .sqlite_history*
 .ssh*
 .ssh/
@@ -147,9 +157,11 @@
 .tor-browser-en/
 .trello-cli/
 .tuxmath/
+.tuxtype/
 .update-timestamp
 .urbackupclientgui_startonce
 .vagrant.d/
+.var/
 .vault-token
 .viking/
 .vim-*
@@ -159,25 +171,31 @@
 .vscode*
 .wakatime*
 .vmware/
+.wakatime*
 .wget-hsts
 .Windows.md.un~ 
 .wine-pipelight/
 .wine/
 .wireshark/
 .xchat2/
+.xournalpp/
 .xinputrc
 .xsel.log
 .xsession-errors
 .xsession-errors.old
 .z
+.z.*
+.zoom
 .zcompdump*
 .zsh-update
 .zsh_history
 *calibre/
 Applications/
 Bureau/
+Calibre Library/
 Cozy*Drive/
 Documents/
+Downloads
 Dropbox/
 Google Drive/
 GOPROJECTS
@@ -186,6 +204,7 @@ Images/
 KVMs/
 LICENSE
 Lightworks/
+Mail*
 Mod*
 Musique/
 My GCompris/
@@ -201,10 +220,12 @@ dlang
 dotfiles/
 examples.desktop
 mypass/
+node_modules/
 oauth_data
 onedrive.log
 own*
 pampi/
+PlayOnLinux's virtual drives
 PycharmProjects/
 snap/
 Steam/

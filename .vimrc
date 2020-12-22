@@ -369,3 +369,17 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 set background=dark
 colorscheme gruvbox
 Plugin 'wakatime/vim-wakatime'
+Plugin 'imain/notmuch-vim'
+Plugin 'itchyny/calendar.vim'
+
+Plugin 'google/vim-jsonnet'
+
+let g:notmuch_folders = [
+      \ [ 'new', 'tag:inbox and tag:unread' ],
+      \ [ 'inbox', 'tag:inbox' ],
+      \ [ 'unread', 'tag:unread' ],
+      \ [ 'News', 'tag:@sanenews' ],
+      \ [ 'Later', 'tag:@sanelater' ],
+      \ [ 'Patreon', 'tag:@patreon' ],
+      \ [ 'LivestockConservancy', 'tag:livestock-conservancy' ],
+    \ ]
