@@ -2,6 +2,7 @@
 # ---------
 if [[ ! "$PATH" == */home/daffy/.fzf/bin* ]]; then
   export PATH="$PATH:/home/daffy/.fzf/bin"
+
 fi
 
 # Auto-completion
@@ -11,4 +12,3 @@ fi
 # Key bindings
 # ------------
 source "/home/daffy/.fzf/shell/key-bindings.zsh"
-
