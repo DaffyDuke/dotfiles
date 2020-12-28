@@ -58,6 +58,7 @@
 	d = diff
 	gl = config --global -l
 	se = !git rev-list --all | xargs git grep -F
+	ff = merge --ff-only @{upstream}
 # Usage: git fixup {sha1}
 
 [help]
