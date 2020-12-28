@@ -1,0 +1,49 @@
+#!/bin/bash
+
+########################################################################
+# NOM DU SCRIPT    : dupf
+# DATE DE CREATION :
+# AUTEUR           :
+# MIGRATION V10    : 06/11/1998
+# DESCRIPTION      : Sauvegarde un fichier avec les arguments de date
+# CLASSEMENT       : COPIE
+# DOMAINE          : UTILITAIRE
+########################################################################
+
+########################################################################
+# DATE DE MAJ      :
+# AUTEUR           :
+########################################################################
+
+#set -x
+if [ $# -eq 0 ]
+then
+ echo "ERREUR ---- ARGUMENT FICHIER OMIS "
+ exit
+fi
+NOMFIC=$@
+set $NOMFIC
+for fic in $NOMFIC
+do
+DATE=`date +%Y%m%d`.`date +%H%M`
+ficdup=$fic.J$DATE
+if [ -f $fic ]
+  then
+    echo "   INFO ==== FICHIER $fic PRESENT"
+   else
+    echo "WARNING ---- FICHIER $fic ABSENT"
+    exit
+fi
+
+echo "   duplication du fichier $fic en $ficdup"
+
+cp -p $fic $ficdup
+
+if [ -f $ficdup ]
+  then
+    echo "   INFO ==== FICHIER $ficdup PRESENT"
+   else
+    echo "WARNING ---- FICHIER $ficdup ABSENT"
+fi
+done
+
