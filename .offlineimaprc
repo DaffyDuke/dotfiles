@@ -26,7 +26,7 @@ remoteuser = daffyduke@www.mon.coincoin.fr.eu.org
 ssl = yes
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 remotepasseval = mailpasswd("kimsufi")
-folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning)', folder)
+folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|Trier)', folder)
 
 [Repository ProtonRemote]
 type = IMAP
@@ -35,4 +35,4 @@ remoteuser = daffyduke@protonmail.com
 remoteport = 1143
 ssl = no
 remotepasseval = mailpasswd("protonmail")
-folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|RedHat|SuSE)', folder)
+folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|RedHat|SuSE|Trier)', folder)
