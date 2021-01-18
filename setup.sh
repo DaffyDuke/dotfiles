@@ -133,7 +133,7 @@ Packages()
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
     s3cmd screen scribus seahorse scdaemon shotwell sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
-    tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute tshark \
+    tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     ubuntu-restricted-extras ukuu unrar urlview \
     vagrant vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
