@@ -127,7 +127,7 @@ Packages()
     kerneloops keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
-    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch nnotmuch-vim pm numatop npm \
+    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openclipart-libreoffice openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
@@ -152,14 +152,14 @@ Packages()
 }
 
 snap()
-[
+{
   for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape ipfs-desktop\
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
     rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
   do
     snap install "${snap}"
   done
-]
+}
 
 Python()
 {
@@ -945,6 +945,24 @@ EOF
   systemctl --user enable xscreensaver
 }
 
+Signal()
+{
+  # NOTE: These instructions only work for 64 bit Debian-based
+  # Linux distributions such as Ubuntu, Mint etc.
+  
+  # 1. Install our official public software signing key
+  wget -O- https://updates.signal.org/desktop/apt/keys.asc |\
+  sudo apt-key add -
+  
+  # 2. Add our repository to your list of repositories
+  echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" |\
+    sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
+  
+  # 3. Update your package database and install signal
+  # sudo apt update && sudo apt install signal-desktop
+  sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop-beta
+}
+
 Slack()
 {
   # Slack
@@ -1324,6 +1342,7 @@ Main()
 #  RocketChat
 #  Rust
 #  Screensavers
+  Signal
 #  Slack
 #  snap
 #  Spotify
