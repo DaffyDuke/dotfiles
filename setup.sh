@@ -124,7 +124,7 @@ Packages()
     handbrake hddtemp heimdall-flash-frontend hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
-    kerneloops keychain kigo klavaro kodi \
+    kerneloops kdocker keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
     needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
@@ -1342,7 +1342,7 @@ Main()
 #  RocketChat
 #  Rust
 #  Screensavers
-  Signal
+#  Signal
 #  Slack
 #  snap
 #  Spotify
