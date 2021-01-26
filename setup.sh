@@ -226,6 +226,8 @@ Ansible()
   git clone https://github.com/metacloud/molecule
   cd /tmp/molecule/test/scenarios/driver/docker || exit
   molecule test
+  # Run ansible playbooks in parallel.
+  pip install ansible-parallel
 }
 
 Argbash()
