@@ -564,6 +564,8 @@ GnomeExtensions()
   # Install Gnome-extensions
   # https://wiki.gnome.org/Projects/GnomeShell/Extensions#Enabling_extensions
   # https://github.com/cyberalex4life/gnome-shell-extension-cl/blob/master/gnome-shell-extension-cl
+  # sound-output-device-chooser@kgshank.net                           - enabled    
+  gnomeshell-extension-manage --install --extension-id 906
   # alternate-tab@gnome-shell-extensions.gcampax.github.com           - enabled    
   gnomeshell-extension-manage --install --extension-id 15
   # drive-menu@gnome-shell-extensions.gcampax.github.com              - enabled    
