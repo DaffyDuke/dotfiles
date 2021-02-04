@@ -61,6 +61,7 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 alias hogs='ps uxga | sort --key=4.1 -n'
 alias curlv='curl -w "@curl-format.txt" -o /dev/null -s '
 # alias bat=batcat
+alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1| grep -E "state|to\ full|percentage"'
 
 gitfixalls() {
   git diff --summary | grep --color 'mode change 100755 => 100644' | cut -d' ' -f7- | xargs -d'\n' chmod +x 2>/dev/null
