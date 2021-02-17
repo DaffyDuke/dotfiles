@@ -631,8 +631,9 @@ TryExec=/usr/bin/ffmpegthumbnailer
 Exec=/usr/bin/ffmpegthumbnailer -s %s -i %i -o %o -c png -f -t 10
 MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg;video/quicktime;video/x-avi;video/x-flv;video/x-mp4;video/x-mpeg;video/x-webm;video/x-mkv;application/x-extension-webm;video/x-matroska;video/x-ms-wmv;video/x-msvideo;video/x-msvideo/avi;video/x-theora/ogg;video/x-theora/ogv;video/x-ms-asf;video/x-m4v;
 EOF'
-}
 gsettings set org.gnome.settings-daemon.plugins.power power-button-action 'suspend'
+gsettings set org.gnome.mutter check-alive-timeout 30000
+}
 
 GrafTCP()
 {
