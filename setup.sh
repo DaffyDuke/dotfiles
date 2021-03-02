@@ -529,11 +529,14 @@ DVD()
   sudo dpkg-reconfigure libdvd-pkg
 }
 
-Feedreader()
+FlatPackages()
 {
-  # Feedreader
+  # misc softwares available with flatpack command
   FlatPack
-  flatpak install flathub org.gnome.FeedReader
+  for pkg in org.gnome.FeedReader org.openshot.OpenShot
+  do
+    flatpak install flathub "${pkg}"
+  done
 }
 
 FlatPack()
