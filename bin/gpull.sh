@@ -13,7 +13,7 @@ LOCAL=~/Documents/Code/git
 for HOSTING in adullact  babolivier  codecommit  enough  framagit  github  gitlab  
 do
   cd ${LOCAL}/${HOSTING}
-  for DIR in $(ls -1)
+  for DIR in $(ls -1 | grep -v youtube-dl_BEFORE_DMCA_ )
   do
     cd ${LOCAL}/${HOSTING}/${DIR}
 #    test -d .git && git pull -q
