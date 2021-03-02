@@ -14,6 +14,7 @@
 .asciinema/
 .aspnet/
 .atom/
+.avidemux6/
 .aws/
 .azure/
 .bash_history
@@ -110,6 +111,7 @@
 .offlineimap.pyc
 .offlineimap/
 .oh-my-zsh/
+.openshot_qt/
 .passw*
 .pEp*
 .pingus/
