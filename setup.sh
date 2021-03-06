@@ -796,6 +796,21 @@ lynishardening()
   sudo sysctl -p
   sudo postconf -e smtpd_banner=mycomputer
   sudo postconf -e disable_vrfy_command=yes 
+  grep -q "AllowTcpForwarding=no" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "AllowTcpForwarding=no" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "ClientAliveCountMax=2" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "ClientAliveCountMax=2" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "Compression=no" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "Compression=no" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "LogLevel=VERBOSE" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "LogLevel=VERBOSE" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "MaxAuthTries=3" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "MaxAuthTries=3" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "MaxSessions=2" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "MaxSessions=2" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  grep -q "TCPKeepAlive=no" /etc/ssh/sshd_config.d/lynis.conf || \
+    echo "TCPKeepAlive=no" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  sudo systemctl restart ssh
 }
 
 Minishift()
