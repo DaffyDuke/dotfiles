@@ -784,6 +784,18 @@ lynis()
   sudo apt install -y lynis
 }
 
+lynishardening()
+{
+  # some suggestions afer lynis report
+  grep -q "*  hard  core  0" /etc/security/limits.conf || \
+    echo "*  hard  core  0" | sudo tee -a /etc/security/limits.conf
+  grep -q "fs.suid_dumpable = 0" /etc/sysctl.conf || \
+    echo "fs.suid_dumpable = 0" | sudo tee -a /etc/sysctl.conf
+  grep -q "ulimit -S -c 0" /etc/profile || \
+    echo "ulimit -S -c 0 > /dev/null 2>&1" | sudo tee -a /etc/profile
+  sudo sysctl -p
+}
+
 Minishift()
 {
   # Minishift
@@ -1336,6 +1348,7 @@ Main()
 #  Lightworks
 #  lnav
 #  lynis
+  lynishardening
 #  Minishift
 #  MultiBootUSB
 #  Multisystem
