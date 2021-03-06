@@ -810,6 +810,10 @@ lynishardening()
     echo "MaxSessions=2" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
   grep -q "TCPKeepAlive=no" /etc/ssh/sshd_config.d/lynis.conf || \
     echo "TCPKeepAlive=no" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
+  sudo apt install acct sysstat
+  sudo sed -i -e 's+ENABLED="false"+ENABLED="true"+g+' /etc/default/sysstat
+  sudo systemctl enable sysstat
+  sudo systemctl restart sysstat
   sudo systemctl restart ssh
 }
 
