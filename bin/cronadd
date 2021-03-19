@@ -1,0 +1,30 @@
+#!/bin/bash
+# Note: Ce script permet de visualiser la table crontab
+#       et d'y ajouter éventuellement un nouveau travail.
+#       Il ne permet pas d'en modifier ou d'en supprimer.
+# Formulaire d'affichage de la table crontab
+#
+>"/tmp/tabcron"
+while read minute heure jour mois quant comm; do
+    if [[ "$minute" != "#" ]]; then
+        echo "$minute" >>"/tmp/tabcron"
+        echo "$heure" >>"/tmp/tabcron"
+        echo "$jour" >>"/tmp/tabcron"
+        echo "$mois" >>"/tmp/tabcron"
+        echo "$quant" >>"/tmp/tabcron"
+        echo "$comm" >>"/tmp/tabcron"
+    fi
+done <<< $(crontab -l)
+cat /tmp/tabcron | zenity --list --title "Liste des travaux planifiés" --height "500" --width "1000" --ok-label "Ajouter un travail" --cancel-label "Quitter" --text "Valeurs possibles : [*=chaque] [m,n=multiples] [m-n=plage] [*/x=chaque x unités] [m-n/x=chaque x unités dans la plage]" --column="Minute" --column="Heure" --column="Jour" --column="Mois" --column="Jour de la semaine" --column="Commande à exécuter"
+crd="$?"
+rm "/tmp/tabcron"
+[[ "$crd" != 0 ]] && exit 0
+# Formulaire de saisie d'une entrée dans la table crontab
+#
+lig=$(zenity --forms --title "Saisie d'un nouveau travail" --text "Valeurs possibles : [*=chaque] [m,n=multiples] [m-n=plage] [*/x=chaque x unités] [m-n/x=chaque x unités dans la plage]"  --add-entry "Minute"  --add-entry "Heure"  --add-entry "Jour"  --add-entry "Mois"  --add-entry "Jour de la semaine"  --add-entry "Commande à exécuter" --separator " ")
+[[ $? != 0 ]] && zenity --warning --title "Attention" --text "Vous abandonnez l'ajout, la table n'est pas modifiée !" --width "200" && exit 0
+# Ajouter la ligne à la table crontab via la cde crontab
+(crontab -l; echo "$lig") | crontab -
+zenity --info --title "Attention" --text "Le nouveau travail a été ajouté à la table." --width "200"
+exit 0
+
