@@ -205,6 +205,17 @@ GO()
   go install .
 }
 
+Crontab()
+{
+  # Install Usefull local crontabs
+  cd /tmp || exit
+  cat > crontab << \EOF
+16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
+@reboot cd /home/daffy/Documents/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
+EOF
+  crontab crontab && rm crontab
+}
+
 Android()
 {
   # Android Rules
@@ -1348,6 +1359,7 @@ Main()
 #  CLOUD
 #  coolretroterm
 #  CozyDrive
+  Crontab
 #  Ctop
 #  Docker
 #  Douane
@@ -1369,7 +1381,7 @@ Main()
 #  Lightworks
 #  lnav
 #  lynis
-  lynishardening
+#  lynishardening
 #  Minishift
 #  MultiBootUSB
 #  Multisystem
