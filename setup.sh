@@ -977,7 +977,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree fd-find just gping mdcat ripgrep
+  for rustpkg in bat delta-git dog dust dutree fd-find just gping mdcat ripgrep viu
   do
     cargo install "${rustpkg}"
   done
