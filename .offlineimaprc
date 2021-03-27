@@ -2,31 +2,17 @@
 # accounts = Kimsufi, Proton
 accounts = Proton
 pythonfile = ~/.offlineimap.py
+maxsyncaccounts = 2
+ui = blinkenlights
+socktimeout = 90
 
 [Account Proton]
 localrepository = LocalProton
 remoterepository = ProtonRemote
 
-[Account Kimsufi]
-localrepository = LocalKimsufi
-remoterepository = KimsufiRemote
-
-[Repository LocalKimsufi]
-type = Maildir
-localfolders = ~/Mail
-
 [Repository LocalProton]
 type = Maildir
 localfolders = ~/MailProton
-
-[Repository KimsufiRemote]
-type = IMAP
-remotehost = www.mon.coincoin.fr.eu.org
-remoteuser = daffyduke@www.mon.coincoin.fr.eu.org
-ssl = yes
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
-remotepasseval = mailpasswd("kimsufi")
-folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|Trier)', folder)
 
 [Repository ProtonRemote]
 type = IMAP
@@ -35,4 +21,4 @@ remoteuser = daffyduke@protonmail.com
 remoteport = 1143
 ssl = no
 remotepasseval = mailpasswd("protonmail")
-folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|Warning|RedHat|SuSE|Trier)', folder)
+folderfilter = lambda folder: not re.search('(^Trash$|Planif|Junk|^All|Inbox|Archive|Imported|Corbeille|RedHat|SuSE|Trier)', folder)
