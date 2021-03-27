@@ -153,12 +153,13 @@ Packages()
 
 snap()
 {
-  for snap in chromium code github-desktop gnome-system-monitor hub hugo inkscape ipfs-desktop\
+  for snap in chromium czkawka code github-desktop gnome-system-monitor hub hugo inkscape ipfs-desktop\
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
     rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
   do
     snap install "${snap}"
   done
+  sudo snap connect czkawka:removable-media
 }
 
 Python()
