@@ -1024,6 +1024,24 @@ Slack()
   sudo snap install slack --classic
 }
 
+Spip-Cli()
+{
+  # Spip in commandline https://contrib.spip.net/SPIP-Cli#Installation
+  sudo git clone https://git.spip.net/spip-contrib-outils/spip-cli.git /opt/spip-cli
+  cd /opt/spip-cli
+  sudo composer install
+
+  cd /opt/spip-cli/bin
+  # Commande 'spip'
+  sudo ln -s $(pwd)/spip /usr/local/bin/
+  # Commande 'spipmu' pour site mutualisé
+  sudo ln -s $(pwd)/spipmu /usr/local/bin/
+  # Autocompletion (Linux)
+  sudo ln -s $(pwd)/spip_console_autocomplete /etc/bash_completion.d/spip
+  # Autocompletion (MacOs)
+  # sudo ln -s $(pwd)/spip_console_autocomplete /usr/local/etc/bash_completion.d/spip
+}
+
 Spotify()
 {
   # Spotify
@@ -1401,6 +1419,7 @@ Main()
 #  Signal
 #  Slack
 #  snap
+#  Spip-Cli
 #  Spotify
 #  Stacer
 #  Students
