@@ -33,6 +33,7 @@
 .config/
 .cozy-desktop/
 .cpan/
+.cups/
 .dbus/
 .dia/
 .disruptive innovations sarl/
@@ -67,6 +68,7 @@
 .gtk-bookmarks
 .gtkboard/
 .guake-indicator/
+.hplip/
 .hugin
 .httpie/
 .hugindata/
@@ -114,6 +116,7 @@
 .openshot_qt/
 .passw*
 .pEp*
+.phoronix-test-suite/
 .pingus/
 .pip/
 .pkey
@@ -161,6 +164,7 @@
 .trello-cli/
 .tuxmath/
 .tuxtype/
+.unison/
 .update-timestamp
 .urbackupclientgui_startonce
 .vagrant.d/
