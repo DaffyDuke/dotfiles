@@ -121,7 +121,7 @@ Packages()
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fpart ftp \
     gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
-    handbrake hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
+    handbrake hashcat hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     kerneloops kdocker keychain kigo klavaro kodi \
@@ -166,10 +166,6 @@ Python()
 {
   # Python
   snap install pycharm-community --classic
-  pip3 install virtualenv
-  pip3 install docopt
-  pip3 install configobj
-  pip3 install terminaltables
 
   # Try alphago .....
   # cd /tmp
@@ -178,7 +174,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bpytop betago git-pull-request icdiff jsonnet kapitan litecli mycli tenserflow spotify-cli-linux
+  for pkg in bpytop betago configobj docopt git-pull-request icdiff jsonnet kapitan litecli mycli search-that-hash spotify-cli-linux tenserflow terminaltables virtualenv
   do
     pip3 install "${pkg}" --upgrade
   done
