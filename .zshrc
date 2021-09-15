@@ -45,7 +45,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain ssh-agent terraform thefuck tmuxinator ubuntu wakatime z)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu wakatime z)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -73,6 +73,7 @@ source $ZSH/oh-my-zsh.sh
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
+ eval `keychain --eval --agents ssh id_rsa`
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
