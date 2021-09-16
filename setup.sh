@@ -879,6 +879,16 @@ NeoVim()
   go get -u github.com/nsf/gocode
 }
 
+nicotine()
+{
+  # Nicotine+ is a graphical client for the Soulseek peer-to-peer network.
+  sudo apt install software-properties-common
+  sudo add-apt-repository ppa:nicotine-team/stable
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6CEB6050A30E5769
+  sudo apt update
+  sudo apt install nicotine
+}
+
 npmfx()
 {
   # FX json parser
@@ -1402,6 +1412,7 @@ Main()
 #  Multisystem
 #  Music
 #  NeoVim
+  nicotine
 #  npmfx
 #  OneDrive
 #  OSQuery
