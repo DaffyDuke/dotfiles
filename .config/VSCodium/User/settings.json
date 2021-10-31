@@ -47,5 +47,7 @@
         "[x]"
     ],
     "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
-    "redhat.telemetry.enabled": false
+    "redhat.telemetry.enabled": false,
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": true
 }
