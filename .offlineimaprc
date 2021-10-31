@@ -5,6 +5,8 @@ pythonfile = ~/.offlineimap.py
 maxsyncaccounts = 2
 ui = blinkenlights
 socktimeout = 90
+# ignore-readonly = yes
+sep=/
 
 [Account Proton]
 localrepository = LocalProton
