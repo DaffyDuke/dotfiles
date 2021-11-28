@@ -1169,6 +1169,13 @@ urbackup()
   TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF; rm $TF
 }
 
+Ventoy()
+{
+  # Ventoy : multisystem alternative
+  cd /tmp/ && wget https://github.com/ventoy/Ventoy/releases/download/v1.0.61/ventoy-1.0.61-linux.tar.gz
+  cd ~/bin && tar xvfz /tmp/ventoy-1.0.61-linux.tar.gz
+}
+
 VIM()
 {
   # Add Ruby Support to vim
@@ -1439,6 +1446,7 @@ Main()
 #  Trello
 #  ttfmscorefontsinstaller
 #  urbackup
+#  Ventoy
 #  VIM
 #  VirtualBox
 #  VSCodium
