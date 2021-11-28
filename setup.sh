@@ -135,7 +135,7 @@ Packages()
     s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     ubuntu-restricted-extras ukuu unison-gtk unrar urlview \
-    vagrant vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vifm vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
