@@ -201,7 +201,8 @@ GO()
   # qf : GF Paterns For (ssrf,RCE,Lfi,sqli,ssti,idor,url redirection,debug_logic, interesting Subs) parameters grep
   go get -u github.com/tomnomnom/waybackurls
   go get -u github.com/tomnomnom/gf
-
+  # assetfinder : Find domains and subdomains related to a given domain
+  go get -u github.com/tomnomnom/assetfinder
 
 
   # tips cross compilation
