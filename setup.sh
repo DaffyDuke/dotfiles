@@ -194,6 +194,11 @@ GO()
   go get -u github.com/golang/lint/golint
   # Accept URLs on stdin, replace all query string values with a user-supplied valu
   go get -u github.com/tomnomnom/qsreplace
+  # gau Fetch known URLs from AlienVault's Open Threat Exchange, the Wayback Machine, and Common Crawl.
+  go install github.com/lc/gau/v2/cmd/gau@latest
+  # https://github.com/lc/gau/issues/8
+  sed -i -e "s+alias gau='git add --update'+\#alias gau='git add --update'+g" ~/.oh-my-zsh/plugins/git/git.plugin.zsh
+
 
   # tips cross compilation
   # CGO_ENABLED=yes go build
