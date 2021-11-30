@@ -203,6 +203,8 @@ GO()
   go get -u github.com/tomnomnom/gf
   # assetfinder : Find domains and subdomains related to a given domain
   go get -u github.com/tomnomnom/assetfinder
+  # ffuf – Fast Web Fuzzer Linux Tool Written in Go
+  go get -u github.com/ffuf/ffuf
 
 
   # tips cross compilation
