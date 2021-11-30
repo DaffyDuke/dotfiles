@@ -192,6 +192,9 @@ GO()
   go get golang.org/x/tools/cmd/godoc
   go get golang.org/x/tools/cmd/goimports
   go get -u github.com/golang/lint/golint
+  # Accept URLs on stdin, replace all query string values with a user-supplied valu
+  go get -u github.com/tomnomnom/qsreplace
+
   # tips cross compilation
   # CGO_ENABLED=yes go build
   go get github.com/claudiodangelis/qrcp
