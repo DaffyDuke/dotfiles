@@ -198,6 +198,10 @@ GO()
   go install github.com/lc/gau/v2/cmd/gau@latest
   # https://github.com/lc/gau/issues/8
   sed -i -e "s+alias gau='git add --update'+\#alias gau='git add --update'+g" ~/.oh-my-zsh/plugins/git/git.plugin.zsh
+  # qf : GF Paterns For (ssrf,RCE,Lfi,sqli,ssti,idor,url redirection,debug_logic, interesting Subs) parameters grep
+  go get -u github.com/tomnomnom/waybackurls
+  go get -u github.com/tomnomnom/gf
+
 
 
   # tips cross compilation
