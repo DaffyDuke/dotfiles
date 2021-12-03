@@ -1007,6 +1007,13 @@ Rust()
   done
 }
 
+s3benchmark()
+{
+  # s3benchmark : Measure Amazon S3's performance from any location.
+  cd ~/bin && curl -OL https://github.com/dvassallo/s3-benchmark/raw/master/build/linux-amd64/s3-benchmark
+  chmod +x ~/bin/s3-benchmark
+}
+
 Screensavers()
 {
   # Screensavers
@@ -1436,7 +1443,7 @@ Main()
 #  Multisystem
 #  Music
 #  NeoVim
-  nicotine
+#  nicotine
 #  npmfx
 #  OneDrive
 #  OSQuery
@@ -1445,7 +1452,8 @@ Main()
 #  Puppet
 #  rapidphotodownloader
 #  RocketChat
-#  Rust
+#  Rust   
+  s3benchmark
 #  Screensavers
 #  Signal
 #  Slack
