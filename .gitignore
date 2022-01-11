@@ -51,6 +51,7 @@
 .flickrfs/
 .fltk/
 .fontconfig/
+.fonts/
 .freerdp/
 .fzf/
 .gconf/
@@ -92,6 +93,7 @@
 .lnav/
 .local/
 .macromedia/
+.minetest/
 .minikube/
 .minishift/
 .mono/
@@ -161,6 +163,7 @@
 .tig_history
 .thunderbird/
 .tmux
+.tomatoes/
 .tor-browser-en/
 .trello-cli/
 .tuxmath/
@@ -208,6 +211,7 @@ Dropbox/
 Google Drive/
 GOPROJECTS
 go-dist
+go1*
 Images/
 KVMs/
 LICENSE
@@ -245,3 +249,8 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
+
+
+
+
+
