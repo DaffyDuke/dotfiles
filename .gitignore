@@ -26,6 +26,7 @@
 .ccnet/
 .cert/
 .certspotter/
+.clamtk/
 .cmake/
 .codestream
 .composer/
@@ -74,6 +75,7 @@
 .httpie/
 .hugindata/
 .ipython/
+.jamovi/
 .java/
 .jocala/
 .joe_state
@@ -249,8 +251,3 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
-
-
-
-
-

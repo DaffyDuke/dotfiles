@@ -614,6 +614,8 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1544
   # todolist@tomMoral.org                                             - enabled    
   gnomeshell-extension-manage --install --extension-id 1104                 
+  # CoverflowAltTab@palatis.blogspot.com                              - enabled    
+  gnomeshell-extension-manage --install --extension-id 97
   cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
