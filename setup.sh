@@ -127,7 +127,7 @@ Packages()
     kerneloops kdocker keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
-    needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
+    nautilus-image-converter needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
