@@ -1,2 +1,0 @@
-# Default Output Directory and Pattern
---ignore-errors -f best -o ~/Dropbox/Videos/News/%(extractor_key)s/%(uploader)s/%(title)s-%(id)s.%(ext)s
