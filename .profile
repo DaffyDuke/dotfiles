@@ -28,3 +28,6 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 export PATH="$HOME/.cargo/bin:$PATH"
 PATH="/usr/games:$PATH"
+
+QT_QPA_PLATFORM="wayland;xcb"
+

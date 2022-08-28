@@ -120,7 +120,7 @@ Packages()
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fonts-radisnoir fpart ftp \
-    gcstar geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
@@ -578,6 +578,17 @@ Fuzzy()
   cd /tmp || exit
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install
+}
+
+GCStar()
+{
+  # gcstar : collection software
+  cd /tmp || exit
+  wget https://gitlab.com/GCstar/GCstar/-/archive/v1.7.3/GCstar-v1.7.3.tar.gz
+  tar xvfz GCstar-v1.7.3.tar.gz
+  cd GCstar-v1.7.3
+  agi libogg-vorbis-header-pureperl-perl libnet-freedb-perl libmp3-tag-perl libgd-graph3d-perl libdatetime-format-strptime-perl libtest-mocktime-datecalc-perl libgtk3-simplelist-perl
+  ./install
 }
 
 Github()
@@ -1429,6 +1440,7 @@ Main()
 #  FlatPack
 #  Feedreader
 #  Fuzzy
+  GCStar
 #  Github
 #  GnomeConfigurations
 #  GnomeExtensions
