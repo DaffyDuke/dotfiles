@@ -24,10 +24,10 @@
 	excludesfile = /home/oduquesne/.gitignore_global
         whitespace = trailing-space,space-before-tab
 	autocrlf = input
-        pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+#        pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
 
 [interactive]
-      diffFilter = delta --color-only
+#      diffFilter = delta --color-only
 
 # [http]
 # 	proxy = http://proxy.home:3128

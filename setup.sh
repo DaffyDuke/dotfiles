@@ -99,14 +99,15 @@ PPA()
     ppa:danielrichter2007/grub-customizer \
     ppa:bashtop-monitor/bashtop \
     ppa:libratbag-piper/piper-libratbag-git \
-    https://cli.github.com/packages
+    https://cli.github.com/packages \
+    ppa:nextcloud-devs/client
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
     y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
-    variety-slideshow grub-customizer bashtop piper gh
+    variety-slideshow grub-customizer bashtop piper gh nautilus-nextcloud
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
