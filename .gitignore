@@ -61,6 +61,7 @@
 .gem/
 .gimp-2.8/
 .gitconfig
+.grip/
 .gksu.lock
 .gnome/
 .gnome2/
@@ -94,6 +95,7 @@
 .lightworks.thereCanBeOnlyOne
 .lnav/
 .local/
+.lyx/
 .macromedia/
 .minetest/
 .minikube/
@@ -202,6 +204,7 @@
 .zcompdump*
 .zsh-update
 .zsh_history
+__pycache__/
 *calibre/
 Applications/
 Bureau/
