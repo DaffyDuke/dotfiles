@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.42 for daffy on Sun Sep 19 22:39:28 2021.
+# Written by xscreensaver-demo 5.45 for daffy on Fri Dec  2 11:38:31 2022.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:05:00
@@ -283,6 +283,15 @@ programs:								      \
 - GL: 				peepers -root				    \n\
 - GL: 				razzledazzle -root			    \n\
 				vfeedback -root				    \n\
+				scooter -root				    \n\
+- GL: 				deepstars -root				    \n\
+- GL: 				gravitywell -root			    \n\
+- GL: 				beats -root				    \n\
+- GL: 				covid19 -root				    \n\
+- GL: 				etruscanvenus -root			    \n\
+- GL: 				gibson -root				    \n\
+- GL: 				headroom -root				    \n\
+- GL: 				sphereeversion -root			    \n\
 
 
 pointerPollTime:    0:00:05
