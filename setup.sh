@@ -100,14 +100,15 @@ PPA()
     ppa:bashtop-monitor/bashtop \
     ppa:libratbag-piper/piper-libratbag-git \
     https://cli.github.com/packages \
-    ppa:nextcloud-devs/client
+    ppa:nextcloud-devs/client \
+    ppa:appimagelauncher-team/stable
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
     y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
-    variety-slideshow grub-customizer bashtop piper gh nautilus-nextcloud
+    variety-slideshow grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
@@ -133,7 +134,7 @@ Packages()
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
     qalc qarte qemu qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat software-properties-common strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     ubuntu-restricted-extras ukuu unison-gtk unrar urlview \
     vagrant vifm vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \

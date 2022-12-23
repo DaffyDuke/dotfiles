@@ -24,10 +24,26 @@
 	excludesfile = /home/oduquesne/.gitignore_global
         whitespace = trailing-space,space-before-tab
 	autocrlf = input
-#        pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+#        pager = delta --theme='Monokai Extended'
+        pager = delta
 
 [interactive]
-#      diffFilter = delta --color-only
+      diffFilter = delta --color-only --features=interactive
+ 
+[delta]
+    features = decorations
+ 
+ [delta "interactive"]
+     keep-plus-minus-markers = false
+ 
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
 
 # [http]
 # 	proxy = http://proxy.home:3128
