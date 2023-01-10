@@ -1338,6 +1338,7 @@ VSCodium()
     timonwong.shellcheck \
     vscodevim.vim \
     vscoss.vscode-ansible \
+    wdhongtw.gpg-indicator \
     wholroyd.jinja \
     zkirkland.vscode-firstupper
 
