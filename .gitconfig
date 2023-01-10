@@ -63,18 +63,18 @@
   fixup = !sh -c 'SHA=$(git rev-parse $1) \
        && git commit --fixup $SHA \
        && git rebase -i --autosquash $SHA~' -
-	pr = pull-request
-	nb = !git checkout --track $(git config branch.$(git rev-parse --abbrev-ref HEAD).remote)/$(git rev-parse --abbrev-ref HEAD) -b
-	p = push
-	st = status -sb
-	ll = log --oneline
-	last = log -1 HEAD --stat
-	cm = commit -m
-	rv = remote -v
-	d = diff
-	gl = config --global -l
-	se = !git rev-list --all | xargs git grep -F
-	ff = merge --ff-only @{upstream}
+  pr = pull-request
+  nb = !git checkout --track $(git config branch.$(git rev-parse --abbrev-ref HEAD).remote)/$(git rev-parse --abbrev-ref HEAD) -b
+  p = push
+  st = status -sb
+  ll = log --oneline
+  last = log -1 HEAD --stat
+  cm = commit -m
+  rv = remote -v
+  d = diff
+  gl = config --global -l
+  se = !git rev-list --all | xargs git grep -F
+  ff = merge --ff-only @{upstream}
 # Usage: git fixup {sha1}
 
 # EMOJI-LOG
@@ -96,6 +96,10 @@
   tst = "!f() { git cap \"🤖 TEST: $@\"; }; f"
   # BREAKING CHANGE.
   brk = "!f() { git cap \"‼️ BREAKING: $@\"; }; f"
+
+  # Remove gone git branches when removed from remote
+  gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+
 
 [help]
 	autocorrect = 20
