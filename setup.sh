@@ -123,7 +123,7 @@ Packages()
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fonts-radisnoir fpart ftp \
     geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
-    handbrake hashcat hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
+    handbrake hashcat hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
     i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     kerneloops kdocker keychain kigo klavaro kodi \
