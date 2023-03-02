@@ -1298,6 +1298,7 @@ VSCodium()
     fabianlauer.vs-code-xml-format \
     fimars.github-plus-theme-elixir-adapted \
     foxundermoon.shell-format \
+    gera2ld.markmap-vscode \
     gistart.theme-desert-dawn \
     GrapeCity.gc-excelviewer \
     Gruntfuggly.todo-tree \
