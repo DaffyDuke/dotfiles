@@ -1341,6 +1341,7 @@ VSCodium()
     vscoss.vscode-ansible \
     wdhongtw.gpg-indicator \
     wholroyd.jinja \
+    xlab-steampunk.steampunk-spotter \
     zkirkland.vscode-firstupper
 
     do
