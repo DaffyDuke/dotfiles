@@ -19,7 +19,7 @@ localfolders = ~/MailProton
 [Repository ProtonRemote]
 type = IMAP
 remotehost = localhost
-remoteuser = daffyduke@protonmail.com
+remoteuser = daffyduke@coincoin.fr.eu.org
 remoteport = 1143
 ssl = no
 remotepasseval = mailpasswd("protonmail")
