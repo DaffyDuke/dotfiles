@@ -26,8 +26,8 @@ export GOROOT=$HOME/go-dist
 export GOPATH=$HOME/GOPROJECTS
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
-export PATH="$HOME/.cargo/bin:$PATH"
 PATH="/usr/games:$PATH"
 
 QT_QPA_PLATFORM="wayland;xcb"
 
+. "$HOME/.cargo/env"

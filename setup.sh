@@ -78,37 +78,28 @@ PPA()
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
   # this tool aims to be ran from Ubuntu
   # install additionnal repositories
-  for ppa in ppa:djcj/hybrid \
-    ppa:geary-team/releases \
-    ppa:gezakovacs/ppa \
-    ppa:hollywood/ppa \
+  for ppa in \
     ppa:pbek/qownnotes \
-    ppa:peek-developers/stable \
     ppa:peterlevi/ppa \
     ppa:teejee2008/ppa \
     ppa:unit193/encryption \
     ppa:vincent-vandevyvre/vvv \
-    ppa:webupd8team/indicator-kdeconnect \
-    ppa:webupd8team/y-ppa-manager \
-    ppa:twodopeshaggy/jarun \
     ppa:yubico/stable \
     ppa:libreoffice/ppa \
     ppa:yannubuntu/boot-repair \
-    ppa:dyatlov-igor/la-capitaine \
     ppa:peterlevi/ppa \
     ppa:danielrichter2007/grub-customizer \
     ppa:bashtop-monitor/bashtop \
     ppa:libratbag-piper/piper-libratbag-git \
-    https://cli.github.com/packages \
     ppa:nextcloud-devs/client \
     ppa:appimagelauncher-team/stable
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
-  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt indicator-kdeconnect \
-    y-ppa-manager ddgr software-properties-common boot-repair la-capitaine-icon-theme variety \
-    variety-slideshow grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher
+  sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt \
+    ddgr software-properties-common boot-repair variety \
+    grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
@@ -116,14 +107,14 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    acct aeskulap alot asciidoc aide aide-common alien androidsdk-ddms apt-file apt-cacher aria2 aspell-fr atop awscli auditd \
+    acct aeskulap alot asciidoc aide aide-common alien apt-file apt-cacher aria2 aspell-fr atop awscli auditd \
     baobab barrier bc blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall chrome-gnome-shell clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
     easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot flashplugin-installer fonts-powerline fortunes-fr fonts-radisnoir fpart ftp \
-    geary gimp glances gnome-tweak-tool gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
-    handbrake hashcat hddtemp heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
+    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
+    geary gimp glances gnome-tweaks gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    handbrake hashcat heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
     i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     kerneloops kdocker keychain kigo klavaro kodi \
@@ -132,12 +123,12 @@ Packages()
     nautilus-image-converter needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty planfacile pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-virtualenv pwgen pydf python3-gpg \
-    qalc qarte qemu qtpass \
+    qalc qemu-system-gui qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs ssg-base sshpass sslscan socat software-properties-common strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
-    ubuntu-restricted-extras ukuu unison-gtk unrar urlview \
-    vagrant vifm vim-fugitive vim-gnome vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    ubuntu-restricted-extras unison-gtk unrar urlview \
+    vagrant vifm vim-fugitive vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xscreensaver xsane \
     yamllint yubikey-manager-qt \
@@ -148,18 +139,19 @@ Packages()
 
   # Python alternatives
   sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
-  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
-  sudo update-alternatives  --set python /usr/bin/python3.6
+  sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 2
+  sudo update-alternatives  --set python /usr/bin/python3.10
 
 }
 
-snap()
+SNAP()
 {
-  for snap in chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop\
+  # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
+  for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
     rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
   do
-    snap install "${snap}"
+    snap install --classic ${snap}
   done
   sudo snap connect czkawka:removable-media
 }
@@ -356,9 +348,9 @@ Children()
 {
   # Add some games
   sudo apt install -y \
-    brainparty briquolo cgoban childsplay colobot connectagram \
-    extremetuxracer fretsonfire frozen-bubble gbrainy gcompris grhino \
-    junior-programming khangman mu-cade opencity pingus pysycache steam supertuxkart tomatoes tuxmath tuxtype
+    brainparty briquolo cgoban colobot connectagram \
+    extremetuxracer fretsonfire-songs-muldjord frozen-bubble gbrainy gcompris-qt grhino \
+    junior-config junior-programming khangman mu-cade opencity pingus steam supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
   sudo dpkg-reconfigure --force junior-config
@@ -541,8 +533,8 @@ Dropbox()
   # Dropbox
   # https://www.dropbox.com/install-linux
   cd /tmp || exit 1
-  wget -O dropbox_2020.03.04_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2020.03.04_amd64.deb
-  sudo dpkg -i dropbox_2020.03.04_amd64.deb
+  wget -O dropbox_2022.12.05_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2022.12.05_amd64.deb
+  sudo dpkg -i dropbox_2022.12.05_amd64.deb
   sudo apt --fix-broken install
   echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
 }
@@ -595,12 +587,12 @@ Fuzzy()
 GCStar()
 {
   # gcstar : collection software
+  sudo apt install -y libogg-vorbis-header-pureperl-perl libnet-freedb-perl libmp3-tag-perl libgd-graph3d-perl libdatetime-format-strptime-perl libtest-mocktime-datecalc-perl libgtk3-simplelist-perl libxml-simple-perl
   cd /tmp || exit
   wget https://gitlab.com/GCstar/GCstar/-/archive/v1.7.3/GCstar-v1.7.3.tar.gz
   tar xvfz GCstar-v1.7.3.tar.gz
-  cd GCstar-v1.7.3
-  agi libogg-vorbis-header-pureperl-perl libnet-freedb-perl libmp3-tag-perl libgd-graph3d-perl libdatetime-format-strptime-perl libtest-mocktime-datecalc-perl libgtk3-simplelist-perl
-  ./install
+  cd /tmp/GCstar-v1.7.3/gcstar && sudo ./install
+  rm /tmp/GCstar-v1.7.3.tar.gz*
 }
 
 Github()
@@ -693,8 +685,8 @@ gsettings set org.gnome.mutter check-alive-timeout 30000
 GrafTCP()
 {
   # GraphTCP : https://github.com/hmgle/graftcp
-  cd /tmp || git clone https://github.com/hmgle/graftcp.git
-  cd graftcp || make
+  cd /tmp && git clone https://github.com/hmgle/graftcp.git
+  cd graftcp && make
 }
 
 GRAPH()
@@ -930,7 +922,7 @@ nicotine()
   sudo add-apt-repository ppa:nicotine-team/stable
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6CEB6050A30E5769
   sudo apt update
-  sudo apt install nicotine
+  sudo apt install -y nicotine
 }
 
 npmfx()
@@ -1062,8 +1054,9 @@ Signal()
   # Linux distributions such as Ubuntu, Mint etc.
   
   # 1. Install our official public software signing key
-  wget -O- https://updates.signal.org/desktop/apt/keys.asc |\
-  sudo apt-key add -
+  wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg
+  cat signal-desktop-keyring.gpg | sudo tee -a /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null
+  rm signal-desktop-keyring.gpg
   
   # 2. Add our repository to your list of repositories
   echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" |\
@@ -1262,20 +1255,25 @@ VirtualBox()
   sudo rm /etc/apt/sources.list.d/virtualbox.list
   echo "deb http://download.virtualbox.org/virtualbox/debian eoan contrib" | sudo tee -a /etc/apt/sources.list.d/virtualbox.list
   sudo apt-get update
-  sudo apt-get install -y virtualbox-6.1
+  sudo apt-get install -y virtualbox
   sudo usermod -G vboxusers -a $USER
   version=$(VBoxManage --version|cut -dr -f1|cut -d'_' -f1) && wget -c http://download.virtualbox.org/virtualb … ox-extpack
   VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-$version.vbox-extpack
 }
 
+Vivaldi()
+{
+  # Vivaldi web browser
+  cd /tmp || exit
+  wget https://downloads.vivaldi.com/stable/vivaldi-stable_5.7.2921.65-1_amd64.deb
+  sudo dpkg -i vivaldi-stable_5.7.2921.65-1_amd64.deb
+  rm vivaldi-stable_5.7.2921.65-1_amd64.deb
+}
+
 VSCodium()
 {
   # VSCodium : libre version of Microsoft VSCode
-  # https://vscodium.com/
-  # Setup
-  # wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
-  # echo 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-  # sudo apt update && sudo apt install -y codium
+  # SNAP
   # Extensions
   for extension in \
     abusaidm.html-snippets \
@@ -1345,7 +1343,7 @@ VSCodium()
     zkirkland.vscode-firstupper
 
     do
-      vscodium --install-extension ${extension}
+      codium --install-extension ${extension}
     done
 }
 
@@ -1413,7 +1411,7 @@ ZSH()
   # Install oh-my-szh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
-  cd ~/.oh-my-zsh && git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+  cd ~/.oh-my-zsh && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
 }
 
 Annexes()
@@ -1439,7 +1437,7 @@ Main()
 #  bluegriffon
 #  browsh
 #  Chaos
-#  Children
+  Children
 #  Chrome
 #  chromeIPass
 #  CLOUD
@@ -1449,70 +1447,77 @@ Main()
 #  Ctop
 #  Docker
 #  Douane
-#  Dropbox
+  Dropbox
 #  DroidCAM
-#  DVD
-  Element
-#  FlatPack
+  DVD
+#  Element
+  FlatPack
 #  Feedreader
-#  Fuzzy
+  Fuzzy
 #  GCStar
 #  Github
-#  GnomeConfigurations
-#  GnomeExtensions
+  GnomeConfigurations
+  GnomeExtensions
 #  GrafTCP
 #  GRAPH
 #  Infrakit
 #  IssueHelper
-#  Keybase
-#  Kubernetes
+  Keybase
+  Kubernetes
 #  Lightworks
-#  lnav
-#  lynis
+  lnav
+  lynis
 #  lynishardening
-#  Minishift
+  Minishift
 #  MultiBootUSB
 #  Multisystem
-#  Music
-#  NeoVim
-#  nicotine
+  Music
+  NeoVim
+  nicotine
 #  npmfx
 #  OneDrive
 #  OSQuery
-#  PlayOnLinux
-#  Powershell
-#  Puppet
+  PlayOnLinux
+  Powershell
+  Puppet
 #  rapidphotodownloader
 #  RocketChat
-#  Rust   
+  Rust   
 #  s3benchmark
-#  Screensavers
-#  Signal
-#  Slack
-#  snap
+  Screensavers
+  Signal
+  Slack
+  SNAP
 #  Spip-Cli
-#  Spotify
-#  Stacer
-#  Students
+  Spotify
+  Stacer
+  Students
 #  STui
 #  Taskfile
-#  Terminal
-#  TLDR
+  Terminal
+  TLDR
 #  Trello
-#  ttfmscorefontsinstaller
-#  urbackup
-#  Ventoy
-#  VIM
-#  VirtualBox
-#  VSCodium
-#  WSS
-#  WTF
-#  XAuth
-#  YakYak
-#  youtube
+  ttfmscorefontsinstaller
+  urbackup
+  Ventoy
+  VIM
+  VirtualBox
+  Vivaldi
+  VSCodium
+  WSS
+  WTF
+  XAuth
+  YakYak
+  youtube
 #  YunoHost
-#  ZSH
+  ZSH
 #  zquests
 }
 
-Main
+
+if [ ! -z $1 ] 
+then
+  $1
+else
+  Main
+fi
