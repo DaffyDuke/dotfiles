@@ -994,6 +994,16 @@ Puppet()
   sudo dpkg -i puppet-release-xenial.deb && rm -f puppet-release-xenial.deb
 }
 
+ProtonBridge()
+{
+  # ProtonBridge to download mails and use it from mutt
+  cd /tmp || exit
+  version=3.0.21
+  wget https://proton.me/download/bridge/protonmail-bridge_${version}-1_amd64.deb
+  sudo dpkg -i protonmail-bridge_${version}-1_amd64.deb
+  rm protonmail-bridge_${version}-1_amd64.deb
+}
+
 rapidphotodownloader()
 {
   # rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
@@ -1479,6 +1489,7 @@ Main()
 #  OSQuery
   PlayOnLinux
   Powershell
+  ProtonBridge
   Puppet
 #  rapidphotodownloader
 #  RocketChat
