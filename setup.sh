@@ -300,6 +300,10 @@ Bat()
   cd /tmp || exit 1
   wget https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
   sudo dpkg -i bat_0.10.0_amd64.deb
+}
+
+Delta()
+{
   cd /tmp || exit 1
   wget https://github.com/barnumbirr/delta-debian/releases/download/v0.1.1-1/delta_0.1.1-1_amd64_debian_buster.deb
   sudo dpkg -i delta_0.1.1-1_amd64_debian_buster.deb
@@ -1455,6 +1459,7 @@ Main()
 #  CozyDrive
 #  Crontab
 #  Ctop
+  Delta
 #  Docker
 #  Douane
   Dropbox
