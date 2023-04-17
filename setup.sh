@@ -1008,6 +1008,18 @@ ProtonBridge()
   rm protonmail-bridge_${version}-1_amd64.deb
 }
 
+ProtonVPN()
+{
+  # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
+  cd /tmp || exit
+  wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb
+  echo "c409c819eed60985273e94e575fd5dfd8dd34baef3764fc7356b0f23e25a372c protonvpn-stable-release_1.0.3_all.deb" | sha256sum --check -
+  sudo apt-get update
+  sudo dpkg -i protonvpn-stable-release_1.0.3_all.deb
+  sudo apt install -y protonvpn
+  sudo apt install -y gnome-shell-extension-appindicator gir1.2-appindicator3-0.1
+}
+
 rapidphotodownloader()
 {
   # rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
@@ -1495,6 +1507,7 @@ Main()
   PlayOnLinux
   Powershell
   ProtonBridge
+  ProtonVPN
   Puppet
 #  rapidphotodownloader
 #  RocketChat
