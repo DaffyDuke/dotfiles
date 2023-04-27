@@ -1379,6 +1379,14 @@ VSCodium()
     done
 }
 
+WakeMeOps()
+{
+  # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
+  curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
+  sudo apt-get update
+  sudo apt install gping choose bottom himalaya xh
+}
+
 WSS()
 {
   # WSS by Netflix
@@ -1539,6 +1547,7 @@ Main()
   VirtualBox
   Vivaldi
   VSCodium
+  WakeMeOps
   WSS
   WTF
   XAuth
