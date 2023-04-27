@@ -109,3 +109,4 @@ complete -o nospace -C /home/daffy/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source /home/daffy/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /home/daffy/.asdf/asdf.sh

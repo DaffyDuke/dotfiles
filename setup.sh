@@ -390,9 +390,9 @@ CLOUD()
   # terraform
   # https://www.terraform.io/downloads.html
   cd ~/bin || exit
-  wget https://releases.hashicorp.com/terraform/0.10.8/terraform_0.10.8_linux_amd64.zip
-  unzip -f terraform_0.10.8_linux_amd64.zip
-  rm -f terraform_0.10.8_linux_amd64.zip getTerraformProviders.sh
+  wget https://releases.hashicorp.com/terraform/1.2.9/terraform_1.2.9_linux_amd64.zip
+  unzip -f terraform_1.2.9_linux_amd64.zip
+  rm -f terraform_1.2.9_linux_amd64.zip getTerraformProviders.sh
   wget https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
   sudo mkdir -p /usr/local/terraform/toolbox/providers/
   sudo bash ~/bin/getTerraformProviders.sh
@@ -464,6 +464,12 @@ CLOUD()
   sudo dpkg -i packages-microsoft-prod.deb
   sudo apt-get update
   sudo apt-get install -y azure-functions-core-tools
+
+  # ASDF
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+  # already in this git repo here
+  # echo ". $HOME/.asdf/asdf.sh" >> ~/.bashrc
+  # echo ". $HOME/.asdf/asdf.sh" >> ~/.zshrc
 }
 
 coolretroterm()

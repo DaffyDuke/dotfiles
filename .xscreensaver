@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.45 for daffy on Fri Dec  2 11:38:31 2022.
+# Written by xscreensaver-settings 6.02 for daffy on Mon Apr 17 22:24:11 2023.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:05:00
@@ -10,18 +10,13 @@ passwdTimeout:	0:00:30
 visualID:	default
 installColormap:    True
 verbose:	False
-timestamp:	True
 splash:		True
 splashDuration:	0:00:05
 demoCommand:	xscreensaver-demo
-prefsCommand:	xscreensaver-demo -prefs
 nice:		10
-memoryLimit:	0
 fade:		True
 unfade:		False
 fadeSeconds:	0:00:03
-fadeTicks:	20
-captureStderr:	True
 ignoreUninstalledPrograms:False
 font:		*-medium-r-*-140-*-m-*
 dpmsEnabled:	False
@@ -34,7 +29,7 @@ grabVideoFrames:    False
 chooseRandomImages: False
 imageDirectory:	
 
-mode:		off
+mode:		one
 selected:	225
 
 textMode:	url
@@ -42,6 +37,7 @@ textLiteral:	XScreenSaver
 textFile:	
 textProgram:	fortune
 textURL:	http://fridge.ubuntu.com/node/feed
+dialogTheme:	default
 
 programs:								      \
 			"ATV4" 	atv4					    \n\
@@ -292,15 +288,10 @@ programs:								      \
 - GL: 				gibson -root				    \n\
 - GL: 				headroom -root				    \n\
 - GL: 				sphereeversion -root			    \n\
+				binaryhorizon -root			    \n\
+				marbling -root				    \n\
 
 
-pointerPollTime:    0:00:05
 pointerHysteresis:  10
-windowCreationTimeout:0:00:30
-initialDelay:	0:00:00
-GetViewPortIsFullOfLies:False
-procInterrupts:	True
-xinputExtensionDev: False
-overlayStderr:	True
 authWarningSlack:   20
 
