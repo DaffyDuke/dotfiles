@@ -110,3 +110,12 @@ complete -o nospace -C /home/daffy/bin/vault vault
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source /home/daffy/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 . /home/daffy/.asdf/asdf.sh
+
+# Howdoi
+# https://github.com/gleitz/howdoi
+export  HOWDOI_COLORIZE=1
+export  HOWDOI_DISABLE_CACHE=1
+# export  HOWDOI_DISABLE_SSL=1
+# export  HOWDOI_SEARCH_ENGINE=google
+# export  HOWDOI_URL=serverfault.com
+
