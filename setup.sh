@@ -1046,6 +1046,8 @@ RocketChat()
 Rust()
 {
   # Install rust and other cargo tools
+  # First remove debian packages
+  sudo apt remove cargo rustc
   curl https://sh.rustup.rs -sSf | sh
 
   # Initiate Cargo cache
