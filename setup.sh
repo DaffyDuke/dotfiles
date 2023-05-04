@@ -118,7 +118,7 @@ Packages()
     i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf iputils-arping iptstate \
     jq jxplorer \
     kerneloops kdocker keychain kigo klavaro kodi \
-    language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
+    language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libopenscap8 libpam-tmpdir libpam-yubico libreoffice libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-pdfimport libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
     mat mc meld ncdu mono-complete mumble mutt \
     nautilus-image-converter needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openssh-client openssh-server openvpn owncloud-client \
@@ -817,14 +817,6 @@ Lightworks()
   wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
   sudo dpkg -i lightworks.deb && rm lightworks.deb
   sudo apt --fix-broken install -y
-}
-
-lnav()
-{
-  # lnav
-  cd ~/bin || exit
-  wget https://github.com/tstack/lnav/releases/download/v0.8.3/lnav-0.8.3-linux-64bit.zip -O ~/bin/lnav-0.8.3-linux-64bit.zip
-  unzip ~/bin/lnav-0.8.3-linux-64bit.zip && rm ~/bin/lnav-0.8.3-linux-64bit.zip
 }
 
 lynis()
