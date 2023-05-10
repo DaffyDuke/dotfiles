@@ -168,7 +168,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bpytop betago configobj docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv
+  for pkg in bpytop betago configobj docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
     pip3 install "${pkg}" --upgrade
   done
