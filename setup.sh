@@ -934,6 +934,16 @@ npmfx()
   sudo npm install -g fx
 }
 
+OfflineImap()
+{
+  # Install last OfflineImap lines
+  mkdir -p ~/.config/systemd/user
+  cd /tmp && git clone https://github.com/OfflineIMAP/offlineimap.git
+  cp offlineimap/contrib/systemd/* ~/.config/systemd/user/
+  systemctl --user start offlineimap.service
+  systemctl --user enable offlineimap-oneshot.timer
+}
+
 OneDrive()
 {
   # OneDrive : https://github.com/abraunegg/onedrive
@@ -1510,6 +1520,7 @@ Main()
   NeoVim
   nicotine
 #  npmfx
+  OfflineImap
 #  OneDrive
 #  OSQuery
   PlayOnLinux
