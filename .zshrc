@@ -123,3 +123,7 @@ export  HOWDOI_DISABLE_CACHE=1
 # The minimal, blazing-fast, and infinitely customizable prompt for any shell!
 eval "$(starship init zsh)"
 
+# https://github.com/denisidoro/navi/blob/master/docs/installation.md#installing-the-shell-widget
+# An interactive cheatsheet tool for the command-line.
+eval "$(navi widget zsh)"
+
