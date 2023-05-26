@@ -1456,6 +1456,12 @@ ZSH()
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
   cd ~/.oh-my-zsh && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  cd /tmp || exit
+  git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git
+  cd nerd-fonts || exit
+  ./install.sh "FiraCode"
+  snap install starship --edge
 }
 
 Annexes()

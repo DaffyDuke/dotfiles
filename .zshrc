@@ -45,7 +45,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu wakatime z)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -118,4 +118,8 @@ export  HOWDOI_DISABLE_CACHE=1
 # export  HOWDOI_DISABLE_SSL=1
 # export  HOWDOI_SEARCH_ENGINE=google
 # export  HOWDOI_URL=serverfault.com
+
+# https://starship.rs/guide/#%F0%9F%9A%80-installation
+# The minimal, blazing-fast, and infinitely customizable prompt for any shell!
+eval "$(starship init zsh)"
 
