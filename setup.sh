@@ -348,6 +348,12 @@ Chaos()
   docker run -it chaostoolkit/chaostoolkit discover chaostoolkit-kubernetes
 }
 
+ChatGPT()
+{
+  # Install a chatgpt commandline
+  curl -sS https://raw.githubusercontent.com/0xacx/chatGPT-shell-cli/main/install.sh | sudo -E bash
+}
+
 Children()
 {
   # Add some games
@@ -1487,6 +1493,7 @@ Main()
 #  bluegriffon
 #  browsh
 #  Chaos
+  ChatGPT
   Children
 #  Chrome
 #  chromeIPass

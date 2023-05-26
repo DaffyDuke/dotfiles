@@ -27,6 +27,7 @@
 .ccnet/
 .cert/
 .certspotter/
+.chatgpt_history
 .clamtk/
 .cmake/
 .codestream
