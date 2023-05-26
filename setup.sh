@@ -122,7 +122,7 @@ Packages()
     mat mc meld ncdu mono-complete mumble mutt \
     nautilus-image-converter ncal needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openscap-common openssh-client openssh-server openvpn owncloud-client \
-    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
+    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-poetry python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
     s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common strace stunnel4 synaptic synfigstudio sysstat \
