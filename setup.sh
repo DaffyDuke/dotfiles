@@ -149,7 +149,7 @@ SNAP()
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
-    rambox shellcheck slack spotify strawberry whatsdesk yakyak yq
+    rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak yq
   do
     snap install --classic ${snap}
   done
