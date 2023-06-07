@@ -111,7 +111,7 @@ Packages()
     baobab barrier bc blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall chrome-gnome-shell cifs-utils clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
-    easytag ethstatus ethtool ettercap-graphical evince evolution extrace exuberant-ctags \
+    easytag ethstatus ethtool ettercap-graphical evince evolution evolution-ews extrace exuberant-ctags \
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
     gajim geary gimp glances gnome-tweaks gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
@@ -168,9 +168,9 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bpytop betago configobj docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago configobj docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
-    pip3 install "${pkg}" --upgrade
+    pip install "${pkg}" --upgrade
   done
 }
 
@@ -315,7 +315,7 @@ bcctools()
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D4284CDD
   echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic-nightly main" | sudo tee /etc/apt/sources.list.d/iovisor.list
   sudo apt-get update
-  sudo apt-get install y bcc-tools libbcc-examples linux-headers-"$(uname -r)"
+  sudo apt-get install -y bcc-tools libbcc-examples linux-headers-"$(uname -r)" python3-bcc
 }
 
 bluegriffon()
