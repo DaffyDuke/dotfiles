@@ -107,7 +107,7 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    acct aeskulap alot asciidoc aide aide-common alien apt-file apt-cacher aria2 aspell-fr atop awscli auditd \
+    acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 aspell-fr atop awscli auditd \
     baobab barrier bc blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall chrome-gnome-shell cifs-utils clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
@@ -119,9 +119,9 @@ Packages()
     jq jxplorer \
     kerneloops kdocker keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
-    mat mc meld ncdu mono-complete mumble mutt \
+    mc meld ncdu mono-complete mumble mutt \
     nautilus-image-converter ncal needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
-    ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openscap-common openssh-client openssh-server openvpn owncloud-client \
+    ocrfeeder offlineimap ooo-thumbnailer openconnect openscap-common openssh-client openssh-server openvpn owncloud-client \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-poetry python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
