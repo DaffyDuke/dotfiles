@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Encrypt
+# gpg-encrypt Nautilus script
+
+gpg -c --no-symkey-cache "$1" && rm -f "$1"
+

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Decrypt
+# gpg-decrypt Nautilus script
+
+ext=`echo "$1" | grep [.]gpg`
+if [ "$ext" != "" ]; then
+    gpg --batch --yes --no-symkey-cache "$1"
+else
+    zenity --error --text "The selected file is not crypted."
+fi
+
