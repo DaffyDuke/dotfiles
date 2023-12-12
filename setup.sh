@@ -1162,11 +1162,11 @@ Students()
 {
   # Add some scientific Tools
   sudo apt install -y \
-    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo qalculate step tkgate zegrapher
+    avogadro fritzing geogebra geogebra-gnome kalzium kgeography marble marble-plugins pyacidobasic python3-mecavideo qalculate-gtk step tkgate verbiste-gnome zegrapher
 
   cd /tmp || exit 1
-  wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
-  sudo dpkg -i filius_1.7.4_all.deb
+  wget https://www.lernsoftware-filius.de/downloads/Setup/filius_2.5.1_all.deb
+  sudo dpkg -i filius_2.5.1_all.deb
   # Logiciels PlayOnLinux
   # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
   # Filius : https://www.lernsoftware-filius.de/Herunterladen
