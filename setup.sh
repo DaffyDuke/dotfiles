@@ -92,14 +92,17 @@ PPA()
     ppa:bashtop-monitor/bashtop \
     ppa:libratbag-piper/piper-libratbag-git \
     ppa:nextcloud-devs/client \
-    ppa:appimagelauncher-team/stable
+    ppa:appimagelauncher-team/stable \
+    ppa:yannick-mauray/quickgui \
+    ppa:flexiondotorg/quickemu
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt \
     ddgr software-properties-common boot-repair variety \
-    grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher
+    grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher \
+    quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
