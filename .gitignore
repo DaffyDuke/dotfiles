@@ -138,6 +138,7 @@
 .pypar2/
 .python_history*
 .pvpn-cli/
+.qstopmotion/
 .rancher/
 .rclone.conf
 .recently-used
@@ -159,6 +160,7 @@
 .steam/
 .steampath
 .steampid
+.stopmotion/
 .sudo_as_admin_successful
 .synaptic/
 .synfig/
@@ -258,3 +260,4 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
+
