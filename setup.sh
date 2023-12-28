@@ -118,7 +118,7 @@ Packages()
     fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
     gajim geary gimp gitleaks glances gnome-tweaks gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
-    i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
+    i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     jq jxplorer \
     kdenlive kerneloops kdocker keychain kigo klavaro kodi \
     language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
