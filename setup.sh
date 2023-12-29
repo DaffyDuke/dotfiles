@@ -1370,6 +1370,7 @@ VSCodium()
     oderwat.indent-rainbow \
     PeterJausovec.vscode-docker \
     PKief.material-icon-theme \
+    pomdtr.excalidraw-editor \
     Prisma.vscode-graphql \
     redhat.vscode-yaml \
     ryu1kn.partial-diff \
