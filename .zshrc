@@ -128,3 +128,5 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
+alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
+howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
