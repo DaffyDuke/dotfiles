@@ -1310,9 +1310,9 @@ Vivaldi()
 {
   # Vivaldi web browser
   cd /tmp || exit
-  wget https://downloads.vivaldi.com/stable/vivaldi-stable_5.7.2921.65-1_amd64.deb
-  sudo dpkg -i vivaldi-stable_5.7.2921.65-1_amd64.deb
-  rm vivaldi-stable_5.7.2921.65-1_amd64.deb
+  wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.5.3206.48-1_amd64.deb
+  sudo dpkg -i vivaldi-stable_6.5.3206.48-1_amd64.deb
+  rm vivaldi-stable_6.5.3206.48-1_amd64.deb
 }
 
 VSCodium()
