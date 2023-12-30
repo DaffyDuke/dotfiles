@@ -50,6 +50,7 @@
 .electron-gyp/
 .etr/
 .everpad/
+.filius/
 .flickr/
 .flickrfs/
 .fltk/
@@ -139,6 +140,7 @@
 .python_history*
 .pvpn-cli/
 .qstopmotion/
+.quickhash
 .rancher/
 .rclone.conf
 .recently-used
