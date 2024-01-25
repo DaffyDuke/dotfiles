@@ -1,4 +1,5 @@
 set nocompatible              " be iMproved, required
+syntax on
 filetype off                  " required
 " disable Visual vim by default
 set mouse-=a07
