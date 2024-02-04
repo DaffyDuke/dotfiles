@@ -1019,7 +1019,7 @@ ProtonBridge()
 {
   # ProtonBridge to download mails and use it from mutt
   cd /tmp || exit
-  version=3.8.1
+  version=3.8.2
   wget https://proton.me/download/bridge/protonmail-bridge_${version}-1_amd64.deb
   sudo dpkg -i protonmail-bridge_${version}-1_amd64.deb
   rm protonmail-bridge_${version}-1_amd64.deb
