@@ -31,6 +31,7 @@
 .clamtk/
 .cmake/
 .codestream
+.colima/
 .composer/
 .compiz/
 .config/
@@ -73,6 +74,7 @@
 .gtk-bookmarks
 .gtkboard/
 .guake-indicator/
+.history
 .hplip/
 .hugin
 .httpie/
@@ -83,6 +85,7 @@
 .jocala/
 .joe_state
 .juniper_networks/
+.k8slens/
 .kde/
 .keras/
 .keychain
@@ -98,6 +101,7 @@
 .lnav/
 .local/
 .lyx/
+.m2/
 .macromedia/
 .minetest/
 .minikube/
@@ -117,6 +121,7 @@
 .node-gyp/
 .npm/
 .nvpy/
+.nvm/
 .nylas-mail/
 .offlineimap.pyc
 .offlineimap/
@@ -135,8 +140,10 @@
 .purple/
 .pvpn-gui/protonvpn-gui.log
 .PyCharm*
+.pyenv/
 .pypar2/
 .python_history*
+.python-version
 .pvpn-cli/
 .rancher/
 .rclone.conf
@@ -152,6 +159,7 @@
 .scribus/
 .selected_editor
 .shutter/
+.slack/
 .snap/
 .sqlite_history*
 .ssh*
@@ -186,6 +194,7 @@
 .vim/
 .viminfo
 .vscode*
+.vs-kubernetes/
 .wakatime*
 .vmware/
 .wakatime*
@@ -202,6 +211,7 @@
 .xsession-errors.old
 .z
 .z.*
+.zsh_sessions/
 .zoom
 .zcompdump*
 .zsh-update
@@ -213,6 +223,7 @@ Bureau/
 Calibre Library/
 Cozy*Drive/
 curlie/
+Desktop/
 Documents/
 Downloads
 Dropbox/
@@ -222,10 +233,13 @@ GOPROJECTS
 go*
 Images/
 KVMs/
+Library/
 LICENSE
 Lightworks/
 Mail*
 Mod*
+Movies/
+Music/
 Musique/
 My GCompris/
 nohup.out
@@ -245,7 +259,9 @@ oauth_data
 onedrive.log
 Next*
 pampi/
+Pictures/
 PlayOnLinux's virtual drives
+Public/
 PycharmProjects/
 snap/
 Steam/
@@ -258,3 +274,6 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
+stack.json
+.history
+

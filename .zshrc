@@ -45,14 +45,14 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu wakatime z zsh-autosuggestions)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
 
 export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
-export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
-export RUST_USER_BIN=HOME/.cargo/bin
+export PY_USER_BIN=$(/opt/homebrew/opt/python/libexec/bin/python -c 'import site; print(site.USER_BASE + "/bin")')
+export RUST_USER_BIN=$HOME/.cargo/bin
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -84,6 +84,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source $HOME/.aliases
+[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
 
 export TERM=xterm-256color
 
@@ -105,11 +106,11 @@ ssh() {
 export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /home/daffy/bin/vault vault
+complete -o nospace -C /Users/mac-Z09ODUQU/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source /home/daffy/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-. /home/daffy/.asdf/asdf.sh
+source /Users/mac-Z09ODUQU/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # Howdoi
 # https://github.com/gleitz/howdoi
@@ -127,3 +128,36 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Homebrew: Python
+export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
+
+# pyenv
+export PATH="/Users/mac-Z09ODUQU/.pyenv:$PATH"
+eval "$(pyenv init -)"
+
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+fpath=(/Users/mac-Z09ODUQU/.oh-my-zsh/custom/completions /Users/mac-Z09ODUQU/.oh-my-zsh/custom/plugins/zsh-autosuggestions /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/z /Users/mac-Z09ODUQU/.oh-my-zsh/custom/plugins/zsh-wakatime /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/ubuntu /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/tmuxinator /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/thefuck /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/terraform /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/keychain /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/ruby /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/rake /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/kubectl /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/kitchen /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/golang /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/gitignore /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/git /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/docker /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/debian /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/bundler /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/aws /Users/mac-Z09ODUQU/.oh-my-zsh/functions /Users/mac-Z09ODUQU/.oh-my-zsh/completions /Users/mac-Z09ODUQU/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Add krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# https://github.com/lensapp/lens/issues/6563
+export USE_GKE_GCLOUD_AUTH_PLUGIN=False
+
+# https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(/opt/homebrew/bin/mise activate zsh)"

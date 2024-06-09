@@ -125,3 +125,5 @@ complete -C /home/daffy/bin/vault vault
 export PATH=/bin/lscript:/bin/lscript:HOME/.cargo/bin:/home/daffy/.local/bin:/home/daffy/go-dist/bin:/home/daffy/bin:/home/daffy/.krew/bin:/usr/local/bin:/usr/share/bcc/tools/:/usr/games:/home/daffy/.cargo/bin:/home/daffy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/home/daffy/go-dist/bin:/home/daffy/GOPROJECTS/bin:/home/daffy/GOPROJECTS/bin:/home/daffy/.fzf/bin
 . "$HOME/.cargo/env"
 . /home/daffy/.asdf/asdf.sh
+eval "$(~/.local/bin/mise activate bash)"
+eval "$(/opt/homebrew/bin/mise activate bash)"

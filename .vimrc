@@ -1,4 +1,5 @@
 set nocompatible              " be iMproved, required
+syntax on
 filetype off                  " required
 " disable Visual vim by default
 set mouse-=a07
@@ -52,6 +53,7 @@ Plugin 'cespare/vim-toml'
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 Plugin 'morhetz/gruvbox'
 
@@ -373,6 +375,7 @@ Plugin 'imain/notmuch-vim'
 Plugin 'itchyny/calendar.vim'
 
 Plugin 'google/vim-jsonnet'
+Plugin 'valloric/youcompleteme'
 
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],
