@@ -326,6 +326,13 @@ bluegriffon()
   sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
 }
 
+Brew()
+{
+  # Use brew to install softwares on MacOs
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew bundle
+}
+
 browsh()
 {
   # browsh Text Web browser
@@ -1491,9 +1498,10 @@ Main()
 #  Bat
 #  bcctools
 #  bluegriffon
+#  Brew
 #  browsh
 #  Chaos
-  ChatGPT
+#  ChatGPT
   Children
 #  Chrome
 #  chromeIPass

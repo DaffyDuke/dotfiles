@@ -1,0 +1,71 @@
+argocd: GitOps Continuous Delivery for Kubernetes
+asdf: Extendable version manager with support for Ruby, Node.js, Erlang & more
+awscli: Official Amazon AWS command-line interface
+berkeley-db: High performance key/value database
+bottom: Yet another cross-platform graphical process/system monitor
+cdrtools: CD/DVD/Blu-ray premastering and recording software
+cmake: Cross-platform make
+colima: Container runtimes on MacOS (and Linux) with minimal setup
+colordiff: Color-highlighted diff(1) output
+deno: Secure runtime for JavaScript and TypeScript
+dnsperf: Measure DNS performance by simulating network conditions
+docker: Pack, ship and run any application as a lightweight container
+figlet: Banner-like program prints strings as ASCII art
+fuzzy-find: Fuzzy filename finder matching across directories as well as files
+gcal: Program for calculating and printing calendars
+gh: GitHub command-line tool
+ghostscript: Interpreter for PostScript and PDF
+git-cliff: Highly customizable changelog generator
+git-delta: Syntax-highlighting pager for git and diff output
+gnu-getopt: Command-line option parsing utility
+gnu-sed: GNU implementation of the famous stream editor
+gnupg: GNU Pretty Good Privacy (PGP) package
+go: Open source programming language to build simple/reliable/efficient software
+grep: GNU grep, egrep and fgrep
+hcl2json: Convert HCL2 to JSON
+hey: HTTP load generator, ApacheBench (ab) replacement
+hurl: Run and Test HTTP Requests with plain text and curl
+jq: Lightweight and flexible command-line JSON processor
+keychain: User-friendly front-end to ssh-agent(1)
+kind: Run local Kubernetes cluster in Docker
+kubectx: Tool that can switch between kubectl contexts easily and create aliases
+kubeval: Validate Kubernetes configuration files, supports multiple Kubernetes versions
+lnav: Curses-based tool for viewing and analyzing log files
+lolcat: Rainbows and unicorns in your console!
+lynx: Text-based web browser
+macvim: GUI for vim, made for macOS
+midnight-commander: Terminal-based visual file manager
+jwt-cli: Super fast CLI tool to decode and encode JWTs built in Rust
+minikube: Run a Kubernetes cluster locally
+mise: Polyglot runtime manager (asdf rust clone)
+mono: Cross platform, open source .NET development framework
+multi-git-status: Show uncommitted, untracked and unpushed changes for multiple Git repos
+multitail: Tail multiple files in one terminal simultaneously
+mysql: Open source relational database management system
+ncftp: FTP client with an advanced user interface
+node: Platform built on V8 to build network applications
+helm-docs: Automatically generate markdown documentation for helm charts
+openjdk: Development kit for the Java programming language
+parallel: Shell command parallelization utility
+pstree: Show ps output as a tree
+pwgen: Password generator
+pyenv: Python version management
+python@3.10: Interpreted, interactive, object-oriented programming language
+rust: Safe, concurrent, practical language
+shellcheck: Static analysis and lint tool, for (ba)sh scripts
+spice-gtk: GTK client/libraries for SPICE
+starship: Cross-shell prompt for astronauts
+terraformer: CLI tool to generate terraform files from existing infrastructure
+thefuck: Programmatically correct mistyped console commands
+tig: Text interface for Git repositories
+tmux: Terminal multiplexer
+tree: Display directories as trees (with optional color/HTML output)
+ugit: Undo git commands. Your damage control git buddy
+vim: Vi 'workalike' with many additional features
+watch: Executes a program periodically, showing output fullscreen
+wget: Internet file retriever
+yamllint: Linter for YAML files
+yj: CLI to convert between YAML, TOML, JSON and HCL
+youplot: Command-line tool that draw plots on the terminal
+yq: Process YAML, JSON, XML, CSV and properties documents from the CLI
+zsync: File transfer program
