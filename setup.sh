@@ -1287,6 +1287,9 @@ VIM()
   cd ~/.vim/pack/tpope/start
   git clone https://tpope.io/vim/fugitive.git
   vim -u NONE -c "helptags fugitive/doc" -c q
+
+  # vim-terraform
+  git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
 }
 
 VirtualBox()
