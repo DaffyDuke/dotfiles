@@ -828,6 +828,15 @@ Lightworks()
   sudo apt --fix-broken install -y
 }
 
+lutris()
+{
+  # Lutris Game Platform
+  echo "deb [signed-by=/etc/apt/keyrings/lutris.gpg] https://download.opensuse.org/repositories/home:/strycore/Debian_12/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list > /dev/null
+  wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key | gpg --dearmor | sudo tee /etc/apt/keyrings/lutris.gpg > /dev/null
+  sudo apt update
+  sudo apt install -y lutris
+}
+
 lynis()
 {
   # lynis update is really major from ubuntu packages
@@ -1037,14 +1046,14 @@ ProtonBridge()
 ProtonVPN()
 {
   # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
-  version=1.0.3-2
+  version=1.0.3-3
   cd /tmp || exit
   wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
   echo "c68a0b8dad58ab75080eed7cb989e5634fc88fca051703139c025352a6ee19ad protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
   sudo apt-get update
   sudo dpkg -i protonvpn-stable-release_${version}_all.deb
   sudo apt install -y protonvpn
-  sudo apt install -y gnome-shell-extension-appindicator gir1.2-appindicator3-0.1
+  sudo apt install -y libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 }
 
 rapidphotodownloader()
@@ -1541,7 +1550,7 @@ Main()
   Keybase
   Kubernetes
 #  Lightworks
-  lnav
+  lutris
   lynis
 #  lynishardening
   Minishift
