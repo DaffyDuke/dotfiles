@@ -240,14 +240,16 @@ Android()
 
 Ansible()
 {
+  # ansible & ARA
+  python3 -m pip install --user ansible "ara[server]" --break-system-packages
   # molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
-  sudo pip install molecule
+  python3 -m pip install --user molecule --break-system-packages
   cd /tmp || exit
   git clone https://github.com/metacloud/molecule
-  cd /tmp/molecule/test/scenarios/driver/docker || exit
+  cd /tmp/molecule/tests/fixtures/integration/test_command/molecule/docker || exit
   molecule test
   # Run ansible playbooks in parallel.
-  pip install ansible-parallel
+  python3 -m pip install ansible-parallel --break-system-packages
 }
 
 Argbash()

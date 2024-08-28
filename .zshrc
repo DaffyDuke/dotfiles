@@ -130,3 +130,6 @@ eval "$(navi widget zsh)"
 
 alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
 howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
+
+# ARA vars for ansible
+export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
