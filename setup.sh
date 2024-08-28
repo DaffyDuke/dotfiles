@@ -744,9 +744,25 @@ Keybase()
   sudo apt-get install -f
 }
 
+K3S()
+{
+  # Kubernetes Light
+  curl -sfL https://get.k3s.io | sh -
+  # Check for Ready node, takes ~30 seconds
+  sudo k3s kubectl get node
+  sudo k3s server &
+  # Kubeconfig is written to /etc/rancher/k3s/k3s.yaml
+  sudo k3s kubectl get node
+
+  # On a different node run the below command.
+  # NODE_TOKEN comes from /var/lib/rancher/k3s/server/node-token on your server
+  # sudo k3s agent --server https://myserver:6443 --token ${NODE_TOKEN}
+}
+
 Kubernetes()
 {
   # Kubernetes
+  sudo apt install -y k9s
   # https://github.com/kubernetes/minikube
   cd ~/bin/ || exit
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
@@ -1550,6 +1566,7 @@ Main()
 #  Infrakit
 #  IssueHelper
   Keybase
+  K3S
   Kubernetes
 #  Lightworks
   lutris
