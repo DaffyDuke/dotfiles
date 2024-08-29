@@ -504,6 +504,16 @@ CozyDrive()
   gnomeshell-extension-manage --install --extension-id 1031
 }
 
+CrowdSec()
+{
+  # CrowdSec : https://github.com/crowdsecurity/crowdsec?tab=readme-ov-file
+  curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+  sudo apt-get update
+  sudo apt install -y crowdsec
+  sudo apt install -y crowdsec-firewall-bouncer-iptables
+  sudo crowdsec -t && sudo systemctl restart crowdsec
+}
+
 Ctop()
 {
   # Top-like interface for container metrics https://ctop.sh
@@ -1538,14 +1548,15 @@ Main()
 #  bluegriffon
 #  browsh
 #  Chaos
-  ChatGPT
-  Children
+#  ChatGPT
+#  Children
 #  Chrome
 #  chromeIPass
 #  CLOUD
 #  coolretroterm
 #  CozyDrive
 #  Crontab
+#  Crowdsec
 #  Ctop
   Delta
 #  Docker
