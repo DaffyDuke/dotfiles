@@ -60,6 +60,7 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## List the tasks using the most CPU time
 alias hogs='ps uxga | sort --key=4.1 -n'
 alias curlv='curl -w "@curl-format.txt" -o /dev/null -s '
+alias gcurl='curl --header "Authorization: Bearer $(gcloud auth print-identity-token)"'
 # alias bat=batcat
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1| grep -E "state|to\ full|percentage"'
 
