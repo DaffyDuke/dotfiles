@@ -152,7 +152,7 @@ SNAP()
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
-    rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak yq
+    rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak
   do
     snap install --classic ${snap}
   done
@@ -845,6 +845,9 @@ Kubernetes()
   go install
   # Run
   # popeye
+  #
+  # Kubevious Healthcheck & syntax
+  curl https://get.kubevious.io/cli.sh -o install-kubevious.sh && chmod +x install-kubevious.sh && sudo ./install-kubevious.sh && rm install-kubevious.sh
 }
 
 Lightworks()
@@ -1449,7 +1452,7 @@ WakeMeOps()
   # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
   curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
   sudo apt-get update
-  sudo apt install gping choose bottom himalaya xh
+  sudo apt install bottom choose gping himalaya hugo k9s openlens procs rclone ripgrep trivy xh yq
 }
 
 WSS()
