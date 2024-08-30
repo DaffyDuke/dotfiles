@@ -593,7 +593,7 @@ FlatPackages()
   FlatPack
   for pkg in ch.openboard.OpenBoard com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect
   do
     flatpak install flathub "${pkg}"
   done
