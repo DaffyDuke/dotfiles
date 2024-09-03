@@ -70,6 +70,11 @@ wifi-resume.service
   # Take care to suspend module
   # http://www.webupd8.org/2013/01/fix-wireless-or-wired-network-not.html
   echo "SUSPEND_MODULES=\"\$SUSPEND_MODULES iwldvm iwlwifi\"" | sudo tee -a /etc/pm/config.d/unload_modules
+
+  # Discover
+  sudo apt install bettercap build-essential ruby-dev libpcap-dev
+  sudo gem install bettercap
+  sudo bettercap
 }
 
 PPA()
