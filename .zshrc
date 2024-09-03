@@ -133,3 +133,7 @@ howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
 
 # ARA vars for ansible
 export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+
+# fx.wtf
+source <(fx --comp zsh)
+

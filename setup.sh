@@ -1531,6 +1531,7 @@ ZSH()
   cd nerd-fonts || exit
   ./install.sh "FiraCode"
   snap install starship --edge
+  curl https://fx.wtf/install.sh | sudo sh
 }
 
 Annexes()
