@@ -1125,7 +1125,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie mdcat navi ripgrep spotify-tui trippy viu
+  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat navi ripgrep spotify-tui trippy viu
   do
     cargo install "${rustpkg}"
   done
