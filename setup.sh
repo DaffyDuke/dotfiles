@@ -672,6 +672,13 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1104                 
   # CoverflowAltTab@palatis.blogspot.com                              - enabled    
   gnomeshell-extension-manage --install --extension-id 97
+  # Burn My Windows
+  gnomeshell-extension-manage --install --extension-id 4679
+  # Emoji Selector 
+  gnomeshell-extension-manage --install --extension-id 1162
+  # Vitals
+  gnomeshell-extension-manage --install --extension-id 1460
+  #
   cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
