@@ -31,13 +31,13 @@ alias docker-clean-all='docker stop $(docker container ls -a -q) && docker syste
 alias fake="curl -s https://randomuser.me/api/ | jq -r .results[0].login.username"
 alias docker-clean-containers='docker container stop $(docker container ls -a -q) && docker container rm $(docker container ls -a -q)'
 alias nexus='emulator -avd Nexus -gpu off'
-alias ip='ip --color'
-alias ipb='ip --color --brief'
+# alias ip='ip --color'
+# alias ipb='ip --color --brief'
 alias full="df -P | awk '0+\$5 >= 80 {print}'"
 alias gitfixmodes=gitfixalls
 alias gitrefreshalls=gitrefresh
 # alias code=vscodium
-alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
+# alias eth="echo $(ip r|grep ^default | sort -k9 | head -1 | awk '{print $5}')"
 alias lzd='lazydocker'
 alias dust="dust -t 10"
 alias diff='colordiff'
@@ -181,4 +181,3 @@ ip_in_file()
 }
 
 alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
-
