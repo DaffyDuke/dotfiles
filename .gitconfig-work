@@ -21,7 +21,7 @@
 	gpgsign = true
         verbose = true
 [core]
-	excludesfile = /Users/mac-Z09ODUQU/.gitignore_global
+	excludesfile = $HOME/.gitignore_global
         whitespace = trailing-space,space-before-tab
 	autocrlf = input
 #        pager = delta --theme='Monokai Extended'

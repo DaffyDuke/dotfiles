@@ -112,18 +112,18 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-[ -r /home/daffy/.byobu/prompt ] && . /home/daffy/.byobu/prompt   #byobu-prompt#
+[ -r $HOME/.byobu/prompt ] && . $HOME/.byobu/prompt   #byobu-prompt#
 stty -ixon
 alias bd=". bd -si"
 if [[ $TERMINIX_ID ]]; then
     source /etc/profile.d/vte.sh
 fi
 
-complete -C /home/daffy/bin/vault vault
+complete -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export PATH=/bin/lscript:/bin/lscript:HOME/.cargo/bin:/home/daffy/.local/bin:/home/daffy/go-dist/bin:/home/daffy/bin:/home/daffy/.krew/bin:/usr/local/bin:/usr/share/bcc/tools/:/usr/games:/home/daffy/.cargo/bin:/home/daffy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:/home/daffy/go-dist/bin:/home/daffy/GOPROJECTS/bin:/home/daffy/GOPROJECTS/bin:/home/daffy/.fzf/bin
+export PATH=/bin/lscript:/bin/lscript:HOME/.cargo/bin:$HOME/.local/bin:$HOME/go-dist/bin:$HOME/bin:$HOME/.krew/bin:/usr/local/bin:/usr/share/bcc/tools/:/usr/games:$HOME/.cargo/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:$HOME/go-dist/bin:$HOME/GOPROJECTS/bin:$HOME/GOPROJECTS/bin:$HOME/.fzf/bin
 . "$HOME/.cargo/env"
-. /home/daffy/.asdf/asdf.sh
+. $HOME/.asdf/asdf.sh
 eval "$(~/.local/bin/mise activate bash)"
 eval "$(/opt/homebrew/bin/mise activate bash)"

@@ -106,10 +106,10 @@ ssh() {
 export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /Users/mac-Z09ODUQU/bin/vault vault
+complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source /Users/mac-Z09ODUQU/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # Howdoi
@@ -135,17 +135,17 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
 
 # pyenv
-export PATH="/Users/mac-Z09ODUQU/.pyenv:$PATH"
+export PATH="$HOME/.pyenv:$PATH"
 eval "$(pyenv init -)"
 
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
-fpath=(/Users/mac-Z09ODUQU/.oh-my-zsh/custom/completions /Users/mac-Z09ODUQU/.oh-my-zsh/custom/plugins/zsh-autosuggestions /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/z /Users/mac-Z09ODUQU/.oh-my-zsh/custom/plugins/zsh-wakatime /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/ubuntu /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/tmuxinator /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/thefuck /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/terraform /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/keychain /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/ruby /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/rake /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/kubectl /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/kitchen /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/golang /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/gitignore /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/git /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/docker /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/debian /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/bundler /Users/mac-Z09ODUQU/.oh-my-zsh/plugins/aws /Users/mac-Z09ODUQU/.oh-my-zsh/functions /Users/mac-Z09ODUQU/.oh-my-zsh/completions /Users/mac-Z09ODUQU/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
+fpath=($HOME/.oh-my-zsh/custom/completions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/z $HOME/.oh-my-zsh/custom/plugins/zsh-wakatime $HOME/.oh-my-zsh/plugins/ubuntu $HOME/.oh-my-zsh/plugins/tmuxinator $HOME/.oh-my-zsh/plugins/thefuck $HOME/.oh-my-zsh/plugins/terraform $HOME/.oh-my-zsh/plugins/keychain $HOME/.oh-my-zsh/plugins/ruby $HOME/.oh-my-zsh/plugins/rake $HOME/.oh-my-zsh/plugins/kubectl $HOME/.oh-my-zsh/plugins/kitchen $HOME/.oh-my-zsh/plugins/golang $HOME/.oh-my-zsh/plugins/gitignore $HOME/.oh-my-zsh/plugins/git $HOME/.oh-my-zsh/plugins/docker $HOME/.oh-my-zsh/plugins/debian $HOME/.oh-my-zsh/plugins/bundler $HOME/.oh-my-zsh/plugins/aws $HOME/.oh-my-zsh/functions $HOME/.oh-my-zsh/completions $HOME/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '$HOME/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/mac-Z09ODUQU/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 # Add krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
