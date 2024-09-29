@@ -126,5 +126,10 @@ complete -C $HOME/bin/vault vault
 export PATH=/bin/lscript:/bin/lscript:$HOME/.cargo/bin:$HOME/.local/bin:$HOME/go-dist/bin:$HOME/bin:$HOME/.krew/bin:/usr/local/bin:/usr/share/bcc/tools/:/usr/games:$HOME/.cargo/bin:$HOME/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/puppetlabs/bin:$HOME/go-dist/bin:$HOME/GOPROJECTS/bin:$HOME/GOPROJECTS/bin:$HOME/.fzf/bin
 . "$HOME/.cargo/env"
 . $HOME/.asdf/asdf.sh
+if [ -f /etc/debian_version ]; then
+eval "$(~/.local/bin/mise activate bash)"
+else
+eval "$(/opt/homebrew/bin/mise activate bash)"
+fi
 alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
 howto() { h="$@"; eval $(acli --script howCmd "$h") ; }

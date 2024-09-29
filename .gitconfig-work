@@ -1,0 +1,117 @@
+[user]
+	email = olivier.duquesne.partner@decathlon.com
+	name = Olivier Duquesne
+	signingkey = BF61D76EBD6864C3
+[push]
+	default = simple
+# [merge]
+#         ff = only
+[gc]
+        reflogExpire = never
+        reflogExpireUnreachable = never
+[rerere]
+        enabled = true
+[rebase]
+        autosquash = true
+[color]
+	ui = always
+[gpg]
+	program = /opt/homebrew/bin/gpg
+[commit]
+	gpgsign = true
+        verbose = true
+[core]
+	excludesfile = $HOME/.gitignore_global
+        whitespace = trailing-space,space-before-tab
+	autocrlf = input
+#        pager = delta --theme='Monokai Extended'
+        pager = delta
+
+[interactive]
+      diffFilter = delta --color-only --features=interactive
+ 
+[delta]
+    features = decorations
+ 
+ [delta "interactive"]
+     keep-plus-minus-markers = false
+ 
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
+
+# [http]
+# 	proxy = http://proxy.home:3128
+#
+# https://gist.github.com/mghignet/06e239a312efac607e7a92457387d8a6
+# Discard all changes on your local branch and go back to the version you have on the remote branch
+# Put this in your .gitconfig
+[alias]
+  dammit = !BRANCH=$(git rev-parse --abbrev-ref HEAD) \
+    && git fetch origin $BRANCH \
+    && git reset --hard origin/$BRANCH
+# Usage: git dammit
+
+# https://gist.github.com/mghignet/154da1507d53e759f7ed868f1ef87809
+# Modify any commit of your history in one command (shorthand)
+# Put this in your .gitconfig
+  fixup = !sh -c 'SHA=$(git rev-parse $1) \
+       && git commit --fixup $SHA \
+       && git rebase -i --autosquash $SHA~' -
+  pr = pull-request
+  nb = !git checkout --track $(git config branch.$(git rev-parse --abbrev-ref HEAD).remote)/$(git rev-parse --abbrev-ref HEAD) -b
+  p = push
+  st = status -sb
+  ll = log --oneline
+  last = log -1 HEAD --stat
+  cm = commit -m
+  rv = remote -v
+  d = diff
+  gl = config --global -l
+  se = !git rev-list --all | xargs git grep -F
+  ff = merge --ff-only @{upstream}
+# Usage: git fixup {sha1}
+
+# EMOJI-LOG
+# https://github.com/ahmadawais/Emoji-Log
+  # Git Commit, Add all and Push — in one step.
+  cap = "!f() { git add .; git commit -m \"$@\"; git push; }; f"
+
+  # NEW.
+  new = "!f() { git cap \"📦 feat: $@\"; }; f"
+  # IMPROVE.
+  imp = "!f() { git cap \"👌 chore: $@\"; }; f"
+  # FIX.
+  fix = "!f() { git cap \"🐛 fix: $@\"; }; f"
+  # RELEASE.
+  rlz = "!f() { git cap \"🚀 style: $@\"; }; f"
+  # DOC.
+  doc = "!f() { git cap \"📖 docs: $@\"; }; f"
+  # TEST.
+  tst = "!f() { git cap \"🤖 test: $@\"; }; f"
+  # BREAKING CHANGE.
+  brk = "!f() { git cap \"‼️  refactor: $@\"; }; f"
+
+  # Remove gone git branches when removed from remote
+  gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+
+
+[help]
+	autocorrect = 20
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[gc]
+    # default 90 days
+    reflogExpire = 200
+    # default 30 days
+    reflogExpireUnreachable = 90
+
