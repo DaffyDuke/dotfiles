@@ -377,6 +377,8 @@ Plugin 'itchyny/calendar.vim'
 Plugin 'google/vim-jsonnet'
 Plugin 'valloric/youcompleteme'
 
+Plugin 'tpope/vim-unimpaired'
+
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],
       \ [ 'inbox', 'tag:inbox' ],

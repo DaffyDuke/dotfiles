@@ -6,7 +6,7 @@ alias starwars_history='ssh gabe565.com'
 alias mapscii='telnet mapscii.me'
 alias mkdir='mkdir -pv'
 alias ipinfo='curl ipinfo.io'
-alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y && sudo apt-get upgrade -y && flatpak update -y; snap list|grep -v -E "Name|Nom" | while read Name Trash; do sudo snap refresh $Name; done && cleansnap && pip3 list | grep -v -E "Package|----"|awk "{print \$1}" | while read pkg; do pip3 install $pkg --upgrade; done'
+alias cleaner='sudo apt purge -y $(dpkg --list |grep "^rc" |awk "{print \$2}") && sudo apt-get autoremove -y && sudo apt-get autoclean -y && sudo apt-get update -y ; sudo apt-get upgrade -y && flatpak update -y; snap list|grep -v -E "Name|Nom" | while read Name Trash; do sudo snap refresh $Name; done && cleansnap && pip3 list | grep -v -E "Package|----"|awk "{print \$1}" | while read pkg; do pip3 install $pkg --upgrade --break-system-packages; done; rustup update; cargo install cargo-update; cargo install-update -a ; sudo -v && wget -nv -O- https://download.calibre-ebook.com/linux-installer.sh | sudo sh /dev/stdin'
 alias getcomposer='curl -sS https://getcomposer.org/installer | php'
 alias random='mktemp -u | cut -d'.' -f2'
 alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | sed -r "s/\s{2,}//g" | head -n 50 | sort -n'
@@ -60,6 +60,7 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 ## List the tasks using the most CPU time
 alias hogs='ps uxga | sort --key=4.1 -n'
 alias curlv='curl -w "@curl-format.txt" -o /dev/null -s '
+alias gcurl='curl --header "Authorization: Bearer $(gcloud auth print-identity-token)"'
 # alias bat=batcat
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT1| grep -E "state|to\ full|percentage"'
 
@@ -140,7 +141,7 @@ passcli(){
   # Prerequisite : secret-tool store --label=KeePass name keepass_password
   # passcli locate entry
   # passcli show entry
-  secret-tool lookup name keepass_password | /snap/bin/keepassxc.cli $(echo $1 | sed -e "s+show+show --show-protected+g") ~/Dropbox/Certificats/database.kdbx -k ~/Dropbox/keepass.key $2
+  secret-tool lookup name keepass_password | /usr/bin/keepassxc-cli $(echo $1 | sed -e "s+show+show --show-protected+g") ~/Dropbox/Certificats/database.kdbx -k ~/Dropbox/keepass.key $2
 }
 
 treee(){

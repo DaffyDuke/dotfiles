@@ -37,6 +37,7 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
+LESSHISTFILE=/dev/null
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -110,7 +111,12 @@ complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f /etc/debian_version ]
+then
+. $HOME/.asdf/asdf.sh
+else
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 
 # Howdoi
 # https://github.com/gleitz/howdoi
@@ -128,6 +134,17 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
+if [ -f /etc/debian_version ]
+then
+alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
+howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
+
+# ARA vars for ansible
+export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+
+# fx.wtf
+source <(fx --comp zsh)
+else
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -161,3 +178,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(/opt/homebrew/bin/mise activate zsh)"
+
+fi

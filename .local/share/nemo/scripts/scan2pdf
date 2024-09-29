@@ -1,0 +1,15 @@
+#!/bin/bash
+IFS='
+'
+for file in $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
+do
+  if [ -f "$file" ]; then
+	base=${file%.*}
+	ext=${file##*.}
+	newname=${base}.pdf
+	convert -quality 25 $file $newname.jpg
+	convert -page a4 $newname.jpg $newname
+	rm $newname.jpg
+  fi
+done
+

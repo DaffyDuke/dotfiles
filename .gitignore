@@ -10,6 +10,7 @@
 .ansible*
 .apport-ignore.xml
 .aptitude/
+.ara/
 .asciidoc/
 .asciinema/
 .asdf/
@@ -51,6 +52,7 @@
 .electron-gyp/
 .etr/
 .everpad/
+.filius/
 .flickr/
 .flickrfs/
 .fltk/
@@ -145,6 +147,8 @@
 .python_history*
 .python-version
 .pvpn-cli/
+.qstopmotion/
+.quickhash
 .rancher/
 .rclone.conf
 .recently-used
@@ -167,6 +171,7 @@
 .steam/
 .steampath
 .steampid
+.stopmotion/
 .sudo_as_admin_successful
 .synaptic/
 .synfig/
@@ -236,6 +241,7 @@ KVMs/
 Library/
 LICENSE
 Lightworks/
+LOG_imapsync/
 Mail*
 Mod*
 Movies/
@@ -276,4 +282,3 @@ user.reg
 userdef.reg
 stack.json
 .history
-

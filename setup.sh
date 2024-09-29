@@ -70,6 +70,11 @@ wifi-resume.service
   # Take care to suspend module
   # http://www.webupd8.org/2013/01/fix-wireless-or-wired-network-not.html
   echo "SUSPEND_MODULES=\"\$SUSPEND_MODULES iwldvm iwlwifi\"" | sudo tee -a /etc/pm/config.d/unload_modules
+
+  # Discover
+  sudo apt install bettercap build-essential ruby-dev libpcap-dev
+  sudo gem install bettercap
+  sudo bettercap
 }
 
 PPA()
@@ -92,14 +97,17 @@ PPA()
     ppa:bashtop-monitor/bashtop \
     ppa:libratbag-piper/piper-libratbag-git \
     ppa:nextcloud-devs/client \
-    ppa:appimagelauncher-team/stable
+    ppa:appimagelauncher-team/stable \
+    ppa:yannick-mauray/quickgui \
+    ppa:flexiondotorg/quickemu
   do
     sudo apt-add-repository -n --yes ${ppa}
   done
   sudo apt-get update
   sudo apt install -y hollywood qownnotes peek variety timeshift veracrypt \
     ddgr software-properties-common boot-repair variety \
-    grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher
+    grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher \
+    quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
 }
 
@@ -107,31 +115,31 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    acct aeskulap alot asciidoc aide aide-common alien apt-file apt-cacher aria2 aspell-fr atop awscli auditd \
+    acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 asciidoctor aspell-fr atop awscli auditd \
     baobab barrier bc blueman brasero build-essential bundler \
-    ca-certificates cargo checkinstall chrome-gnome-shell cifs-utils clipit chromium-browser chromium-browser-l10n checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
-    darktable debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix \
-    easytag ethstatus ethtool ettercap-graphical evince evolution evolution-ews extrace exuberant-ctags \
-    fail2ban fastboot fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
-    gajim geary gimp glances gnome-tweaks gnome-usage gnupg2 gnupg-agent gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
-    handbrake hashcat heimdall-flash-frontend hexchat-plugins hexchat-indicator hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins hyperfine \
-    i2c-tools: iftop inkscape ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
-    jq jxplorer \
-    kerneloops kdocker keychain kigo klavaro kodi \
-    language-pack-fr ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-templates libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc lxc-utils python3-lxc lynx \
-    mat mc meld ncdu mono-complete mumble mutt \
-    nautilus-image-converter ncal needrestart netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nmap nmon notmuch numatop npm \
-    ocrfeeder offlineimap ogmrip ooo-thumbnailer openconnect openscap-common openssh-client openssh-server openvpn owncloud-client \
-    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgcli pgtop photocollage pinentry-curses pinentry-tty pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-poetry python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
+    ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
+    darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix duf \
+    easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
+    fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
+    gajim geary geogebra-gnome gimp  git-extras gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
+    i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
+    josm josm-l10n jq jxplorer \
+    kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
+    ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc python3-lxc lynx \
+    mc meld mgitstatus miller mono-complete mumble mutt \
+    nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
+    ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
+    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
-    ubuntu-restricted-extras unison-gtk unrar urlview \
+    unison-gtk unrar urlview \
     vagrant vifm vim-fugitive vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
-    xauth xdg-utils xscreensaver xsane \
-    yamllint yubikey-manager-qt \
+    xauth xdg-utils xournalpp xscreensaver xsane \
+    yamllint \
     zmap
 
   sudo apt-get install -y libquazip5-1 libqrencode4
@@ -149,7 +157,7 @@ SNAP()
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
     keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
-    rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak yq
+    rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak
   do
     snap install --classic ${snap}
   done
@@ -168,9 +176,9 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bcc bpytop betago configobj docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
-    pip install "${pkg}" --upgrade
+    pip install "${pkg}" --upgrade --break-system-packages
   done
 }
 
@@ -237,14 +245,16 @@ Android()
 
 Ansible()
 {
+  # ansible & ARA
+  python3 -m pip install --user ansible "ara[server]" --break-system-packages
   # molecule : https://blog.octo.com/en/the-wizard-ansible-molecule-and-test-driven-development/
-  sudo pip install molecule
+  python3 -m pip install --user molecule --break-system-packages
   cd /tmp || exit
   git clone https://github.com/metacloud/molecule
-  cd /tmp/molecule/test/scenarios/driver/docker || exit
+  cd /tmp/molecule/tests/fixtures/integration/test_command/molecule/docker || exit
   molecule test
   # Run ansible playbooks in parallel.
-  pip install ansible-parallel
+  python3 -m pip install ansible-parallel --break-system-packages
 }
 
 Argbash()
@@ -367,7 +377,7 @@ Children()
   sudo apt install -y \
     brainparty briquolo cgoban colobot connectagram \
     extremetuxracer fretsonfire-songs-muldjord frozen-bubble gbrainy gcompris-qt grhino \
-    junior-config junior-programming khangman lutris mu-cade opencity pingus steam supertuxkart tomatoes tuxmath tuxtype
+    junior-config junior-programming khangman lutris mu-cade opencity pingus supertuxkart tomatoes tuxmath tuxtype
 
   # when you need to add users to junior-programming
   sudo dpkg-reconfigure --force junior-config
@@ -381,7 +391,7 @@ Chrome()
   sudo sh -c 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list'
   wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
   sudo apt-get update
-  sudo apt-get install -y google-chrome-unstable
+  sudo apt-get install -y google-chrome-stable
 }
 
 chromeIPass()
@@ -506,6 +516,16 @@ CozyDrive()
   gnomeshell-extension-manage --install --extension-id 1031
 }
 
+CrowdSec()
+{
+  # CrowdSec : https://github.com/crowdsecurity/crowdsec?tab=readme-ov-file
+  curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+  sudo apt-get update
+  sudo apt install -y crowdsec
+  sudo apt install -y crowdsec-firewall-bouncer-iptables
+  sudo crowdsec -t && sudo systemctl restart crowdsec
+}
+
 Ctop()
 {
   # Top-like interface for container metrics https://ctop.sh
@@ -529,6 +549,11 @@ Docker()
   sudo gpasswd -a $USER docker
   # https://github.com/jesseduffield/lazydocker#installation
   go get github.com/jesseduffield/lazydocker
+  # Dive https://github.com/wagoodman/dive
+  cd /tmp || exit
+  DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+  curl -OL https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.deb
+  sudo apt install ./dive_${DIVE_VERSION}_linux_amd64.deb
 }
 
 Douane()
@@ -556,8 +581,8 @@ Dropbox()
   # Dropbox
   # https://www.dropbox.com/install-linux
   cd /tmp || exit 1
-  wget -O dropbox_2022.12.05_amd64.deb https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2022.12.05_amd64.deb
-  sudo dpkg -i dropbox_2022.12.05_amd64.deb
+  wget -O dropbox_2020.03.04_amd64.deb https://www.dropbox.com/download?dl=packages/debian/dropbox_2020.03.04_amd64.deb
+  sudo dpkg -i dropbox_2020.03.04_amd64.deb
   sudo apt --fix-broken install
   echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p
 }
@@ -585,7 +610,7 @@ FlatPackages()
   FlatPack
   for pkg in ch.openboard.OpenBoard com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect
   do
     flatpak install flathub "${pkg}"
   done
@@ -654,6 +679,13 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1104                 
   # CoverflowAltTab@palatis.blogspot.com                              - enabled    
   gnomeshell-extension-manage --install --extension-id 97
+  # Burn My Windows
+  gnomeshell-extension-manage --install --extension-id 4679
+  # Emoji Selector 
+  gnomeshell-extension-manage --install --extension-id 1162
+  # Vitals
+  gnomeshell-extension-manage --install --extension-id 1460
+  #
   cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
@@ -746,9 +778,25 @@ Keybase()
   sudo apt-get install -f
 }
 
+K3S()
+{
+  # Kubernetes Light
+  curl -sfL https://get.k3s.io | sh -
+  # Check for Ready node, takes ~30 seconds
+  sudo k3s kubectl get node
+  sudo k3s server &
+  # Kubeconfig is written to /etc/rancher/k3s/k3s.yaml
+  sudo k3s kubectl get node
+
+  # On a different node run the below command.
+  # NODE_TOKEN comes from /var/lib/rancher/k3s/server/node-token on your server
+  # sudo k3s agent --server https://myserver:6443 --token ${NODE_TOKEN}
+}
+
 Kubernetes()
 {
   # Kubernetes
+  sudo apt install -y k9s
   # https://github.com/kubernetes/minikube
   cd ~/bin/ || exit
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
@@ -821,6 +869,9 @@ Kubernetes()
   go install
   # Run
   # popeye
+  #
+  # Kubevious Healthcheck & syntax
+  curl https://get.kubevious.io/cli.sh -o install-kubevious.sh && chmod +x install-kubevious.sh && sudo ./install-kubevious.sh && rm install-kubevious.sh
 }
 
 Lightworks()
@@ -830,6 +881,15 @@ Lightworks()
   wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
   sudo dpkg -i lightworks.deb && rm lightworks.deb
   sudo apt --fix-broken install -y
+}
+
+lutris()
+{
+  # Lutris Game Platform
+  echo "deb [signed-by=/etc/apt/keyrings/lutris.gpg] https://download.opensuse.org/repositories/home:/strycore/Debian_12/ ./" | sudo tee /etc/apt/sources.list.d/lutris.list > /dev/null
+  wget -q -O- https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key | gpg --dearmor | sudo tee /etc/apt/keyrings/lutris.gpg > /dev/null
+  sudo apt update
+  sudo apt install -y lutris
 }
 
 lynis()
@@ -895,6 +955,15 @@ Minishift()
   minishift stop
 }
 
+mkcert()
+{
+  # mkcert : create a valid local CA & certs
+  sudo apt install libnss3-tools
+  curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+  chmod +x mkcert-v*-linux-amd64
+  sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+}
+
 MultiBootUSB()
 {
   # MultiBootUSB
@@ -926,7 +995,7 @@ NeoVim()
   Python
   GO
   # NeoVIM
-  pip3 install --upgrade neovim
+  pip3 install --upgrade --break-system-packages neovim
   go get -u github.com/nsf/gocode
 }
 
@@ -990,7 +1059,7 @@ PlayOnLinux()
   # PlayOnLinux
   wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
   sudo add-apt-repository http://deb.playonlinux.com/
-  sudo apt -V install playonlinux wine-stable
+  sudo apt -V install playonlinux wine
 }
 
 Powershell()
@@ -1023,7 +1092,7 @@ ProtonBridge()
 {
   # ProtonBridge to download mails and use it from mutt
   cd /tmp || exit
-  version=3.0.21
+  version=3.8.2
   wget https://proton.me/download/bridge/protonmail-bridge_${version}-1_amd64.deb
   sudo dpkg -i protonmail-bridge_${version}-1_amd64.deb
   rm protonmail-bridge_${version}-1_amd64.deb
@@ -1032,13 +1101,14 @@ ProtonBridge()
 ProtonVPN()
 {
   # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
+  version=1.0.3-3
   cd /tmp || exit
-  wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_1.0.3_all.deb
-  echo "c409c819eed60985273e94e575fd5dfd8dd34baef3764fc7356b0f23e25a372c protonvpn-stable-release_1.0.3_all.deb" | sha256sum --check -
+  wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
+  echo "c68a0b8dad58ab75080eed7cb989e5634fc88fca051703139c025352a6ee19ad protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
   sudo apt-get update
-  sudo dpkg -i protonvpn-stable-release_1.0.3_all.deb
+  sudo dpkg -i protonvpn-stable-release_${version}_all.deb
   sudo apt install -y protonvpn
-  sudo apt install -y gnome-shell-extension-appindicator gir1.2-appindicator3-0.1
+  sudo apt install -y libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 }
 
 rapidphotodownloader()
@@ -1069,7 +1139,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree erdtree fd-find just gping mdcat navi ripgrep spotify-tui viu
+  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat navi ripgrep spotify-tui trippy viu
   do
     cargo install "${rustpkg}"
   done
@@ -1113,7 +1183,7 @@ Signal()
   
   # 3. Update your package database and install signal
   # sudo apt update && sudo apt install signal-desktop
-  sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop-beta
+  sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop
 }
 
 Slack()
@@ -1145,14 +1215,11 @@ Spotify()
 {
   # Spotify
   # https://doc.ubuntu-fr.org/spotify
-  # sudo rm /etc/apt/sources.list.d/spotify.list
-  # sudo sh -c 'echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list'
-  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D2C19886
-  # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EFDC8610341D9410
-  # sudo apt-get update
-  # sudo apt-get install -y spotify-client
-  sudo snap install spotify
-  sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
+  curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+  echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+  sudo apt-get update && sudo apt-get install spotify-client
+  # sudo snap install spotify
+  # sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
   pip install spotify-cli-linux
   pip install lyricwikia
 }
@@ -1169,11 +1236,11 @@ Students()
 {
   # Add some scientific Tools
   sudo apt install -y \
-    avogadro fritzing geogebra geogebra-gnome kalzium python-acidobasic python-mecavideo qalculate step tkgate zegrapher
+    avogadro fritzing geogebra geogebra-gnome kalzium kgeography marble marble-plugins pyacidobasic python3-mecavideo qalculate-gtk step tkgate verbiste-gnome zegrapher
 
   cd /tmp || exit 1
-  wget http://www.lernsoftware-filius.de/downloads/filius_1.7.4_all.deb
-  sudo dpkg -i filius_1.7.4_all.deb
+  wget https://www.lernsoftware-filius.de/downloads/Setup/filius_2.5.1_all.deb
+  sudo dpkg -i filius_2.5.1_all.deb
   # Logiciels PlayOnLinux
   # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
   # Filius : https://www.lernsoftware-filius.de/Herunterladen
@@ -1184,7 +1251,7 @@ STui()
 {
   # S-Tui : https://www.cyberciti.biz/python-tutorials/monitor-linux-cpu-temperature-frequency-power-in-a-graphical-way/
   sudo apt install -y python-pip stress
-  sudo pip install s-tui
+  pip install s-tui --break-system-packages
   # sudo s-tui
 }
 
@@ -1293,6 +1360,9 @@ VIM()
   cd ~/.vim/pack/tpope/start
   git clone https://tpope.io/vim/fugitive.git
   vim -u NONE -c "helptags fugitive/doc" -c q
+
+  # vim-terraform
+  git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
 }
 
 VirtualBox()
@@ -1314,15 +1384,19 @@ Vivaldi()
 {
   # Vivaldi web browser
   cd /tmp || exit
-  wget https://downloads.vivaldi.com/stable/vivaldi-stable_5.7.2921.65-1_amd64.deb
-  sudo dpkg -i vivaldi-stable_5.7.2921.65-1_amd64.deb
-  rm vivaldi-stable_5.7.2921.65-1_amd64.deb
+  wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.5.3206.48-1_amd64.deb
+  sudo dpkg -i vivaldi-stable_6.5.3206.48-1_amd64.deb
+  rm vivaldi-stable_6.5.3206.48-1_amd64.deb
 }
 
 VSCodium()
 {
   # VSCodium : libre version of Microsoft VSCode
   # SNAP
+  cd /tmp || exit
+  wget https://github.com/VSCodium/vscodium/releases/download/1.85.1.23348/codium_1.85.1.23348_amd64.deb
+  sudo dpkg -i codium_1.85.1.23348_amd64.deb
+  rm codium_1.85.1.23348_amd64.deb
   # Extensions
   for extension in \
     abusaidm.html-snippets \
@@ -1374,6 +1448,7 @@ VSCodium()
     oderwat.indent-rainbow \
     PeterJausovec.vscode-docker \
     PKief.material-icon-theme \
+    pomdtr.excalidraw-editor \
     Prisma.vscode-graphql \
     redhat.vscode-yaml \
     ryu1kn.partial-diff \
@@ -1401,7 +1476,7 @@ WakeMeOps()
   # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
   curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
   sudo apt-get update
-  sudo apt install gping choose bottom himalaya xh
+  sudo apt install bottom choose gping himalaya hugo k9s openlens procs rclone ripgrep trivy xh yq
 }
 
 WSS()
@@ -1475,6 +1550,7 @@ ZSH()
   cd nerd-fonts || exit
   ./install.sh "FiraCode"
   snap install starship --edge
+  curl https://fx.wtf/install.sh | sudo sh
 }
 
 Annexes()
@@ -1502,13 +1578,14 @@ Main()
 #  browsh
 #  Chaos
 #  ChatGPT
-  Children
+#  Children
 #  Chrome
 #  chromeIPass
 #  CLOUD
 #  coolretroterm
 #  CozyDrive
 #  Crontab
+#  Crowdsec
 #  Ctop
   Delta
 #  Docker
@@ -1529,12 +1606,14 @@ Main()
 #  Infrakit
 #  IssueHelper
   Keybase
+  K3S
   Kubernetes
 #  Lightworks
-  lnav
+  lutris
   lynis
 #  lynishardening
   Minishift
+  mkcert
 #  MultiBootUSB
 #  Multisystem
   Music
