@@ -52,9 +52,12 @@ plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake rub
 # User configuration
 
 export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
+if [ -f /etc/debian_version ]; then
+export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
+else
 export PY_USER_BIN=$(/opt/homebrew/opt/python/libexec/bin/python -c 'import site; print(site.USER_BASE + "/bin")')
+fi
 export RUST_USER_BIN=$HOME/.cargo/bin
-
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
