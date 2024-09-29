@@ -145,8 +145,10 @@ export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
 # fx.wtf
 source <(fx --comp zsh)
 else
+
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
+alias vim=/opt/homebrew/bin/vim
 
 # Homebrew: Python
 export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
