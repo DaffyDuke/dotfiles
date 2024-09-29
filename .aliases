@@ -181,5 +181,3 @@ ip_in_file()
 }
 
 alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
-
-alias vim=/opt/homebrew/bin/vim
