@@ -46,15 +46,18 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu zsh-wakatime z zsh-autosuggestions)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
 
 export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
+if [ -f /etc/debian_version ]; then
 export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
-export RUST_USER_BIN=HOME/.cargo/bin
-
+else
+export PY_USER_BIN=$(/opt/homebrew/opt/python/libexec/bin/python -c 'import site; print(site.USER_BASE + "/bin")')
+fi
+export RUST_USER_BIN=$HOME/.cargo/bin
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -85,6 +88,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source $HOME/.aliases
+[ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
 
 export TERM=xterm-256color
 
@@ -110,7 +114,12 @@ complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [ -f /etc/debian_version ]
+then
 . $HOME/.asdf/asdf.sh
+else
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 
 # Howdoi
 # https://github.com/gleitz/howdoi
@@ -128,6 +137,8 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
+if [ -f /etc/debian_version ]
+then
 alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
 howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
 
@@ -136,4 +147,41 @@ export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
 
 # fx.wtf
 source <(fx --comp zsh)
+else
 
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+alias vim=/opt/homebrew/bin/vim
+
+# Homebrew: Python
+export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
+
+# pyenv
+export PATH="$HOME/.pyenv:$PATH"
+eval "$(pyenv init -)"
+
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+fpath=($HOME/.oh-my-zsh/custom/completions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/z $HOME/.oh-my-zsh/custom/plugins/zsh-wakatime $HOME/.oh-my-zsh/plugins/ubuntu $HOME/.oh-my-zsh/plugins/tmuxinator $HOME/.oh-my-zsh/plugins/thefuck $HOME/.oh-my-zsh/plugins/terraform $HOME/.oh-my-zsh/plugins/keychain $HOME/.oh-my-zsh/plugins/ruby $HOME/.oh-my-zsh/plugins/rake $HOME/.oh-my-zsh/plugins/kubectl $HOME/.oh-my-zsh/plugins/kitchen $HOME/.oh-my-zsh/plugins/golang $HOME/.oh-my-zsh/plugins/gitignore $HOME/.oh-my-zsh/plugins/git $HOME/.oh-my-zsh/plugins/docker $HOME/.oh-my-zsh/plugins/debian $HOME/.oh-my-zsh/plugins/bundler $HOME/.oh-my-zsh/plugins/aws $HOME/.oh-my-zsh/functions $HOME/.oh-my-zsh/completions $HOME/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '$HOME/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Add krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# https://github.com/lensapp/lens/issues/6563
+export USE_GKE_GCLOUD_AUTH_PLUGIN=False
+
+# https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(/opt/homebrew/bin/mise activate zsh)"
+
+fi

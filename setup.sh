@@ -336,6 +336,13 @@ bluegriffon()
   sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
 }
 
+Brew()
+{
+  # Use brew to install softwares on MacOs
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew bundle
+}
+
 browsh()
 {
   # browsh Text Web browser
@@ -1544,6 +1551,10 @@ ZSH()
   ./install.sh "FiraCode"
   snap install starship --edge
   curl https://fx.wtf/install.sh | sudo sh
+  # Install ugit
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Bhupesh-V/ugit/master/install)"
+  # Install ugit zsh plugin
+  git clone https://github.com/Bhupesh-V/ugit.git $ZSH_CUSTOM/plugins/ugit
 }
 
 Annexes()
@@ -1567,6 +1578,7 @@ Main()
 #  Bat
 #  bcctools
 #  bluegriffon
+#  Brew
 #  browsh
 #  Chaos
 #  ChatGPT

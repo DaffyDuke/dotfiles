@@ -1,0 +1,7 @@
+# gcloud 435.0.1
+# kubectl 1.27.3
+yj 5.1.0
+crictl 1.27.0
+k9s 0.27.4
+helm 3.12.1
+flux2 0.41.2
