@@ -1544,6 +1544,10 @@ ZSH()
   ./install.sh "FiraCode"
   snap install starship --edge
   curl https://fx.wtf/install.sh | sudo sh
+  # Install ugit
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Bhupesh-V/ugit/master/install)"
+  # Install ugit zsh plugin
+  git clone https://github.com/Bhupesh-V/ugit.git $ZSH_CUSTOM/plugins/ugit
 }
 
 Annexes()
