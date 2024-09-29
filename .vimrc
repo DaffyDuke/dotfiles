@@ -1,4 +1,5 @@
 set nocompatible              " be iMproved, required
+syntax on
 filetype off                  " required
 " disable Visual vim by default
 set mouse-=a07
@@ -373,6 +374,8 @@ Plugin 'imain/notmuch-vim'
 Plugin 'itchyny/calendar.vim'
 
 Plugin 'google/vim-jsonnet'
+
+Plugin 'tpope/vim-unimpaired'
 
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],

@@ -19,7 +19,7 @@
 	program = /usr/bin/gpg
 [commit]
 	gpgsign = true
-        verbose = true
+	verbose = true
 [core]
 	excludesfile = /home/oduquesne/.gitignore_global
         whitespace = trailing-space,space-before-tab
@@ -103,3 +103,9 @@
 
 [help]
 	autocorrect = 20
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

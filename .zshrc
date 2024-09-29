@@ -46,7 +46,7 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu wakatime z zsh-autosuggestions)
+plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -106,11 +106,11 @@ ssh() {
 export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /home/daffy/bin/vault vault
+complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source /home/daffy/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-. /home/daffy/.asdf/asdf.sh
+source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. $HOME/.asdf/asdf.sh
 
 # Howdoi
 # https://github.com/gleitz/howdoi
@@ -130,3 +130,10 @@ eval "$(navi widget zsh)"
 
 alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
 howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
+
+# ARA vars for ansible
+export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+
+# fx.wtf
+source <(fx --comp zsh)
+

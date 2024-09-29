@@ -10,6 +10,7 @@
 .ansible*
 .apport-ignore.xml
 .aptitude/
+.ara/
 .asciidoc/
 .asciinema/
 .asdf/
@@ -228,6 +229,7 @@ Images/
 KVMs/
 LICENSE
 Lightworks/
+LOG_imapsync/
 Mail*
 Mod*
 Musique/

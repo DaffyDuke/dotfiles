@@ -8,7 +8,12 @@ case $1 in
         ;;
     'stop')
         # sudo ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
-        sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+        if [ -f /run/systemd/resolve/resolv.conf ]
+        then
+          sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+        else
+          sudo ln -sf /run/resolvconf/resolv.conf /etc/resolv.conf
+        fi
         ;;
     'status')
         if [ -h /etc/resolv.conf ]
