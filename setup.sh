@@ -1336,8 +1336,10 @@ Ventoy()
 
 VIM()
 {
+  if [ -f /etc/debian_version ]; then
   # Add Ruby Support to vim
   sudo update-alternatives --set vim /usr/bin/vim.nox
+  fi
   # Install vundle
   pip install flake8
   pip install wakatime
