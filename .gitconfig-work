@@ -1,7 +1,7 @@
 [user]
 	email = olivier.duquesne.partner@decathlon.com
 	name = Olivier Duquesne
-	signingkey = BF61D76EBD6864C3
+	signingkey = EFE05E0404C2F5FE061DAAD93A5C73FBC6B8527C
 [push]
 	default = simple
 # [merge]
