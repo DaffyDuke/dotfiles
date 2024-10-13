@@ -115,7 +115,7 @@ Packages()
 {
   # Install some packages
   sudo apt install -y \
-    acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 asciidoctor aspell-fr atop awscli auditd \
+    acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
     baobab barrier bc blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix duf \
@@ -126,12 +126,12 @@ Packages()
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
-    ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lnav lolcat lsof ltrace lxc python3-lxc lynx \
+    ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
     mc meld mgitstatus miller mono-complete mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
-    qalc qemu-system-gui qtpass \
+    qalc qemu-system-gui qtpass qtractor \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
     s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
