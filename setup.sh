@@ -466,6 +466,8 @@ CLOUD()
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   # Update the package list and install the Cloud SDK
   sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+  # Install components
+  gcloud components install gke-gcloud-auth-plugin
 
   # AZURE
   # Install prerequisite packages: 
@@ -1139,7 +1141,7 @@ Rust()
   rustup install stable
   rustup default stable
 
-  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat navi ripgrep spotify-tui trippy viu
+  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat multigit navi ripgrep spotify-tui trippy viu
   do
     cargo install "${rustpkg}"
   done
