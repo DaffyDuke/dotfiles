@@ -89,7 +89,7 @@ downloadAllImages(){ wget --no-check-certificate -nd -H -p -A jpg,jpeg,png,gif -
 dlmp3(){ wget -r -l1 -H -t1 -nd -N -np -A.mp3 -erobots=off "$1"; }
 detach() { sudo umount "/dev/"$1"1"; udisks --detach "/dev/$1"; } 
 debug() { sudo strace -Ff -tt -p $(pidof $1) 2>&1 | tee strace-$1.log; }
-# drm() { docker rm $(docker ps -q -a); }
+dockerrm() { docker rm $(docker ps -q -a); }
 
 cleansnap() {
   snap list --all | grep désactivé | while read Nom Version Révision Suivi Développeur Notes

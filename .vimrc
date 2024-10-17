@@ -373,10 +373,8 @@ colorscheme gruvbox
 Plugin 'wakatime/vim-wakatime'
 Plugin 'imain/notmuch-vim'
 Plugin 'itchyny/calendar.vim'
-
 Plugin 'google/vim-jsonnet'
 Plugin 'valloric/youcompleteme'
-
 Plugin 'tpope/vim-unimpaired'
 
 let g:notmuch_folders = [
