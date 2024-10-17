@@ -12,7 +12,9 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel9k/powerlevel9k"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME="agnoster"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -172,12 +174,6 @@ eval "$(pyenv init -)"
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 fpath=($HOME/.oh-my-zsh/custom/completions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/z $HOME/.oh-my-zsh/custom/plugins/zsh-wakatime $HOME/.oh-my-zsh/plugins/ubuntu $HOME/.oh-my-zsh/plugins/tmuxinator $HOME/.oh-my-zsh/plugins/thefuck $HOME/.oh-my-zsh/plugins/terraform $HOME/.oh-my-zsh/plugins/keychain $HOME/.oh-my-zsh/plugins/ruby $HOME/.oh-my-zsh/plugins/rake $HOME/.oh-my-zsh/plugins/kubectl $HOME/.oh-my-zsh/plugins/kitchen $HOME/.oh-my-zsh/plugins/golang $HOME/.oh-my-zsh/plugins/gitignore $HOME/.oh-my-zsh/plugins/git $HOME/.oh-my-zsh/plugins/docker $HOME/.oh-my-zsh/plugins/debian $HOME/.oh-my-zsh/plugins/bundler $HOME/.oh-my-zsh/plugins/aws $HOME/.oh-my-zsh/functions $HOME/.oh-my-zsh/completions $HOME/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '$HOME/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
 # Add krew
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
@@ -191,9 +187,19 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-eval "$(/opt/homebrew/bin/mise activate zsh)"
+eval "$($HOME/.local/bin/mise activate zsh)"
 
 fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
+
+# JAVA_HOME
+export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
