@@ -93,7 +93,7 @@
 .k8slens/
 .kde/
 .keras/
-.keychain
+.keychain/
 .kismet/
 .kpcli-history
 .krew/
@@ -234,7 +234,7 @@ Cozy*Drive/
 curlie/
 Desktop/
 Documents/
-Downloads
+Downloads/
 Dropbox/
 Games/
 Google Drive/
@@ -288,3 +288,4 @@ userdef.reg
 stack.json
 ssh_logs/
 .history
+
