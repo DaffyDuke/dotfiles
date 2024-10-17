@@ -28,6 +28,7 @@
 .ccnet/
 .cert/
 .certspotter/
+.CFUserTextEncoding
 .chatgpt_history
 .clamtk/
 .cmake/
@@ -47,6 +48,7 @@
 .dotnet
 .dropbox-dist/
 .dropbox/
+.DS_Store
 .dvdcss/
 .electron/
 .electron-gyp/
@@ -66,6 +68,7 @@
 .gem/
 .gimp-2.8/
 .gitconfig
+.gradle/
 .grip/
 .gksu.lock
 .gnome/
@@ -90,7 +93,7 @@
 .k8slens/
 .kde/
 .keras/
-.keychain
+.keychain/
 .kismet/
 .kpcli-history
 .krew/
@@ -190,6 +193,7 @@
 .unison/
 .update-timestamp
 .urbackupclientgui_startonce
+.user
 .vagrant.d/
 .var/
 .vault-token
@@ -230,7 +234,7 @@ Cozy*Drive/
 curlie/
 Desktop/
 Documents/
-Downloads
+Downloads/
 Dropbox/
 Games/
 Google Drive/
@@ -249,6 +253,7 @@ Music/
 Musique/
 My GCompris/
 nohup.out
+Notes/
 OneDrive*
 OS.js-v2/
 T*chargements/
@@ -281,4 +286,6 @@ system.reg
 user.reg
 userdef.reg
 stack.json
+ssh_logs/
 .history
+
