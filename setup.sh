@@ -1283,6 +1283,7 @@ Terminal()
   dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
   dconf write /com/gexperts/Tilix/profiles/${default}/default-size-columns '200'
   dconf write /com/gexperts/Tilix/profiles/${default}/default-size-rows '50'
+  dconf write /com/gexperts/Tilix/profiles/${default}/font 'MesloLGS NF 12'
   dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
   dconf write /com/gexperts/Tilix/copy-on-select true
   gsettings set org.gnome.settings-daemon.plugins.media-keys terminal ""
@@ -1546,7 +1547,7 @@ ZSH()
 {
   # Install oh-my-szh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
   cd ~/.oh-my-zsh && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   cd /tmp || exit
