@@ -212,9 +212,9 @@ GO()
   # tips cross compilation
   # CGO_ENABLED=yes go build
   go get github.com/claudiodangelis/qrcp
-  # cd /tmp || exit
+  cd /tmp || exit
   git clone https://github.com/rs/curlie.git
-  cd curlie
+  cd curlie || exit
   go build .
   go install .
 }
@@ -573,7 +573,7 @@ DroidCAM()
   wget https://files.dev47apps.net/linux/droidcam_latest.zip
   unzip droidcam_latest.zip -d droidcam
   cd droidcam && sudo ./install-client
-  sudo apt install linux-headers-`uname -r` gcc make
+  sudo apt install linux-headers-$(uname -r) gcc make
   sudo ./install-video
   sudo ./install-sound
 }
@@ -865,8 +865,9 @@ Kubernetes()
   done
 
   # Popeye - A Kubernetes Cluster Sanitizer
+  cd /tmp || exit
   git clone https://github.com/derailed/popeye
-  cd popeye
+  cd popeye || exit
   # Build and install
   go install
   # Run
@@ -1199,10 +1200,10 @@ Spip-Cli()
 {
   # Spip in commandline https://contrib.spip.net/SPIP-Cli#Installation
   sudo git clone https://git.spip.net/spip-contrib-outils/spip-cli.git /opt/spip-cli
-  cd /opt/spip-cli
+  cd /opt/spip-cli || exit
   sudo composer install
 
-  cd /opt/spip-cli/bin
+  cd /opt/spip-cli/bin || exit
   # Commande 'spip'
   sudo ln -s $(pwd)/spip /usr/local/bin/
   # Commande 'spipmu' pour site mutualisé
