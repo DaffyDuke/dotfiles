@@ -176,7 +176,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
@@ -992,16 +992,6 @@ Music()
   sudo apt install -y guitarix mixxx rosegarden
 }
 
-NeoVim()
-{
-  VIM
-  Python
-  GO
-  # NeoVIM
-  pip3 install --upgrade --break-system-packages neovim
-  go get -u github.com/nsf/gocode
-}
-
 nicotine()
 {
   # Nicotine+ is a graphical client for the Soulseek peer-to-peer network.
@@ -1351,7 +1341,8 @@ VIM()
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
-  cd ~/.vim/plugged/YouCompleteMe && python install.py
+  vim +PluginInstall
+  # cd ~/.vim/plugged/YouCompleteMe && python install.py
 
   # vim-instant-markdown
   sudo npm -g install instant-markdown-d
@@ -1369,6 +1360,8 @@ VIM()
 
   # vim-terraform
   git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
+  # govim
+  go get -u github.com/nsf/gocode
 }
 
 VirtualBox()
@@ -1627,7 +1620,6 @@ Main()
 #  MultiBootUSB
 #  Multisystem
   Music
-  NeoVim
   nicotine
 #  npmfx
   OfflineImap
