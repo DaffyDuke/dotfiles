@@ -176,7 +176,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
@@ -212,9 +212,9 @@ GO()
   # tips cross compilation
   # CGO_ENABLED=yes go build
   go get github.com/claudiodangelis/qrcp
-  # cd /tmp || exit
+  cd /tmp || exit
   git clone https://github.com/rs/curlie.git
-  cd curlie
+  cd curlie || exit
   go build .
   go install .
 }
@@ -317,6 +317,7 @@ Delta()
   cd /tmp || exit 1
   wget https://github.com/barnumbirr/delta-debian/releases/download/v0.1.1-1/delta_0.1.1-1_amd64_debian_buster.deb
   sudo dpkg -i delta_0.1.1-1_amd64_debian_buster.deb
+  sudo apt-mark hold delta
 }
 
 bcctools()
@@ -573,7 +574,7 @@ DroidCAM()
   wget https://files.dev47apps.net/linux/droidcam_latest.zip
   unzip droidcam_latest.zip -d droidcam
   cd droidcam && sudo ./install-client
-  sudo apt install linux-headers-`uname -r` gcc make
+  sudo apt install linux-headers-$(uname -r) gcc make
   sudo ./install-video
   sudo ./install-sound
 }
@@ -865,8 +866,9 @@ Kubernetes()
   done
 
   # Popeye - A Kubernetes Cluster Sanitizer
+  cd /tmp || exit
   git clone https://github.com/derailed/popeye
-  cd popeye
+  cd popeye || exit
   # Build and install
   go install
   # Run
@@ -989,16 +991,6 @@ Music()
 {
   # Music Software
   sudo apt install -y guitarix mixxx rosegarden
-}
-
-NeoVim()
-{
-  VIM
-  Python
-  GO
-  # NeoVIM
-  pip3 install --upgrade --break-system-packages neovim
-  go get -u github.com/nsf/gocode
 }
 
 nicotine()
@@ -1199,10 +1191,10 @@ Spip-Cli()
 {
   # Spip in commandline https://contrib.spip.net/SPIP-Cli#Installation
   sudo git clone https://git.spip.net/spip-contrib-outils/spip-cli.git /opt/spip-cli
-  cd /opt/spip-cli
+  cd /opt/spip-cli || exit
   sudo composer install
 
-  cd /opt/spip-cli/bin
+  cd /opt/spip-cli/bin || exit
   # Commande 'spip'
   sudo ln -s $(pwd)/spip /usr/local/bin/
   # Commande 'spipmu' pour site mutualisé
@@ -1283,6 +1275,7 @@ Terminal()
   dconf write /com/gexperts/Tilix/profiles/${default}/cursor-colors-set false
   dconf write /com/gexperts/Tilix/profiles/${default}/default-size-columns '200'
   dconf write /com/gexperts/Tilix/profiles/${default}/default-size-rows '50'
+  dconf write /com/gexperts/Tilix/profiles/${default}/font 'MesloLGS NF 12'
   dconf write /com/gexperts/Tilix/profiles/${default}/palette "['#4D4D4D', '#FF2B2B', '#98FB98', '#F0E68C', '#CD853F', '#FFDEAD', '#FFA0A0', '#F5DEB3', '#555555', '#FF5555', '#55FF55', '#FFFF55', '#87CEFF', '#FF55FF', '#FFD700', '#FFFFFF']"
   dconf write /com/gexperts/Tilix/copy-on-select true
   gsettings set org.gnome.settings-daemon.plugins.media-keys terminal ""
@@ -1349,7 +1342,8 @@ VIM()
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
-  cd ~/.vim/plugged/YouCompleteMe && python install.py
+  vim +PluginInstall
+  # cd ~/.vim/plugged/YouCompleteMe && python install.py
 
   # vim-instant-markdown
   sudo npm -g install instant-markdown-d
@@ -1367,6 +1361,8 @@ VIM()
 
   # vim-terraform
   git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
+  # govim
+  go get -u github.com/nsf/gocode
 }
 
 VirtualBox()
@@ -1546,7 +1542,7 @@ ZSH()
 {
   # Install oh-my-szh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
   cd ~/.oh-my-zsh && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   cd /tmp || exit
@@ -1625,7 +1621,6 @@ Main()
 #  MultiBootUSB
 #  Multisystem
   Music
-  NeoVim
   nicotine
 #  npmfx
   OfflineImap
