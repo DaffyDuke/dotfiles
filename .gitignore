@@ -68,6 +68,7 @@
 .gem/
 .gimp-2.8/
 .gitconfig
+.gk/
 .gradle/
 .grip/
 .gksu.lock
