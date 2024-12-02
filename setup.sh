@@ -186,11 +186,12 @@ GO()
 {
   # GO
   # https://golang.org/dl/
-  mkdir -p "$GOROOT" "$GOPATH"
-  cd "$GOROOT" || exit
-  wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
-  tar xvfz go1.9.2.linux-amd64.tar.gz
-  rm go1.9.2.linux-amd64.tar.gz
+  # mkdir -p "$GOROOT" "$GOPATH"
+  # cd "$GOROOT" || exit
+  # wget https://redirector.gvt1.com/edgedl/go/go1.9.2.linux-amd64.tar.gz
+  # tar xvfz go1.9.2.linux-amd64.tar.gz
+  # rm go1.9.2.linux-amd64.tar.gz
+  sudo apt install -y golang
   go get golang.org/x/tools/cmd/godoc
   go get golang.org/x/tools/cmd/goimports
   go get -u github.com/golang/lint/golint
