@@ -136,7 +136,7 @@ Packages()
     s3cmd screen screenkey scribus seahorse scdaemon shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
-    vagrant vifm vim-fugitive vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xournalpp xscreensaver xsane \
     yamllint \
@@ -1336,9 +1336,9 @@ VIM()
   sudo update-alternatives --set vim /usr/bin/vim.nox
   fi
   # Install vundle
-  pip install flake8
-  pip install wakatime
-  pip install pidcat-pip
+  pip3 install flake8 --break-system-packages
+  pip3 install wakatime --break-system-packages
+  pip3 install pidcat-pip --break-system-packages
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
