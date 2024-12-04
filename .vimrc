@@ -391,6 +391,9 @@ Plugin 'google/vim-jsonnet'
 " Plugin 'valloric/youcompleteme'
 Plugin 'tpope/vim-unimpaired'
 
+" Catpuccino
+Plugin 'catppuccin/vim', { 'as': 'catppuccin' }
+
 " Terraform
 Plugin 'hashivim/vim-terraform'
 Plugin 'juliosueiras/vim-terraform-completion'
