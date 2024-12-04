@@ -1380,7 +1380,8 @@ VIM()
   # vim-terraform
   git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
 
-  # git clone https://github.com/fladson/vim-kitty.git /tmp/vim-kitty
+  # vim-kitty
+  git clone https://github.com/fladson/vim-kitty.git /tmp/vim-kitty
   mkdir -p ~/.vim/after/syntax/
   mv /tmp/vim-kitty/syntax/* ~/.vim/after/syntax/
   rm -rf /tmp/vim-kitty
