@@ -176,7 +176,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
@@ -317,6 +317,7 @@ Delta()
   cd /tmp || exit 1
   wget https://github.com/barnumbirr/delta-debian/releases/download/v0.1.1-1/delta_0.1.1-1_amd64_debian_buster.deb
   sudo dpkg -i delta_0.1.1-1_amd64_debian_buster.deb
+  sudo apt-mark hold delta
 }
 
 bcctools()
@@ -1359,7 +1360,8 @@ VIM()
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
-  cd ~/.vim/plugged/YouCompleteMe && python install.py
+  vim +PluginInstall
+  # cd ~/.vim/plugged/YouCompleteMe && python install.py
 
   # vim-instant-markdown
   sudo npm -g install instant-markdown-d
@@ -1382,6 +1384,9 @@ VIM()
   mkdir -p ~/.vim/after/syntax/
   mv /tmp/vim-kitty/syntax/* ~/.vim/after/syntax/
   rm -rf /tmp/vim-kitty
+
+  # govim
+  go get -u github.com/nsf/gocode
 }
 
 VirtualBox()
@@ -1640,7 +1645,6 @@ Main()
 #  MultiBootUSB
 #  Multisystem
   Music
-  NeoVim
   nicotine
 #  npmfx
   OfflineImap

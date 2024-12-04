@@ -33,7 +33,21 @@ let g:indent_guides_enable_on_vim_startup = 1
 " for json
 Plugin 'elzr/vim-json'
 
-Plugin 'Shougo/neocomplete'
+if has('nvim')
+  Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plugin 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  Plugin 'tenfyzhong/CompleteParameter.vim'
+  Plugin 'carakan/deoplete-emoji'
+else
+  Plugin 'Shougo/deoplete.nvim'
+  Plugin 'roxma/nvim-yarp'
+  Plugin 'roxma/vim-hug-neovim-rpc'
+  Plugin 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+  Plugin 'tenfyzhong/CompleteParameter.vim'
+  Plugin 'carakan/deoplete-emoji'
+endif
+let g:deoplete#enable_at_startup = 1
+
 "
 Plugin 'Shougo/neosnippet'
 Plugin 'Shougo/neosnippet-snippets'
@@ -374,11 +388,47 @@ Plugin 'wakatime/vim-wakatime'
 Plugin 'imain/notmuch-vim'
 Plugin 'itchyny/calendar.vim'
 Plugin 'google/vim-jsonnet'
-Plugin 'valloric/youcompleteme'
+" Plugin 'valloric/youcompleteme'
 Plugin 'tpope/vim-unimpaired'
 
 " Catpuccino
 Plugin 'catppuccin/vim', { 'as': 'catppuccin' }
+
+" Terraform
+Plugin 'hashivim/vim-terraform'
+Plugin 'juliosueiras/vim-terraform-completion'
+
+" Deoplete config
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
+let g:deoplete#enable_at_startup = 1
+call deoplete#initialize()
+
+" Syntastic Config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" (Optional)Remove Info(Preview) window
+set completeopt-=preview
+
+" (Optional)Hide Info(Preview) window after completions
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" (Optional) Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+
+" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+
+" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+let g:terraform_registry_module_completion = 0
 
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],

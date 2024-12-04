@@ -133,3 +133,8 @@ eval "$(/opt/homebrew/bin/mise activate bash)"
 fi
 alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
 howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
+
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
