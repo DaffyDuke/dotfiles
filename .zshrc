@@ -109,8 +109,8 @@ source $HOME/.aliases
 
 export TERM=xterm-256color
 
-export GOROOT=$HOME/go-dist
-export GOPATH=~/GOPROJECTS
+# export GOROOT=$HOME/go-dist
+# export GOPATH=~/GOPROJECTS
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim

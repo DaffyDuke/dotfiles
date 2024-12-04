@@ -377,6 +377,9 @@ Plugin 'google/vim-jsonnet'
 Plugin 'valloric/youcompleteme'
 Plugin 'tpope/vim-unimpaired'
 
+" Catpuccino
+Plugin 'catppuccin/vim', { 'as': 'catppuccin' }
+
 let g:notmuch_folders = [
       \ [ 'new', 'tag:inbox and tag:unread' ],
       \ [ 'inbox', 'tag:inbox' ],
