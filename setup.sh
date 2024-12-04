@@ -993,6 +993,24 @@ Music()
   sudo apt install -y guitarix mixxx rosegarden
 }
 
+NeoVim()
+{
+  VIM
+  Python
+  GO
+  # NeoVIM
+  pip3 install --upgrade --break-system-packages neovim
+  go get -u github.com/nsf/gocode
+  git clone https://github.com/fladson/vim-kitty.git /tmp/vim-kitty
+  mkdir -p ~/.config/nvim/syntax
+  mkdir -p ~/.config/nvim/ftdetect
+  mkdir -p ~/.config/nvim/ftplugin
+  mv /tmp/vim-kitty/syntax/* ~/.config/nvim/syntax
+  mv /tmp/vim-kitty/ftdetect/kitty.vim ~/.config/nvim/ftdetect
+  mv /tmp/vim-kitty/ftplugin/kitty.vim ~/.config/nvim/ftplugin
+  rm -rf /tmp/vim-kitty
+}
+
 nicotine()
 {
   # Nicotine+ is a graphical client for the Soulseek peer-to-peer network.
@@ -1361,6 +1379,13 @@ VIM()
 
   # vim-terraform
   git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
+
+  # vim-kitty
+  git clone https://github.com/fladson/vim-kitty.git /tmp/vim-kitty
+  mkdir -p ~/.vim/after/syntax/
+  mv /tmp/vim-kitty/syntax/* ~/.vim/after/syntax/
+  rm -rf /tmp/vim-kitty
+
   # govim
   go get -u github.com/nsf/gocode
 }

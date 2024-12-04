@@ -111,13 +111,14 @@ source $HOME/.aliases
 
 export TERM=xterm-256color
 
-export GOROOT=$HOME/go-dist
-export GOPATH=~/GOPROJECTS
+# export GOROOT=$HOME/go-dist
+# export GOPATH=~/GOPROJECTS
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
-export GPG_TTY=`tty`
+export GPG_TTY=$(tty)
+
 
 #export PS1="${ret_status}%{$fg_bold[green]%}%m/linux %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"
 ssh() {
@@ -191,14 +192,10 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+fi
 
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$($HOME/.local/bin/mise activate zsh)"
 
-fi
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
@@ -214,3 +211,4 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.z.work ]] || source ~/.z.work
