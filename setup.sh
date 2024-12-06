@@ -231,6 +231,16 @@ EOF
   crontab crontab && rm crontab
 }
 
+Albert()
+{
+  # MacOS Launcher
+curl https://build.opensuse.org/projects/home:manuelschneid3r/public_key | sudo apt-key add -
+echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/Debian_12/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
+sudo wget -nv https://download.opensuse.org/repositories/home:manuelschneid3r/Debian_12/Release.key -O "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
+sudo apt update
+sudo apt install -y albert
+}
+
 Android()
 {
   # Android Rules
@@ -698,13 +708,19 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1162
   # Vitals
   gnomeshell-extension-manage --install --extension-id 1460
-  #
+  # Frippery Move Clock
+  gnomeshell-extension-manage --install --extension-id 2
+  # Dynamic Panel Transparency
+  gnomeshell-extension-manage --install --extension-id 1011
+  # Compiz windows effect
+  gnomeshell-extension-manage --install --extension-id 3210
   cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
   # other params
   dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
   dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
+  dconf write /org/gnome/desktop/wm/preferences/button-layout 'close:appmenu'
 }
 
 GnomeConfigurations()
@@ -718,6 +734,7 @@ GnomeConfigurations()
   gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
   gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
   gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
+  gsettings set org.gnome.desktop.interface cursor-size 10
   gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
   gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
   gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
@@ -1606,6 +1623,7 @@ Main()
   Packages
 #  Python
 #  GO
+#  Albert
 #  Android
 #  Ansible
 #  Argbash
