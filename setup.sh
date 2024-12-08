@@ -1223,6 +1223,9 @@ Signal()
   # 3. Update your package database and install signal
   # sudo apt update && sudo apt install signal-desktop
   sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop
+
+  # 4. Send icon to systray
+  sudo sed -i '/^Exec/ {/--use-tray-icon/ !s/$/ --use-tray-icon/}' /usr/share/applications/signal-desktop.desktop
 }
 
 Slack()
