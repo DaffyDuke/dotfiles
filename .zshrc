@@ -194,8 +194,8 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 fi
 
-eval "$($HOME/.local/bin/mise activate zsh)"
-
+# Activate mise if installed
+[[ ! -f ¬/.local/bin/mise ]] || eval "$($HOME/.local/bin/mise activate zsh)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
@@ -212,3 +212,4 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
+

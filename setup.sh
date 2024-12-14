@@ -127,7 +127,7 @@ Packages()
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
     ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
-    mc meld mgitstatus miller mono-complete mumble mutt \
+    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
@@ -229,6 +229,16 @@ Crontab()
 @reboot cd /home/daffy/Documents/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
 EOF
   crontab crontab && rm crontab
+}
+
+Albert()
+{
+  # MacOS Launcher
+curl https://build.opensuse.org/projects/home:manuelschneid3r/public_key | sudo apt-key add -
+echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/Debian_12/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
+sudo wget -nv https://download.opensuse.org/repositories/home:manuelschneid3r/Debian_12/Release.key -O "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
+sudo apt update
+sudo apt install -y albert
 }
 
 Android()
@@ -497,6 +507,15 @@ CLOUD()
   # already in this git repo here
   # echo ". $HOME/.asdf/asdf.sh" >> ~/.bashrc
   # echo ". $HOME/.asdf/asdf.sh" >> ~/.zshrc
+ 
+  # MISE
+  #
+  apt update -y && apt install -y gpg sudo wget curl
+  sudo install -dm 755 /etc/apt/keyrings
+  wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
+  echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+  sudo apt update
+  sudo apt install -y mise
 }
 
 coolretroterm()
@@ -689,13 +708,19 @@ GnomeExtensions()
   gnomeshell-extension-manage --install --extension-id 1162
   # Vitals
   gnomeshell-extension-manage --install --extension-id 1460
-  #
+  # Frippery Move Clock
+  gnomeshell-extension-manage --install --extension-id 2
+  # Dynamic Panel Transparency
+  gnomeshell-extension-manage --install --extension-id 1011
+  # Compiz windows effect
+  gnomeshell-extension-manage --install --extension-id 3210
   cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
   npm install
 
   # other params
   dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
   dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
+  dconf write /org/gnome/desktop/wm/preferences/button-layout 'close:appmenu'
 }
 
 GnomeConfigurations()
@@ -709,6 +734,7 @@ GnomeConfigurations()
   gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
   gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
   gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
+  gsettings set org.gnome.desktop.interface cursor-size 10
   gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
   gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
   gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
@@ -1197,6 +1223,9 @@ Signal()
   # 3. Update your package database and install signal
   # sudo apt update && sudo apt install signal-desktop
   sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop
+
+  # 4. Send icon to systray
+  sudo sed -i '/^Exec/ {/--use-tray-icon/ !s/$/ --use-tray-icon/}' /usr/share/applications/signal-desktop.desktop
 }
 
 Slack()
@@ -1249,14 +1278,10 @@ Students()
 {
   # Add some scientific Tools
   sudo apt install -y \
-    avogadro fritzing geogebra geogebra-gnome kalzium kgeography marble marble-plugins pyacidobasic python3-mecavideo qalculate-gtk step tkgate verbiste-gnome zegrapher
+    avogadro filius fritzing geogebra geogebra-gnome kalzium kgeography marble marble-plugins pyacidobasic python3-mecavideo qalculate-gtk step tkgate verbiste-gnome zegrapher
 
-  cd /tmp || exit 1
-  wget https://www.lernsoftware-filius.de/downloads/Setup/filius_2.5.1_all.deb
-  sudo dpkg -i filius_2.5.1_all.deb
   # Logiciels PlayOnLinux
   # Sine Qua Non : http://patrice-rabiller.fr/SineQuaNon/menusqn.htm
-  # Filius : https://www.lernsoftware-filius.de/Herunterladen
   # Regressi : http://regressi.fr/WordPress/download/
 }
 
@@ -1597,6 +1622,7 @@ Main()
   Packages
 #  Python
 #  GO
+#  Albert
 #  Android
 #  Ansible
 #  Argbash
