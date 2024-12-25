@@ -112,6 +112,7 @@
 .minetest/
 .minikube/
 .minishift/
+.mixxx/
 .mono/
 .moby/
 .mozilla/
