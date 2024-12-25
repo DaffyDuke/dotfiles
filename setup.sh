@@ -177,6 +177,7 @@ Python()
 
   # Install some other pip cool stuff
   for pkg in bcc bpytop betago commitizen configobj cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
