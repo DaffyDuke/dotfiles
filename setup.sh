@@ -176,7 +176,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in bcc bpytop betago configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
+  for pkg in bcc bpytop betago commitizen configobj deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
