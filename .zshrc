@@ -110,17 +110,12 @@ source $HOME/.aliases
 [ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
 
 export TERM=xterm-256color
-
-# export GOROOT=$HOME/go-dist
-# export GOPATH=~/GOPROJECTS
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
 export GPG_TTY=$(tty)
 
-
-#export PS1="${ret_status}%{$fg_bold[green]%}%m/linux %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"
 ssh() {
         tmux rename-window "$(echo $@ | awk '{print $NF}' | cut -d . -f 1)"
             command ssh "$@"
