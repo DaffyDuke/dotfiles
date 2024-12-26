@@ -208,7 +208,8 @@ GO()
   go get -u github.com/tomnomnom/assetfinder
   # ffuf – Fast Web Fuzzer Linux Tool Written in Go
   go get -u github.com/ffuf/ffuf
-
+  # pdfcpu: a Go PDF processor and CLI
+  go install github.com/pdfcpu/pdfcpu/cmd/pdfcpu@latest
 
   # tips cross compilation
   # CGO_ENABLED=yes go build
