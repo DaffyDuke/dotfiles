@@ -800,6 +800,16 @@ IssueHelper()
   cargo install gli
 }
 
+Hurl()
+{
+  # Hurl
+  # Hurl is a command line tool that runs HTTP requests defined in a simple plain text format.
+  VERSION=6.0.0
+  cd /tmp || exit 1
+  curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/$VERSION/hurl_${VERSION}_amd64.deb
+  sudo apt update && sudo apt-get install -y ./hurl_${VERSION}_amd64.deb
+}
+
 Keybase()
 {
   # Keybase
@@ -1662,6 +1672,7 @@ Main()
 #  GRAPH
 #  Infrakit
 #  IssueHelper
+  Hurl
   Keybase
   K3S
   Kubernetes
