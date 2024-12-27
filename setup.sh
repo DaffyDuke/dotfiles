@@ -177,7 +177,6 @@ Python()
 
   # Install some other pip cool stuff
   for pkg in bcc bpytop betago commitizen configobj cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables virtualenv yt-dlp
-
   do
     pip install "${pkg}" --upgrade --break-system-packages
   done
@@ -209,7 +208,8 @@ GO()
   go get -u github.com/tomnomnom/assetfinder
   # ffuf – Fast Web Fuzzer Linux Tool Written in Go
   go get -u github.com/ffuf/ffuf
-
+  # pdfcpu: a Go PDF processor and CLI
+  go install github.com/pdfcpu/pdfcpu/cmd/pdfcpu@latest
 
   # tips cross compilation
   # CGO_ENABLED=yes go build
@@ -798,6 +798,16 @@ IssueHelper()
   curl https://sh.rustup.rs -sSf | sh
   source "${HOME}"/.cargo/env
   cargo install gli
+}
+
+Hurl()
+{
+  # Hurl
+  # Hurl is a command line tool that runs HTTP requests defined in a simple plain text format.
+  VERSION=6.0.0
+  cd /tmp || exit 1
+  curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/$VERSION/hurl_${VERSION}_amd64.deb
+  sudo apt update && sudo apt-get install -y ./hurl_${VERSION}_amd64.deb
 }
 
 Keybase()
@@ -1662,6 +1672,7 @@ Main()
 #  GRAPH
 #  Infrakit
 #  IssueHelper
+  Hurl
   Keybase
   K3S
   Kubernetes
