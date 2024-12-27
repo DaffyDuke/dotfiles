@@ -37,6 +37,7 @@
 .composer/
 .compiz/
 .config/
+.cookiecutter*
 .cozy-desktop/
 .cpan/
 .cups/
@@ -112,6 +113,7 @@
 .minetest/
 .minikube/
 .minishift/
+.mixxx/
 .mono/
 .moby/
 .mozilla/
@@ -253,6 +255,7 @@ Movies/
 Music/
 Musique/
 My GCompris/
+My Web Sites/
 nohup.out
 Notes/
 OneDrive*
