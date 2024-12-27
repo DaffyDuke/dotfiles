@@ -62,7 +62,7 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby keychain terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
+plugins=(aws bundler debian docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -110,17 +110,12 @@ source $HOME/.aliases
 [ -f ~/.kubectl_aliases ] && source ~/.kubectl_aliases
 
 export TERM=xterm-256color
-
-# export GOROOT=$HOME/go-dist
-# export GOPATH=~/GOPROJECTS
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
 export EDITOR=vim
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
 export GPG_TTY=$(tty)
 
-
-#export PS1="${ret_status}%{$fg_bold[green]%}%m/linux %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"
 ssh() {
         tmux rename-window "$(echo $@ | awk '{print $NF}' | cut -d . -f 1)"
             command ssh "$@"
@@ -194,8 +189,9 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 fi
 
-eval "$($HOME/.local/bin/mise activate zsh)"
-
+# Activate mise if installed
+[[ ! -f $HOME/.local/bin/mise ]] || eval "$($HOME/.local/bin/mise activate zsh)"
+[[ ! -f /usr/bin/mise ]] || eval "$(mise activate zsh)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
@@ -212,3 +208,4 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
+

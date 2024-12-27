@@ -12,3 +12,7 @@ alias config='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
 ```
 config commit -m 'tuning zshrc' .zshrc
 ```
+please use commitizen 
+```
+config cz commit
+```
