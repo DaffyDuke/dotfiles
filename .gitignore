@@ -126,6 +126,7 @@
 .nb
 .neighbornote/
 .netrc
+.nix*
 .node-gyp/
 .npm/
 .nvpy/
