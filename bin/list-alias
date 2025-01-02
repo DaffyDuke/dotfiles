@@ -1,0 +1,177 @@
+#!/usr/bin/env bash
+
+#
+# Configuration
+#
+
+# Colors
+readonly CYAN='\033[36m'
+readonly GREEN='\033[32m'
+readonly GRAY='\033[90m'
+readonly BLUE='\033[34m'
+readonly WHITE='\033[37m'
+readonly BOLD='\033[1m'
+readonly RESET='\033[0m'
+
+# Detection patterns
+readonly ALIAS_PATTERN='^[[:space:]]*alias[[:space:]]'
+readonly COMMENT_PATTERN='^[[:space:]]*#'
+
+# Configuration files by shell type
+readonly ZSH_CONFIG_FILES=(
+    '.zshrc'
+    '.zshenv'
+    '.zsh_aliases'
+)
+
+readonly BASH_CONFIG_FILES=(
+    '.bash_profile'
+    '.bashrc'
+    '.bash_aliases'
+)
+
+# Icons and labels
+readonly FILE_ICON='📄'
+readonly FUNCTION_ICON='⚙️'
+readonly COMMAND_ICON='🔗'
+readonly FUNCTION_LABEL='Functions'
+readonly COMMAND_LABEL='Commands'
+
+#
+# Functions
+#
+
+process_file() {
+    local file="$1"
+    awk -v cyan="$CYAN" -v green="$GREEN" -v gray="$GRAY" -v blue="$BLUE" \
+        -v bold="$BOLD" -v reset="$RESET" -v white="$WHITE" -v file="$file" \
+        -v file_icon="$FILE_ICON" -v function_icon="$FUNCTION_ICON" \
+        -v command_icon="$COMMAND_ICON" -v function_label="$FUNCTION_LABEL" \
+        -v command_label="$COMMAND_LABEL" -v alias_pattern="$ALIAS_PATTERN" \
+        -v comment_pattern="$COMMENT_PATTERN" '
+    BEGIN {
+        last_comment=""
+    }
+
+    # Capture comments
+    $0 ~ comment_pattern {
+        last_comment = $0
+        gsub(/^[[:space:]]*#[[:space:]]*/, "", last_comment)
+        next
+    }
+
+    # Detect functions
+    /^[[:space:]]*function[[:space:]]+[a-zA-Z0-9_-]+[[:space:]]*\(\)/ || /^[[:space:]]*[a-zA-Z0-9_-]+[[:space:]]*\(\)[[:space:]]*{/ {
+        function_name = ($1 == "function") ? $2 : $1
+        gsub(/\(\).*$/, "", function_name)
+        functions[function_name] = last_comment
+        last_comment = ""
+        next
+    }
+
+    # Process classic aliases
+    $0 ~ alias_pattern {
+        line = $0
+        sub(/^[[:space:]]*alias[[:space:]]*/, "", line)
+        aliases[line] = 1
+        next
+    }
+
+    END {
+        if (length(functions) > 0 || length(aliases) > 0) {
+            printf "\n%s%s %s%s%s\n", cyan, file_icon, bold, file, reset
+
+            if (length(functions) > 0) {
+                printf "\n%s%s  %s%s%s\n", blue, function_icon, bold, function_label, reset
+                for (f in functions) {
+                    printf " - %s%s%s%s%s %s%s%s\n", green, f, reset, white, ":", gray, functions[f], reset
+                }
+            }
+
+            if (length(aliases) > 0) {
+                printf "\n%s%s %s%s%s\n", blue, command_icon, bold, command_label, reset
+                for (a in aliases) {
+                    split_alias = a
+                    sub(/=.*$/, "", split_alias)
+                    split_cmd = a
+                    sub(/^[^=]*=/, "", split_cmd)
+                    gsub(/"/, "", split_cmd)
+                    printf " - %s%s%s%s%s %s%s%s\n", green, split_alias, reset, white, ":", gray, split_cmd, reset
+                }
+            }
+            print ""
+        }
+    }
+' "$file"
+}
+
+detect_shell() {
+    ps -p $PPID -o comm= 2>/dev/null | sed 's/^.*[\/\-]//' | sed 's/[^a-zA-Z0-9].*//'
+}
+
+# Get config files for the current shell from this script list and sourced files
+get_deduplicated_config_files() {
+    local shell_type="$1"
+    declare -A processed_files  # Associative array to deduplicate files
+    local config_files=()
+    local zdotdir=${ZDOTDIR:-$HOME}
+
+    case "$shell_type" in
+        "zsh")
+            for file in "${ZSH_CONFIG_FILES[@]}"; do
+                if [ -f "$zdotdir/$file" ]; then
+                    local canonical_path
+                    canonical_path=$(readlink -f "$zdotdir/$file")
+                    if [ -z "${processed_files[$canonical_path]}" ]; then
+                        config_files+=("$zdotdir/$file")
+                        processed_files[$canonical_path]=1
+                    fi
+                fi
+
+                if [ -f "$HOME/$file" ]; then
+                    local canonical_path
+                    canonical_path=$(readlink -f "$HOME/$file")
+                    if [ -z "${processed_files[$canonical_path]}" ]; then
+                        config_files+=("$HOME/$file")
+                        processed_files[$canonical_path]=1
+                    fi
+                fi
+            done
+            ;;
+        "bash")
+            for file in "${BASH_CONFIG_FILES[@]}"; do
+                if [ -f "$HOME/$file" ]; then
+                    local canonical_path
+                    canonical_path=$(readlink -f "$HOME/$file")
+                    if [ -z "${processed_files[$canonical_path]}" ]; then
+                        config_files+=("$HOME/$file")
+                        processed_files[$canonical_path]=1
+                    fi
+                fi
+            done
+            ;;
+    esac
+
+    printf '%s\n' "${config_files[@]}"
+}
+
+main() {
+    local shell_type
+    shell_type=$(detect_shell)
+
+    echo "Detected shell: $shell_type"
+
+    case "$shell_type" in
+        "zsh"|"bash")
+            while IFS= read -r file; do
+                [ -n "$file" ] && process_file "$file"
+            done < <(get_deduplicated_config_files "$shell_type")
+            ;;
+        *)
+            echo "Unsupported shell"
+            exit 1
+            ;;
+    esac
+}
+
+main
