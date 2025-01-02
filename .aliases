@@ -181,3 +181,4 @@ ip_in_file()
 }
 
 alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
+alias ghbackup='GITUSER="DaffyDuke"; curl "https://api.github.com/users/${GITUSER}/starred?per_page=1000" | grep -o "git@[^\"]*" | xargs -L1 git clone'
