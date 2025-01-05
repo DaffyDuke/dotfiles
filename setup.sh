@@ -1202,6 +1202,22 @@ s3benchmark()
   chmod +x ~/bin/s3-benchmark
 }
 
+scrcpy()
+{
+  # scrcpy: Display and control your Android device
+  # for Debian/Ubuntu
+  sudo apt install -y ffmpeg libsdl2-2.0-0 adb wget \
+    gcc git pkg-config meson ninja-build libsdl2-dev \
+    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
+    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
+  cd /tmp || exit 1
+  git clone https://github.com/Genymobile/scrcpy
+  cd scrcpy
+  ./install_release.sh
+  # Uninstall
+  # sudo ninja -Cbuild-auto uninstall
+}
+
 Screensavers()
 {
   # Screensavers
@@ -1712,6 +1728,7 @@ Main()
 #  RocketChat
   Rust   
 #  s3benchmark
+  scrcpy
   Screensavers
   Signal
   Slack
