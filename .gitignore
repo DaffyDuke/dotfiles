@@ -222,6 +222,7 @@
 .xsel.log
 .xsession-errors
 .xsession-errors.old
+.yoshimi_history
 .z
 .z.*
 .zsh_sessions/

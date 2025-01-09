@@ -1028,7 +1028,7 @@ Multisystem()
 Music()
 {
   # Music Software
-  sudo apt install -y guitarix mixxx rosegarden
+  sudo apt install -y guitarix mixxx rosegarden yoshimi
 }
 
 NeoVim()
