@@ -172,6 +172,7 @@
 .shutter/
 .slack/
 .snap/
+.spotdl/
 .sqlite_history*
 .ssh*
 .ssh/
