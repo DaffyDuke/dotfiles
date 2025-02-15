@@ -176,7 +176,7 @@ Python()
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp
+  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp
   do
     pip3 install "${pkg}" --upgrade --break-system-packages
   done
@@ -1028,7 +1028,7 @@ Multisystem()
 Music()
 {
   # Music Software
-  sudo apt install -y guitarix mixxx rosegarden
+  sudo apt install -y guitarix mixxx rosegarden yoshimi
 }
 
 NeoVim()
@@ -1202,6 +1202,22 @@ s3benchmark()
   chmod +x ~/bin/s3-benchmark
 }
 
+scrcpy()
+{
+  # scrcpy: Display and control your Android device
+  # for Debian/Ubuntu
+  sudo apt install -y ffmpeg libsdl2-2.0-0 adb wget \
+    gcc git pkg-config meson ninja-build libsdl2-dev \
+    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
+    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
+  cd /tmp || exit 1
+  git clone https://github.com/Genymobile/scrcpy
+  cd scrcpy
+  ./install_release.sh
+  # Uninstall
+  # sudo ninja -Cbuild-auto uninstall
+}
+
 Screensavers()
 {
   # Screensavers
@@ -1310,6 +1326,19 @@ Taskfile()
   # https://taskfile.org/#/
   go get -u -v github.com/go-task/task/cmd/task
 }
+
+Teams()
+{
+  # Teams for Linux: Unofficial Microsoft Teams for Linux client
+  # https://github.com/IsmaelMartinez/teams-for-linux
+  sudo mkdir -p /etc/apt/keyrings
+  sudo wget -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
+  echo "deb [signed-by=/etc/apt/keyrings/teams-for-linux.asc arch=$(dpkg --print-architecture)] https://repo.teamsforlinux.de/debian/ stable main" | sudo tee /etc/apt/sources.list.d/teams-for-linux-packages.list
+  sudo apt update
+  sudo apt install -y teams-for-linux
+}
+
+
 
 Terminal()
 {
@@ -1699,6 +1728,7 @@ Main()
 #  RocketChat
   Rust   
 #  s3benchmark
+  scrcpy
   Screensavers
   Signal
   Slack
@@ -1709,6 +1739,7 @@ Main()
   Students
 #  STui
 #  Taskfile
+  Teams
   Terminal
   TLDR
 #  Trello
