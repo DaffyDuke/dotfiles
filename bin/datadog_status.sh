@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Get all pods starting with 'datadog-'
-# pods=$(kubectl get pods -n decathlon-system -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^datadog-')
-pods=$(kubectl get pods -n system-datadog -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^datadog-')
+pods=$(kubectl get pods -n decathlon-system -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^datadog-')
+# pods=$(kubectl get pods -n system-datadog -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n' | grep '^datadog-')
 
 # Loop over each pod
 for pod in $pods; do
@@ -11,9 +11,10 @@ for pod in $pods; do
   echo "############################################################################################################"
 
   # Run 'agent status' command and capture the output
+  output=$(kubectl exec -it $pod -n decathlon-system -- agent status)
   # output=$(kubectl exec -it $pod -n system-datadog -- agent status)
   # output=$(kubectl exec -it $pod -n system-datadog -- agent config set log_level debug)
-  output=$(kubectl exec -it $pod -n system-datadog -- agent config set log_level info)
+  # output=$(kubectl exec -it $pod -n system-datadog -- agent config set log_level info)
 
   echo "$output"
   # Extract the section for 'openmetrics'
