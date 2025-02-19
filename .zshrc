@@ -133,8 +133,6 @@ source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -f /etc/debian_version ]
 then
 . $HOME/.asdf/asdf.sh
-else
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
 # Howdoi
