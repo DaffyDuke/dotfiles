@@ -24,6 +24,16 @@ EOF'
   test -f  ~/.config/systemd/user/geoclue-agent.service && systemctl --user enable --now geoclue-agent.service
   # Add CDROM Roles
   sudo usermod -a -G cdrom daffy
+  sudo bash -c 'cat << EOF > /etc/stubby/stubby.yml
+  - address_data: 80.67.169.12
+    tls_auth_name: "ns0.fdn.fr"
+  - address_data: 2001:910:800::12
+    tls_auth_name: "ns0.fdn.fr"
+  - address_data: 80.67.169.40
+    tls_auth_name: "ns1.fdn.fr"
+  - address_data: 2001:910:800::40
+    tls_auth_name: "ns1.fdn.fr"
+EOF'
 }
 
 WIFI()
@@ -133,7 +143,7 @@ Packages()
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass qtractor \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
     vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
@@ -1656,12 +1666,12 @@ Annexes()
 
 Main()
 {
-#  Setup
 #  WIFI
 #  PPA
   Packages
 #  Python
 #  GO
+#  Setup
 #  Albert
 #  Android
 #  Ansible
