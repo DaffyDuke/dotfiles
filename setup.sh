@@ -1038,7 +1038,7 @@ Multisystem()
 Music()
 {
   # Music Software
-  sudo apt install -y guitarix mixxx rosegarden yoshimi
+  sudo apt install -y easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
 }
 
 NeoVim()
