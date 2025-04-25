@@ -136,7 +136,7 @@ Packages()
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
-    ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
+    lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
     mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
@@ -237,7 +237,6 @@ Crontab()
   cd /tmp || exit
   cat > crontab << \EOF
 16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
-@reboot cd /home/daffy/Documents/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
 EOF
   crontab crontab && rm crontab
 }
@@ -1222,7 +1221,7 @@ scrcpy()
     libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
   cd /tmp || exit 1
   git clone https://github.com/Genymobile/scrcpy
-  cd scrcpy
+  cd scrcpy || exit
   ./install_release.sh
   # Uninstall
   # sudo ninja -Cbuild-auto uninstall
@@ -1449,7 +1448,7 @@ VIM()
 
   # vim-fugitive
   mkdir -p ~/.vim/pack/tpope/start
-  cd ~/.vim/pack/tpope/start
+  cd ~/.vim/pack/tpope/start || exit
   git clone https://tpope.io/vim/fugitive.git
   vim -u NONE -c "helptags fugitive/doc" -c q
 
