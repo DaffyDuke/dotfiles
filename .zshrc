@@ -165,7 +165,8 @@ else
 
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
-alias vim=/opt/homebrew/bin/vim
+alias vi=/opt/homebrew/bin/nvim
+export BAT_THEME="Monokai Extended Light"
 
 # Homebrew: Python
 export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
