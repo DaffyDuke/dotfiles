@@ -23,6 +23,16 @@ EOF'
   test -f ~/.config/systemd/user/geoclue-agent.service && systemctl --user enable --now geoclue-agent.service
   # Add CDROM Roles
   sudo usermod -a -G cdrom daffy
+  sudo bash -c 'cat << EOF > /etc/stubby/stubby.yml
+  - address_data: 80.67.169.12
+    tls_auth_name: "ns0.fdn.fr"
+  - address_data: 2001:910:800::12
+    tls_auth_name: "ns0.fdn.fr"
+  - address_data: 80.67.169.40
+    tls_auth_name: "ns1.fdn.fr"
+  - address_data: 2001:910:800::40
+    tls_auth_name: "ns1.fdn.fr"
+EOF'
 }
 
 WIFI() {
@@ -127,14 +137,14 @@ Packages() {
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
-    ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
-    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mumble mutt \
-    nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
+    lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
+    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh mumble mutt \
+    nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt neovim nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass qtractor \
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
     vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
@@ -174,7 +184,7 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp; do
+  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp; do
     pip3 install "${pkg}" --upgrade --break-system-packages
   done
 }
@@ -222,7 +232,6 @@ Crontab() {
   cd /tmp || exit
   cat >crontab <<\EOF
 16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
-@reboot cd /home/daffy/Documents/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
 EOF
   crontab crontab && rm crontab
 }
@@ -971,24 +980,20 @@ Multisystem() {
 
 Music() {
   # Music Software
-  sudo apt install -y guitarix mixxx rosegarden
+  sudo apt install -y easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
 }
 
 NeoVim() {
-  VIM
-  Python
-  GO
-  # NeoVIM
-  pip3 install --upgrade --break-system-packages neovim
-  go get -u github.com/nsf/gocode
-  git clone https://github.com/fladson/vim-kitty.git /tmp/vim-kitty
-  mkdir -p ~/.config/nvim/syntax
-  mkdir -p ~/.config/nvim/ftdetect
-  mkdir -p ~/.config/nvim/ftplugin
-  mv /tmp/vim-kitty/syntax/* ~/.config/nvim/syntax
-  mv /tmp/vim-kitty/ftdetect/kitty.vim ~/.config/nvim/ftdetect
-  mv /tmp/vim-kitty/ftplugin/kitty.vim ~/.config/nvim/ftplugin
-  rm -rf /tmp/vim-kitty
+  # NeoVim
+  sudo apt install neovim
+  # required
+  mv ~/.config/nvim{,.bak}
+  # optional but recommended
+  mv ~/.local/share/nvim{,.bak}
+  mv ~/.local/state/nvim{,.bak}
+  mv ~/.cache/nvim{,.bak}
+  git clone https://github.com/LazyVim/starter ~/.config/nvim
+  rm -rf ~/.config/nvim/.git
 }
 
 nicotine() {
@@ -1129,6 +1134,21 @@ s3benchmark() {
   chmod +x ~/bin/s3-benchmark
 }
 
+scrcpy() {
+  # scrcpy: Display and control your Android device
+  # for Debian/Ubuntu
+  sudo apt install -y ffmpeg libsdl2-2.0-0 adb wget \
+    gcc git pkg-config meson ninja-build libsdl2-dev \
+    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
+    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
+  cd /tmp || exit 1
+  git clone https://github.com/Genymobile/scrcpy
+  cd scrcpy || exit
+  ./install_release.sh
+  # Uninstall
+  # sudo ninja -Cbuild-auto uninstall
+}
+
 Screensavers() {
   # Screensavers
   sudo apt remove gnome-screensaver
@@ -1229,6 +1249,16 @@ Taskfile() {
   go get -u -v github.com/go-task/task/cmd/task
 }
 
+Teams() {
+  # Teams for Linux: Unofficial Microsoft Teams for Linux client
+  # https://github.com/IsmaelMartinez/teams-for-linux
+  sudo mkdir -p /etc/apt/keyrings
+  sudo wget -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
+  echo "deb [signed-by=/etc/apt/keyrings/teams-for-linux.asc arch=$(dpkg --print-architecture)] https://repo.teamsforlinux.de/debian/ stable main" | sudo tee /etc/apt/sources.list.d/teams-for-linux-packages.list
+  sudo apt update
+  sudo apt install -y teams-for-linux
+}
+
 Terminal() {
   # Install Tilix Theme
   mkdir -p ~/.config/tilix/schemes/
@@ -1322,7 +1352,7 @@ VIM() {
 
   # vim-fugitive
   mkdir -p ~/.vim/pack/tpope/start
-  cd ~/.vim/pack/tpope/start
+  cd ~/.vim/pack/tpope/start || exit
   git clone https://tpope.io/vim/fugitive.git
   vim -u NONE -c "helptags fugitive/doc" -c q
 
@@ -1595,6 +1625,7 @@ Main() {
   #  RocketChat
   Rust
   #  s3benchmark
+  scrcpy
   Screensavers
   Signal
   Slack
@@ -1605,6 +1636,7 @@ Main() {
   Students
   #  STui
   #  Taskfile
+  Teams
   Terminal
   TLDR
   #  Trello
