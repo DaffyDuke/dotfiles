@@ -117,6 +117,10 @@ PPA() {
     grub-customizer bashtop piper gh nautilus-nextcloud appimagelauncher \
     quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
+  # install some github cli extensions
+  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh; do
+    gh extension install "${extension}"
+  done
 }
 
 Packages() {
@@ -1549,12 +1553,12 @@ Annexes() {
 }
 
 Main() {
+  #  Setup
   #  WIFI
   #  PPA
   Packages
   #  Python
   #  GO
-  #  Setup
   #  Albert
   #  Android
   #  Ansible
