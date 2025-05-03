@@ -1731,7 +1731,7 @@ Main()
 }
 
 
-if [ ! -z $1 ] 
+if [ -n $1 ] 
 then
   $1
 else
