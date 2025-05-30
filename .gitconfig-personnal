@@ -18,7 +18,7 @@
 [gpg]
 	program = /usr/bin/gpg
 [commit]
-	gpgsign = true
+	gpgsign = false
 	verbose = true
 [core]
 	excludesfile = ~/.gitignore_global
