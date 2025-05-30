@@ -127,7 +127,7 @@ Packages() {
   # Install some packages
   sudo apt install -y \
     acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
-    baobab barrier bc blueman brasero build-essential bundler \
+    baobab barrier bc bleachbit blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix duf \
     easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
