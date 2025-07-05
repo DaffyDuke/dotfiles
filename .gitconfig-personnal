@@ -5,7 +5,8 @@
 [push]
 	default = simple
 [merge]
-        ff = only
+  ff = only
+  tool = meld
 [gc]
         reflogExpire = never
         reflogExpireUnreachable = never
