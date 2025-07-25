@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # http://www.alfredklomp.com/programming/shrinkpdf
+# https://www.cyberciti.biz/faq/linux-shell-script-to-reduce-pdf-file-size/
 # Licensed under the 3-clause BSD license:
 #
 # Copyright (c) 2014-2019, Alfred Klomp
