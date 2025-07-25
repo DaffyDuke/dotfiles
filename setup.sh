@@ -146,7 +146,7 @@ Packages() {
     rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
     s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
-    unison-gtk unrar urlview \
+    unison-gtk unrar urlview uv \
     vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xournalpp xscreensaver xsane \
@@ -184,8 +184,8 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp; do
-    pip3 install "${pkg}" --upgrade --break-system-packages
+  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers virtualenv yt-dlp; do
+    pip install "${pkg}" --upgrade --break-system-packages
   done
 }
 
@@ -980,7 +980,7 @@ Multisystem() {
 
 Music() {
   # Music Software
-  sudo apt install -y easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
+  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
 }
 
 NeoVim() {
@@ -1333,9 +1333,9 @@ VIM() {
     sudo update-alternatives --set vim /usr/bin/vim.nox
   fi
   # Install vundle
-  pip3 install flake8 --break-system-packages
-  pip3 install wakatime --break-system-packages
-  pip3 install pidcat-pip --break-system-packages
+  pip install flake8 --break-system-packages
+  pip install wakatime --break-system-packages
+  pip install pidcat-pip --break-system-packages
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
