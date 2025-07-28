@@ -184,7 +184,7 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers virtualenv yt-dlp; do
+  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers virtualenv yt-dlp; do
     pip install "${pkg}" --upgrade --break-system-packages
   done
 }
