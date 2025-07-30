@@ -112,7 +112,7 @@ source $HOME/.aliases
 export TERM=xterm-256color
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
-export EDITOR=vim
+export EDITOR=/usr/bin/vi
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
 export GPG_TTY=$(tty)
 
