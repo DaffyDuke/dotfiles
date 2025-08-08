@@ -62,7 +62,7 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
+plugins=(aws bundler debian direnv docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -112,7 +112,7 @@ source $HOME/.aliases
 export TERM=xterm-256color
 export PATH=$RUST_USER_BIN:$PY_USER_BIN:$GOROOT/bin:$PATH
 export PATH=$PATH:$GOPATH/bin
-export EDITOR=vim
+export EDITOR=/usr/bin/vi
 export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
 export GPG_TTY=$(tty)
 

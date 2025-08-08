@@ -127,7 +127,7 @@ Packages() {
   # Install some packages
   sudo apt install -y \
     acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
-    baobab barrier bc blueman brasero build-essential bundler \
+    baobab barrier bc bleachbit blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix duf \
     easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
@@ -184,9 +184,11 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade virtualenv yt-dlp; do
-    pip3 install "${pkg}" --upgrade --break-system-packages
+  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
+    pip install "${pkg}" --upgrade --break-system-packages
   done
+  # uv An extremely fast Python package and project manager, written in Rust.
+  curl -LsSf https://astral.sh/uv/install.sh | sh
 }
 
 GO() {
@@ -607,8 +609,8 @@ Element() {
 FlatPackages() {
   # misc softwares available with flatpack command
   FlatPack
-  for pkg in ch.openboard.OpenBoard com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
-    org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
+  for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
+    io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
     org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect; do
     flatpak install flathub "${pkg}"
   done
@@ -734,6 +736,9 @@ MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg
 EOF'
   gsettings set org.gnome.settings-daemon.plugins.power power-button-action 'suspend'
   gsettings set org.gnome.mutter check-alive-timeout 30000
+  #  Newelle - Your Ultimate Virtual Assistant
+  /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
+  gsettings set org.gnome.mutter center-new-windows true
 }
 
 GrafTCP() {
@@ -980,7 +985,7 @@ Multisystem() {
 
 Music() {
   # Music Software
-  sudo apt install -y easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
+  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
 }
 
 NeoVim() {
@@ -1333,9 +1338,9 @@ VIM() {
     sudo update-alternatives --set vim /usr/bin/vim.nox
   fi
   # Install vundle
-  pip3 install flake8 --break-system-packages
-  pip3 install wakatime --break-system-packages
-  pip3 install pidcat-pip --break-system-packages
+  pip install flake8 --break-system-packages
+  pip install wakatime --break-system-packages
+  pip install pidcat-pip --break-system-packages
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
