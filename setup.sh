@@ -609,8 +609,8 @@ Element() {
 FlatPackages() {
   # misc softwares available with flatpack command
   FlatPack
-  for pkg in ch.openboard.OpenBoard com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
-    org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
+  for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
+    io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
     org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect; do
     flatpak install flathub "${pkg}"
   done
@@ -736,6 +736,9 @@ MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg
 EOF'
   gsettings set org.gnome.settings-daemon.plugins.power power-button-action 'suspend'
   gsettings set org.gnome.mutter check-alive-timeout 30000
+  #  Newelle - Your Ultimate Virtual Assistant
+  /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
+  gsettings set org.gnome.mutter center-new-windows true
 }
 
 GrafTCP() {
