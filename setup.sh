@@ -705,7 +705,7 @@ GnomeConfigurations() {
   gsettings set org.gnome.desktop.wm.preferences theme 'Radiance'
   gsettings set org.gnome.desktop.interface gtk-theme 'Radiance'
   gsettings set org.gnome.desktop.interface cursor-theme 'DMZ-White'
-  gsettings set org.gnome.desktop.interface cursor-size 10
+  gsettings set org.gnome.desktop.interface cursor-size 24
   gsettings set org.gnome.desktop.interface icon-theme 'ubuntu-mono-dark'
   gsettings set org.gnome.desktop.interface monospace-font-name 'Ubuntu Mono 13'
   gsettings set org.gnome.gedit.preferences.print print-font-body-pango 'Monospace 9'
