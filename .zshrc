@@ -4,6 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
 
 # # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # # Initialization code that may require console input (password prompts, [y/n]
@@ -91,13 +92,15 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-eval `keychain --eval --agents ssh id_rsa`
-if [ -f ~/.ssh/id_ecdsa ]; then
-eval `keychain --eval --agents ssh ~/.ssh/id_ecdsa`
+# # ssh
+if [ -z $SSH_AUTH_SOCK ]; then
+  # export SSH_KEY_PATH="~/.ssh/dsa_id"
+  eval `keychain --eval --agents ssh id_rsa`
+  if [ -f ~/.ssh/id_ecdsa ]; then
+   eval `keychain --eval --agents ssh ~/.ssh/id_ecdsa`
+  fi
 fi
-
+# 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
