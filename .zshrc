@@ -4,7 +4,6 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
 
 # # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # # Initialization code that may require console input (password prompts, [y/n]
@@ -211,3 +210,6 @@ fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
 
+if [ -f /etc/debian_version ]; then
+export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
+fi
