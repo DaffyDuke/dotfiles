@@ -23,6 +23,7 @@
 .bash_logout
 .bogofilter/
 .byobu/
+.ca-certificates/
 .cache/
 .cargo/
 .ccnet/

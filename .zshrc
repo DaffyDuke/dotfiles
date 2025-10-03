@@ -62,7 +62,8 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
+plugins=(aws chucknorris bundler debian direnv docker gh git gitignore golang iterm2 keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions zsh-syntax-highlighting)
+# plugins=(aws bundler debian docker git gitignore golang kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -93,9 +94,9 @@ source $ZSH/oh-my-zsh.sh
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
-eval `keychain --eval --agents ssh id_rsa`
+eval `keychain --quiet id_rsa`
 if [ -f ~/.ssh/id_ecdsa ]; then
-eval `keychain --eval --agents ssh ~/.ssh/id_ecdsa`
+eval `keychain --quiet ~/.ssh/id_ecdsa`
 fi
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -129,7 +130,7 @@ complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -f /etc/debian_version ]
 then
 . $HOME/.asdf/asdf.sh
@@ -186,6 +187,9 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+# Add YARN
+export PATH=$HOME/.yarn/bin:$PATH
 fi
 
 # Activate mise if installed
