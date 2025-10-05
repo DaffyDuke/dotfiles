@@ -584,11 +584,9 @@ Dropbox() {
   # Dropbox
   # https://www.dropbox.com/install-linux
   cd /tmp || exit 1
-  wget -O dropbox_2020.03.04_amd64.deb https://www.dropbox.com/download?dl=packages/debian/dropbox_2020.03.04_amd64.deb
-  sudo dpkg -i dropbox_2020.03.04_amd64.deb
-  sudo apt --fix-broken install
-  echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf
+  echo fs.inotify.max_user_watches=500000 | sudo tee -a /etc/sysctl.conf
   sudo sysctl -p
+  sudo apt install nautilus-dropbox -y && cd ~ && sudo wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - && dropbox start -i
 }
 
 DVD() {
