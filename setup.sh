@@ -1342,9 +1342,9 @@ VIM() {
     sudo update-alternatives --set vim /usr/bin/vim.nox
   fi
   # Install vundle
-  pip install flake8 --break-system-packages
-  pip install wakatime --break-system-packages
-  pip install pidcat-pip --break-system-packages
+  pip3 install flake8 --break-system-packages
+  pip3 install wakatime --break-system-packages
+  pip3 install pidcat-pip --break-system-packages
   git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
   vim +BundleInstall
   vim +GoInstallBinaries
@@ -1667,8 +1667,7 @@ Main() {
   #  zquests
 }
 
-if [ -n $1 ] 
-then
+if [ -n $1 ]; then
   $1
 else
   Main

@@ -131,7 +131,7 @@ complete -o nospace -C $HOME/bin/vault vault
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source $HOME/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 if [ -f /etc/debian_version ]
 then
 . $HOME/.asdf/asdf.sh
@@ -192,6 +192,9 @@ export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
+# Add YARN
+export PATH=$HOME/.yarn/bin:$PATH
 fi
 
 # Activate mise if installed
