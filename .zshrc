@@ -62,7 +62,7 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws bundler debian direnv docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
+plugins=(aws brew bundler debian direnv docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -163,6 +163,10 @@ export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
 
 # fx.wtf
 source <(fx --comp zsh)
+
+# Homebrew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 else
 
 # Homebrew
@@ -216,3 +220,4 @@ ln -sf  ~/.gnupg/gpg-agent.conf-debian  ~/.gnupg/gpg-agent.conf
 else
 ln -sf  ~/.gnupg/gpg-agent.conf-mac  ~/.gnupg/gpg-agent.conf
 fi
+

@@ -346,9 +346,15 @@ bluegriffon() {
 }
 
 Brew() {
-  # Use brew to install softwares on MacOs
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  brew bundle
+  if [ -f /etc/debian_version ]; then
+    # Try Brw on Linux
+    sudo apt-get -y install build-essential procps curl file git
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    # Use brew to install softwares on MacOs
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew bundle
+  fi
 }
 
 browsh() {
