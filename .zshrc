@@ -223,4 +223,3 @@ ln -sf  ~/.gnupg/gpg-agent.conf-debian  ~/.gnupg/gpg-agent.conf
 else
 ln -sf  ~/.gnupg/gpg-agent.conf-mac  ~/.gnupg/gpg-agent.conf
 fi
-
