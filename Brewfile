@@ -12,11 +12,17 @@ tap "ymtdzzz/tap"
 brew "libtiff"
 brew "jpeg-xl"
 brew "aom"
+<<<<<<< HEAD
 brew "openssl@3"
 brew "argocd"
 brew "asdf"
 brew "ast-grep"
 brew "sqlite"
+=======
+brew "argocd"
+brew "asdf"
+brew "openssl@3"
+>>>>>>> b48f727 (📦️ package(brew): update softwares >>> ⏰ 30m)
 brew "glib"
 brew "awscli"
 brew "bash"
@@ -33,7 +39,10 @@ brew "cmake"
 brew "lima"
 brew "colima"
 brew "colordiff"
+<<<<<<< HEAD
 brew "composer"
+=======
+>>>>>>> b48f727 (📦️ package(brew): update softwares >>> ⏰ 30m)
 brew "coreutils"
 brew "deno"
 brew "dive"
@@ -95,8 +104,12 @@ brew "mono"
 brew "multi-git-status"
 brew "multitail"
 brew "ncftp"
+<<<<<<< HEAD
 brew "neovim"
 brew "node"
+=======
+brew "node", link: false
+>>>>>>> b48f727 (📦️ package(brew): update softwares >>> ⏰ 30m)
 brew "openjdk@21"
 brew "openssl@1.1"
 brew "parallel"
