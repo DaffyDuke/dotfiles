@@ -99,6 +99,7 @@
 
   # Remove gone git branches when removed from remote
   gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+	prune-all = !git fetch --prune && git branch -vv | grep \": gone]\" | sed \"s/^[[:space:]]*\\([^[:space:]]*\\).*/\\1/\" | xargs -r git branch -d
 
 
 [help]
@@ -115,3 +116,5 @@
     # default 30 days
     reflogExpireUnreachable = 90
 
+[merge]
+	tool = meld
