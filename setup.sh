@@ -143,7 +143,7 @@ Packages() {
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils pre-commit postgresql-client pre-commit progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass qtractor \
-    rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
+    rclone rdesktop redshift-gtk refind remmina rename ripgrep rpm rsync \
     s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
@@ -615,7 +615,7 @@ FlatPackages() {
   FlatPack
   for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect; do
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever; do
     flatpak install flathub "${pkg}"
   done
 }

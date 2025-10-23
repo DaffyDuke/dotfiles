@@ -235,6 +235,7 @@
 __pycache__/
 *calibre/
 Applications/
+AppImages/
 Bureau/
 Calibre Library/
 Cozy*Drive/
