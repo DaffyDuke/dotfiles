@@ -978,6 +978,12 @@ MultiBootUSB() {
   sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
 }
 
+MultiOSUSB() {
+  # MultiOSUSB : multisystem alternative
+  cd /tmp/ && wget -O MultiBootUSB.tar.gz https://github.com/Mexit/MultiOS-USB/releases/download/v0.9.9/MultiOS-USB_linux_v0.9.9.tar.gz
+  cd ~/bin && tar xvfz /tmp/MultiBootUSB.tar.gz
+}
+
 Multisystem() {
   # Multisystem
   sudo apt-add-repository 'deb http://liveusb.info/multisystem/depot all main'
@@ -1012,6 +1018,13 @@ nicotine() {
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6CEB6050A30E5769
   sudo apt update
   sudo apt install -y nicotine
+}
+
+nix() {
+  # Nix https://nix.dev/manual/nix/2.32/installation/multi-user.html?highlight=%22nix-users%22#restricting-access
+  sudo chgrp nix-users /nix/var/nix/daemon-socket
+  sudo chmod ug=rwx,o= /nix/var/nix/daemon-socket
+  sudo usermod -aG nix-users daffy
 }
 
 npmfx() {
@@ -1330,12 +1343,6 @@ urbackup() {
   rm $TF
 }
 
-Ventoy() {
-  # Ventoy : multisystem alternative
-  cd /tmp/ && wget https://github.com/ventoy/Ventoy/releases/download/v1.0.61/ventoy-1.0.61-linux.tar.gz
-  cd ~/bin && tar xvfz /tmp/ventoy-1.0.61-linux.tar.gz
-}
-
 VIM() {
   if [ -f /etc/debian_version ]; then
     # Add Ruby Support to vim
@@ -1618,9 +1625,11 @@ Main() {
   Minishift
   mkcert
   #  MultiBootUSB
+  MultiOSUSB
   #  Multisystem
   Music
   nicotine
+  nix
   #  npmfx
   OfflineImap
   #  OneDrive
@@ -1651,7 +1660,6 @@ Main() {
   #  Trello
   ttfmscorefontsinstaller
   urbackup
-  Ventoy
   VIM
   VirtualBox
   Vivaldi
