@@ -147,7 +147,7 @@ Packages() {
     s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
-    vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vhs vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xournalpp xscreensaver xsane \
     yamllint \
@@ -321,6 +321,15 @@ Bat() {
   cd /tmp || exit 1
   wget https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
   sudo dpkg -i bat_0.10.0_amd64.deb
+}
+
+BootRepair() {
+  # BootRepair
+  # https://wiki.debian.org/Boot-Repair
+  sudo apt install -y wget
+  wget -O- https://sourceforge.net/projects/boot-repair/files/key.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/boot-repair.gpg
+  echo 'deb [signed-by=/etc/apt/keyrings/boot-repair.gpg] https://ppa.launchpadcontent.net/yannubuntu/boot-repair/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/boot-repair.list
+  sudo apt update && sudo apt install -y boot-repair
 }
 
 Delta() {
@@ -970,14 +979,6 @@ mkcert() {
   sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 }
 
-MultiBootUSB() {
-  # MultiBootUSB
-  cd /tmp || exit
-  sudo apt install python3-pyudev
-  wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb
-  sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
-}
-
 MultiOSUSB() {
   # MultiOSUSB : multisystem alternative
   cd /tmp/ && wget -O MultiBootUSB.tar.gz https://github.com/Mexit/MultiOS-USB/releases/download/v0.9.9/MultiOS-USB_linux_v0.9.9.tar.gz
@@ -1110,13 +1111,13 @@ ProtonBridge() {
 
 ProtonVPN() {
   # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
-  version=1.0.3-3
+  version=1.0.8
   cd /tmp || exit
   wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
-  echo "c68a0b8dad58ab75080eed7cb989e5634fc88fca051703139c025352a6ee19ad protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
+  echo "0b14e71586b22e498eb20926c48c7b434b751149b1f2af9902ef1cfe6b03e180 protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
   sudo apt-get update
   sudo dpkg -i protonvpn-stable-release_${version}_all.deb
-  sudo apt install -y protonvpn
+  sudo apt install -y proton-vpn-gnome-desktop
   sudo apt install -y libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 }
 
@@ -1316,7 +1317,12 @@ Terminal() {
 
 TLDR() {
   # TLDR
-  go get 4d63.com/tldr
+  # go get 4d63.com/tldr
+  sudo apt -y install tldr-py
+  git clone git@github.com:tldr-pages/tldr.git ~/.tldr
+  tldr init
+  tldr reindex
+  tldr update
 }
 
 Trello() {
@@ -1581,6 +1587,7 @@ Main() {
   #  Argbash
   #  Atom
   #  Bat
+  BootRepair
   #  bcctools
   #  bluegriffon
   #  Brew
@@ -1624,7 +1631,6 @@ Main() {
   #  lynishardening
   Minishift
   mkcert
-  #  MultiBootUSB
   MultiOSUSB
   #  Multisystem
   Music
