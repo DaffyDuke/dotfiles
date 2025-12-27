@@ -118,7 +118,7 @@ PPA() {
     quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
   # install some github cli extensions
-  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh; do
+  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh meiji163/gh-notify; do
     gh extension install "${extension}"
   done
 }
