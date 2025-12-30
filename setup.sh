@@ -996,7 +996,7 @@ Multisystem() {
 
 Music() {
   # Music Software
-  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
+  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 tuxguitar yoshimi zytrax
 }
 
 NeoVim() {
