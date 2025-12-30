@@ -39,6 +39,7 @@
 .compiz/
 .config/
 .cookiecutter*
+.copilot/
 .cozy-desktop/
 .cpan/
 .cups/
@@ -68,6 +69,7 @@
 .gdfuse/
 .geeknote/
 .gem/
+.gemini/
 .gimp-2.8/
 .gitconfig
 .gk/
@@ -190,7 +192,9 @@
 .thumbnails/
 .tig_history
 .thunderbird/
+.tldrc/
 .tmux
+.todo.cfg
 .tomatoes/
 .tor-browser-en/
 .trello-cli/
@@ -296,4 +300,3 @@ userdef.reg
 stack.json
 ssh_logs/
 .history
-
