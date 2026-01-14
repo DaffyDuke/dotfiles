@@ -39,6 +39,7 @@
 .compiz/
 .config/
 .cookiecutter*
+.copilot/
 .cozy-desktop/
 .cpan/
 .cups/
@@ -56,6 +57,7 @@
 .electron-gyp/
 .etr/
 .everpad/
+.fgfs/
 .filius/
 .flickr/
 .flickrfs/
@@ -68,6 +70,8 @@
 .gdfuse/
 .geeknote/
 .gem/
+.gemini/
+.gervill/
 .gimp-2.8/
 .gitconfig
 .gk/
@@ -182,6 +186,7 @@
 .steampid
 .stopmotion/
 .sudo_as_admin_successful
+.swt/
 .synaptic/
 .synfig/
 .t4k_common/
@@ -190,7 +195,10 @@
 .thumbnails/
 .tig_history
 .thunderbird/
+.tldrc/
+.tldr*
 .tmux
+.todo.cfg
 .tomatoes/
 .tor-browser-en/
 .trello-cli/
@@ -235,6 +243,7 @@
 __pycache__/
 *calibre/
 Applications/
+AppImages/
 Bureau/
 Calibre Library/
 Cozy*Drive/
@@ -295,5 +304,3 @@ user.reg
 userdef.reg
 stack.json
 ssh_logs/
-.history
-
