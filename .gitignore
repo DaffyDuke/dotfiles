@@ -39,6 +39,7 @@
 .compiz/
 .config/
 .cookiecutter*
+.copilot/
 .cozy-desktop/
 .cpan/
 .cups/
@@ -69,6 +70,7 @@
 .gdfuse/
 .geeknote/
 .gem/
+.gemini/
 .gervill/
 .gimp-2.8/
 .gitconfig
@@ -193,8 +195,10 @@
 .thumbnails/
 .tig_history
 .thunderbird/
+.tldrc/
 .tldr*
 .tmux
+.todo.cfg
 .tomatoes/
 .tor-browser-en/
 .trello-cli/
