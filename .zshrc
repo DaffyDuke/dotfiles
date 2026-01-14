@@ -227,7 +227,6 @@ elif [ -n "$IS_MACOS" ]; then
   
   # GnuPG configuration
   ln -sf ~/.gnupg/gpg-agent.conf-mac ~/.gnupg/gpg-agent.conf
-
 fi
 
 # ============================================================================
