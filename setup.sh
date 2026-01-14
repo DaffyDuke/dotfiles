@@ -1575,12 +1575,12 @@ Annexes() {
 }
 
 Main() {
-  #  Setup
+  Setup
   #  WIFI
   #  PPA
   Packages
-  #  Python
-  #  GO
+  Python
+  GO
   #  Albert
   #  Android
   #  Ansible
@@ -1604,7 +1604,7 @@ Main() {
   #  Crowdsec
   #  Ctop
   Delta
-  #  Docker
+  Docker
   #  Douane
   Dropbox
   #  DroidCAM
@@ -1615,8 +1615,8 @@ Main() {
   Fuzzy
   #  GCStar
   #  Github
-  GnomeConfigurations
   GnomeExtensions
+  GnomeConfigurations
   #  GrafTCP
   #  GRAPH
   #  Infrakit
