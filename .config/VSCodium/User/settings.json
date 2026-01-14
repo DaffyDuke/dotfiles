@@ -1,53 +1,45 @@
 {
-    "workbench.colorTheme": "Snazzy Operator",
-    "vs-kubernetes": {
-        "vs-kubernetes.minikube-path.linux": "/home/daffy/.vs-kubernetes/tools/minikube/linux-amd64/minikube",
-        "vs-kubernetes.helm-path.linux": "/home/daffy/.vs-kubernetes/tools/helm/linux-amd64/helm",
-        "vs-kubernetes.draft-path.linux": "/home/daffy/.vs-kubernetes/tools/draft/linux-amd64/draft"
-    },
-    "git.enableCommitSigning": true,
-    "editor.fontFamily": "'monospace regular', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "terminal.integrated.fontFamily": "'PragmataPro for Powerline','Source Code Pro for Powerline','MesloLGM Nerd Font','Powerline','monospace'",
-    "git.enableSmartCommit": true,
-    "todo-tree.tree.showScanModeButton": false,
-    "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "codestream.email": "daffyduke@lautre.net",
-    "sync.gist": "19a90943457a8b4fb2dd3a84af4843cd",
-    "sync.autoDownload": true,
-    "sync.autoUpload": true,
-    "sync.quietSync": true,
-    "sync.forceDownload": true,
-    "sync.forceUpload": true,
+    "codestream.serverUrl": "https://codestream-api-v2-us1.service.newrelic.com",
+    "datadog.telemetry.setup.enableTelemetry": "enabled",
     "git.autofetch": true,
-    "workbench.startupEditor": "newUntitledFile",
-    "cSpell.userWords": [
-        "COVID",
-        "Citrix",
-        "Loadbalancers",
-        "Netscaler",
-        "autres",
-        "c'est",
-        "logrotate",
-        "mitigations",
-        "quoi",
-        "tcpdump",
-        "truc"
-    ],
-    "terminal.integrated.fontSize": 12,
-    "terminal.integrated.copyOnSelection": true,
+    "vs-kubernetes": {
+        "vs-kubernetes.crd-code-completion": "enabled",
+        "vscode-kubernetes.helm-path-mac": "/Users/mac-Z09ODUQU/.vs-kubernetes/tools/helm/darwin-arm64/helm",
+        "vscode-kubernetes.kubectl-path-mac": "/Users/mac-Z09ODUQU/.vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path-mac": "/Users/mac-Z09ODUQU/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+    },
+    "gopls": {
+        "ui.semanticTokens": true
+    },
+    "workbench.colorTheme": "Catppuccin Macchiato",
+    "editor.columnSelection": true,
     "go.toolsManagement.autoUpdate": true,
-    "todo-tree.general.tags": [
-        "BUG",
-        "HACK",
-        "FIXME",
-        "TODO",
-        "XXX",
-        "[ ]",
-        "[x]"
+    "git.enableCommitSigning": true,
+    "cSpell.userWords": [
+        "distrib"
     ],
-    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+    "datadog.telemetry.setup.suppressMigrationNotification": true,
+    "docker.extension.enableComposeLanguageServer": false,
+    "[dockercompose]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        },
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "github.copilot.nextEditSuggestions.enabled": true,
     "redhat.telemetry.enabled": false,
-    "go.formatTool": "goimports",
-    "go.useLanguageServer": true
+    "mise.binPath": "/bin/mise",
+    "azureTerraform.survey": {
+        "surveyPromptDate": "2026-06-20T12:14:22.944Z",
+        "surveyPromptIgnoredCount": 0
+    },
+    "datadog.connection.oauth.setup.domain": "app.datadoghq.eu"
 }
