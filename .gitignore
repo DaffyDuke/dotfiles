@@ -56,6 +56,7 @@
 .electron-gyp/
 .etr/
 .everpad/
+.fgfs/
 .filius/
 .flickr/
 .flickrfs/
@@ -68,6 +69,7 @@
 .gdfuse/
 .geeknote/
 .gem/
+.gervill/
 .gimp-2.8/
 .gitconfig
 .gk/
@@ -182,6 +184,7 @@
 .steampid
 .stopmotion/
 .sudo_as_admin_successful
+.swt/
 .synaptic/
 .synfig/
 .t4k_common/
@@ -297,5 +300,3 @@ user.reg
 userdef.reg
 stack.json
 ssh_logs/
-.history
-
