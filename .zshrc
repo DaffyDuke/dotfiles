@@ -157,6 +157,7 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
+
 # ============================================================================
 # OS-SPECIFIC CONFIGURATION
 # ============================================================================
@@ -226,6 +227,7 @@ elif [ -n "$IS_MACOS" ]; then
   
   # GnuPG configuration
   ln -sf ~/.gnupg/gpg-agent.conf-mac ~/.gnupg/gpg-agent.conf
+
 fi
 
 # ============================================================================
@@ -245,5 +247,3 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
-
-
