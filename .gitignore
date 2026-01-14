@@ -57,6 +57,7 @@
 .electron-gyp/
 .etr/
 .everpad/
+.fgfs/
 .filius/
 .flickr/
 .flickrfs/
@@ -70,6 +71,7 @@
 .geeknote/
 .gem/
 .gemini/
+.gervill/
 .gimp-2.8/
 .gitconfig
 .gk/
@@ -184,6 +186,7 @@
 .steampid
 .stopmotion/
 .sudo_as_admin_successful
+.swt/
 .synaptic/
 .synfig/
 .t4k_common/
@@ -193,6 +196,7 @@
 .tig_history
 .thunderbird/
 .tldrc/
+.tldr*
 .tmux
 .todo.cfg
 .tomatoes/
@@ -239,6 +243,7 @@
 __pycache__/
 *calibre/
 Applications/
+AppImages/
 Bureau/
 Calibre Library/
 Cozy*Drive/
@@ -299,4 +304,3 @@ user.reg
 userdef.reg
 stack.json
 ssh_logs/
-.history

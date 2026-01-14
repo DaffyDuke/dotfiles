@@ -68,13 +68,17 @@ plugins=(aws brew bundler debian direnv docker git gitignore golang keychain kit
 # User configuration
 
 export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
-if [ -f /etc/debian_version ]; then
-export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
-else
-export PY_USER_BIN=$(/opt/homebrew/opt/python/libexec/bin/python -c 'import site; print(site.USER_BASE + "/bin")')
-fi
 export RUST_USER_BIN=$HOME/.cargo/bin
 # export MANPATH="/usr/local/man:$MANPATH"
+
+# Detect OS
+if [ -f /etc/debian_version ]; then
+  export IS_DEBIAN=1
+  export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
+else
+  export IS_MACOS=1
+  export PY_USER_BIN=$(/opt/homebrew/opt/python/libexec/bin/python -c 'import site; print(site.USER_BASE + "/bin")')
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -153,49 +157,82 @@ eval "$(starship init zsh)"
 # An interactive cheatsheet tool for the command-line.
 eval "$(navi widget zsh)"
 
-if [ -f /etc/debian_version ]
-then
-alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
-howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
 
-# ARA vars for ansible
-export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+# ============================================================================
+# OS-SPECIFIC CONFIGURATION
+# ============================================================================
 
-# fx.wtf
-source <(fx --comp zsh)
+if [ -n "$IS_DEBIAN" ]; then
+  # -------------------- DEBIAN/UBUNTU CONFIGURATION --------------------
+  
+  # ASDF version manager
+  . $HOME/.asdf/asdf.sh
+  
+  # AI CLI aliases
+  alias fix='eval $(acli --script fixCmd "$(fc -nl -1)" $?)'
+  howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
+  
+  # ARA vars for ansible
+  export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+  
+  # fx.wtf
+  source <(fx --comp zsh)
+  
+  # Homebrew (Linux)
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  
+  # SSH Auth Socket (for keyring)
+  export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
+  
+  # GnuPG configuration
+  ln -sf ~/.gnupg/gpg-agent.conf-debian ~/.gnupg/gpg-agent.conf
 
-# Homebrew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -n "$IS_MACOS" ]; then
+  # -------------------- macOS CONFIGURATION --------------------
+  
+  # Homebrew (macOS)
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  
+  # Neovim
+  alias vi=/opt/homebrew/bin/nvim
+  
+  # Bat theme
+  export BAT_THEME="Monokai Extended Light"
+  
+  # Python (Homebrew)
+  export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
+  
+  # pyenv
+  export PATH="$HOME/.pyenv:$PATH"
+  eval "$(pyenv init -)"
+  
+  # kubectl completion
+  [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+  
+  # fpath for completions
+  fpath=($HOME/.oh-my-zsh/custom/completions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/z $HOME/.oh-my-zsh/custom/plugins/zsh-wakatime $HOME/.oh-my-zsh/plugins/ubuntu $HOME/.oh-my-zsh/plugins/tmuxinator $HOME/.oh-my-zsh/plugins/thefuck $HOME/.oh-my-zsh/plugins/terraform $HOME/.oh-my-zsh/plugins/keychain $HOME/.oh-my-zsh/plugins/ruby $HOME/.oh-my-zsh/plugins/rake $HOME/.oh-my-zsh/plugins/kubectl $HOME/.oh-my-zsh/plugins/kitchen $HOME/.oh-my-zsh/plugins/golang $HOME/.oh-my-zsh/plugins/gitignore $HOME/.oh-my-zsh/plugins/git $HOME/.oh-my-zsh/plugins/docker $HOME/.oh-my-zsh/plugins/debian $HOME/.oh-my-zsh/plugins/bundler $HOME/.oh-my-zsh/plugins/aws $HOME/.oh-my-zsh/functions $HOME/.oh-my-zsh/completions $HOME/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
+  
+  # Krew
+  export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+  
+  # GKE plugin configuration
+  export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+  
+  # YARN
+  export PATH=$HOME/.yarn/bin:$PATH
+  
+  # JAVA_HOME
+  export JAVA_HOME=$(/usr/libexec/java_home)
+  export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+  
+  # GnuPG configuration
+  ln -sf ~/.gnupg/gpg-agent.conf-mac ~/.gnupg/gpg-agent.conf
 
-else
-
-# Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-alias vi=/opt/homebrew/bin/nvim
-export BAT_THEME="Monokai Extended Light"
-
-# Homebrew: Python
-export PATH="/opt/homebrew/opt/python/libexec/bin:$PATH"
-
-# pyenv
-export PATH="$HOME/.pyenv:$PATH"
-eval "$(pyenv init -)"
-
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
-fpath=($HOME/.oh-my-zsh/custom/completions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions $HOME/.oh-my-zsh/plugins/z $HOME/.oh-my-zsh/custom/plugins/zsh-wakatime $HOME/.oh-my-zsh/plugins/ubuntu $HOME/.oh-my-zsh/plugins/tmuxinator $HOME/.oh-my-zsh/plugins/thefuck $HOME/.oh-my-zsh/plugins/terraform $HOME/.oh-my-zsh/plugins/keychain $HOME/.oh-my-zsh/plugins/ruby $HOME/.oh-my-zsh/plugins/rake $HOME/.oh-my-zsh/plugins/kubectl $HOME/.oh-my-zsh/plugins/kitchen $HOME/.oh-my-zsh/plugins/golang $HOME/.oh-my-zsh/plugins/gitignore $HOME/.oh-my-zsh/plugins/git $HOME/.oh-my-zsh/plugins/docker $HOME/.oh-my-zsh/plugins/debian $HOME/.oh-my-zsh/plugins/bundler $HOME/.oh-my-zsh/plugins/aws $HOME/.oh-my-zsh/functions $HOME/.oh-my-zsh/completions $HOME/.oh-my-zsh/cache/completions /usr/local/share/zsh/site-functions /usr/share/zsh/site-functions /usr/share/zsh/5.9/functions)
-
-# Add krew
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-# https://github.com/lensapp/lens/issues/6563
-export USE_GKE_GCLOUD_AUTH_PLUGIN=False
-
-# https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke?hl=en
-export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-
-# Add YARN
-export PATH=$HOME/.yarn/bin:$PATH
 fi
+
+# ============================================================================
+# END OS-SPECIFIC CONFIGURATION
+# ============================================================================
 
 # Activate mise if installed
 [[ ! -f $HOME/.local/bin/mise ]] || eval "$($HOME/.local/bin/mise activate zsh)"
@@ -207,19 +244,6 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
-if [ ! -f /etc/debian_version ]; then
-# JAVA_HOME
-export JAVA_HOME=$(/usr/libexec/java_home)
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-fi
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
-
-if [ -f /etc/debian_version ]; then
-export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
-ln -sf  ~/.gnupg/gpg-agent.conf-debian  ~/.gnupg/gpg-agent.conf
-else
-ln -sf  ~/.gnupg/gpg-agent.conf-mac  ~/.gnupg/gpg-agent.conf
-fi
