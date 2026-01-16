@@ -173,28 +173,28 @@ sync-main: ## 🔄 Synchronise main vers develop, debian, macos et penguin
 		(echo "$(RED)✗ Échec de la mise à jour de main$(NC)" && exit 1)
 	@echo ""
 	@echo "$(YELLOW)Étape 7/9:$(NC) Merge main → develop..."
-	@$(CONFIG_ALIAS) checkout develop && $(CONFIG_ALIAS) pull origin develop && \
+	@$(CONFIG_ALIAS) checkout develop && $(CONFIG_ALIAS) pull --rebase=false origin develop && \
 		$(CONFIG_ALIAS) merge main -m "chore: sync main into develop" && \
 		echo "$(GREEN)✓ main → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge main → develop$(NC)" && exit 1)
 	@$(CONFIG_ALIAS) push origin develop
 	@echo ""
 	@echo "$(YELLOW)Étape 7/9:$(NC) Merge main → debian..."
-	@$(CONFIG_ALIAS) checkout debian && $(CONFIG_ALIAS) pull origin debian && \
+	@$(CONFIG_ALIAS) checkout debian && $(CONFIG_ALIAS) pull --rebase=false origin debian && \
 		$(CONFIG_ALIAS) merge main -m "chore: sync main into debian" && \
 		echo "$(GREEN)✓ main → debian$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge main → debian$(NC)" && exit 1)
 	@$(CONFIG_ALIAS) push origin debian
 	@echo ""
 	@echo "$(YELLOW)Étape 8/9:$(NC) Merge main → macos..."
-	@$(CONFIG_ALIAS) checkout macos && $(CONFIG_ALIAS) pull origin macos && \
+	@$(CONFIG_ALIAS) checkout macos && $(CONFIG_ALIAS) pull --rebase=false origin macos && \
 		$(CONFIG_ALIAS) merge main -m "chore: sync main into macos" && \
 		echo "$(GREEN)✓ main → macos$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge main → macos$(NC)" && exit 1)
 	@$(CONFIG_ALIAS) push origin macos
 	@echo ""
 	@echo "$(YELLOW)Étape 9/9:$(NC) Merge main → penguin..."
-	@$(CONFIG_ALIAS) checkout penguin && $(CONFIG_ALIAS) pull origin penguin && \
+	@$(CONFIG_ALIAS) checkout penguin && $(CONFIG_ALIAS) pull --rebase=false origin penguin && \
 		$(CONFIG_ALIAS) merge main -m "chore: sync main into penguin" && \
 		echo "$(GREEN)✓ main → penguin$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge main → penguin$(NC)" && exit 1)
