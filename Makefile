@@ -7,7 +7,13 @@
 
 # Variables
 SHELL := /bin/bash
-CONFIG_ALIAS := git --git-dir=$(HOME)/dotfiles --work-tree=$(HOME)
+# Détection automatique : si on est dans un dépôt git normal, utiliser git directement
+# sinon utiliser l'alias du bare repository
+ifneq ($(wildcard .git),)
+	CONFIG_ALIAS := git
+else
+	CONFIG_ALIAS := git --git-dir=$(HOME)/dotfiles --work-tree=$(HOME)
+endif
 SETUP_SCRIPT := ./setup.sh
 
 # Couleurs pour les messages
@@ -96,7 +102,7 @@ install: check-syntax ## 📦 Exécute le script d'installation (setup.sh Main)
 
 ##@ Gestion de versions et branches
 
-merge-branches: ## 🔀 Merge les branches: debian → develop, macos → develop, develop → main
+merge-branches: ## 🔀 Merge les branches: debian → develop, macos → develop, develop → main (via PR)
 	@echo "$(BLUE)═══════════════════════════════════════════════════════════$(NC)"
 	@echo "$(BLUE)   Merge des branches$(NC)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════════$(NC)"
@@ -110,31 +116,43 @@ merge-branches: ## 🔀 Merge les branches: debian → develop, macos → develo
 		exit 1; \
 	fi
 	@echo ""
-	@echo "$(YELLOW)Étape 1/3:$(NC) Merge debian → develop..."
+	@echo "$(YELLOW)Étape 1/4:$(NC) Merge debian → develop..."
 	@$(CONFIG_ALIAS) checkout develop || (echo "$(RED)✗ Échec du checkout develop$(NC)" && exit 1)
 	@$(CONFIG_ALIAS) merge debian -m "chore: merge debian into develop" && \
 		echo "$(GREEN)✓ debian → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge debian → develop$(NC)" && exit 1)
 	@echo ""
-	@echo "$(YELLOW)Étape 2/3:$(NC) Merge macos → develop..."
+	@echo "$(YELLOW)Étape 2/4:$(NC) Merge macos → develop..."
 	@$(CONFIG_ALIAS) merge macos -m "chore: merge macos into develop" && \
 		echo "$(GREEN)✓ macos → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge macos → develop$(NC)" && exit 1)
 	@echo ""
-	@echo "$(YELLOW)Étape 3/3:$(NC) Merge develop → main..."
-	@$(CONFIG_ALIAS) checkout main || (echo "$(RED)✗ Échec du checkout main$(NC)" && exit 1)
-	@$(CONFIG_ALIAS) merge develop -m "chore: merge develop into main" && \
-		echo "$(GREEN)✓ develop → main$(NC)" || \
-		(echo "$(RED)✗ Conflit lors du merge develop → main$(NC)" && exit 1)
+	@echo "$(YELLOW)Étape 3/4:$(NC) Push debian, macos et develop..."
+	@$(CONFIG_ALIAS) push origin develop debian macos && \
+		echo "$(GREEN)✓ Branches poussées$(NC)" || \
+		echo "$(RED)✗ Échec du push$(NC)"
+	@echo ""
+	@echo "$(YELLOW)Étape 4/4:$(NC) Création d'une Pull Request develop → main avec auto-merge..."
+	@if command -v gh &> /dev/null; then \
+		$(CONFIG_ALIAS) checkout develop && \
+		gh pr create --base main --head develop --title "chore: merge develop into main" \
+			--body "Merge automatique de develop vers main via Makefile" --fill 2>/dev/null && \
+		gh pr merge --auto --squash 2>/dev/null && \
+		echo "$(GREEN)✓ Pull Request créée avec auto-merge activé$(NC)" || \
+		(echo "$(YELLOW)⚠ PR déjà existante ou erreur, vérifiez manuellement$(NC)"; \
+		 echo "$(BLUE)URL:$(NC) https://github.com/DaffyDuke/dotfiles/compare/main...develop"); \
+	else \
+		echo "$(YELLOW)⚠ GitHub CLI (gh) non installé$(NC)"; \
+		echo "$(BLUE)Créez manuellement la PR:$(NC) https://github.com/DaffyDuke/dotfiles/compare/main...develop"; \
+	fi
 	@echo ""
 	@echo "$(GREEN)════════════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)✓ Tous les merges sont terminés avec succès !$(NC)"
+	@echo "$(GREEN)✓ Merges terminés ! PR créée avec auto-merge$(NC)"
 	@echo "$(GREEN)════════════════════════════════════════════════════════════$(NC)"
 	@echo ""
-	@echo "$(BLUE)Branches actuelles:$(NC)"
-	@$(CONFIG_ALIAS) branch -vv
-	@echo ""
-	@echo "$(YELLOW)N'oubliez pas de pusher:$(NC) config push origin main develop debian macos"
+	@echo "$(BLUE)Prochaines étapes:$(NC)"
+	@echo "  1. La PR sera automatiquement mergée une fois les checks passés"
+	@echo "  2. Puis exécutez: $(YELLOW)git checkout main && git pull$(NC)"
 
 merge: merge-branches ## Alias pour merge-branches
 
