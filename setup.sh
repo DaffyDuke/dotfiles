@@ -118,7 +118,7 @@ PPA() {
     quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
   # install some github cli extensions
-  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh; do
+  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh meiji163/gh-notify; do
     gh extension install "${extension}"
   done
 }
@@ -129,25 +129,25 @@ Packages() {
     acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
     baobab barrier bc bleachbit blueman brasero build-essential bundler \
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
-    darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam dnstracer dos2unix duf \
+    darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam direnv dnsperf dnstracer dos2unix duf \
     easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
     fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
     gajim geary geogebra-gnome gimp git-extras gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
-    handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hwloc libhwloc-contrib-plugins \
+    handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
     lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
-    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh mumble mutt \
+    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh multitail mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt neovim nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
-    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils postgresql-client progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
+    p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils pre-commit postgresql-client pre-commit progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass qtractor \
-    rclone rdesktop redshift-gtk remmina rename ripgrep rpm rsync \
+    rclone rdesktop redshift-gtk refind remmina rename ripgrep rpm rsync \
     s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
-    vagrant vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    vagrant vhs vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
     whois winbind wireshark wkhtmltopdf \
     xauth xdg-utils xournalpp xscreensaver xsane \
     yamllint \
@@ -166,7 +166,7 @@ Packages() {
 SNAP() {
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
-    keepassxc magnus mailspring onlyoffice-desktopeditors procs pycharm-community \
+    keepassxc magnus mailspring onlyoffice-desktopeditors popeye procs pycharm-community \
     rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak; do
     snap install --classic ${snap}
   done
@@ -321,6 +321,15 @@ Bat() {
   cd /tmp || exit 1
   wget https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
   sudo dpkg -i bat_0.10.0_amd64.deb
+}
+
+BootRepair() {
+  # BootRepair
+  # https://wiki.debian.org/Boot-Repair
+  sudo apt install -y wget
+  wget -O- https://sourceforge.net/projects/boot-repair/files/key.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/boot-repair.gpg
+  echo 'deb [signed-by=/etc/apt/keyrings/boot-repair.gpg] https://ppa.launchpadcontent.net/yannubuntu/boot-repair/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/boot-repair.list
+  sudo apt update && sudo apt install -y boot-repair
 }
 
 Delta() {
@@ -615,7 +624,7 @@ FlatPackages() {
   FlatPack
   for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect; do
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever; do
     flatpak install flathub "${pkg}"
   done
 }
@@ -970,12 +979,10 @@ mkcert() {
   sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
 }
 
-MultiBootUSB() {
-  # MultiBootUSB
-  cd /tmp || exit
-  sudo apt install python3-pyudev
-  wget -O python3-multibootusb_9.2.0-1_all.deb https://github.com/mbusb/multibootusb/releases/download/v9.2.0/python3-multibootusb_9.2.0-1_all.deb
-  sudo dpkg -i python3-multibootusb_9.2.0-1_all.deb && rm python3-multibootusb_9.2.0-1_all.deb
+MultiOSUSB() {
+  # MultiOSUSB : multisystem alternative
+  cd /tmp/ && wget -O MultiBootUSB.tar.gz https://github.com/Mexit/MultiOS-USB/releases/download/v0.9.9/MultiOS-USB_linux_v0.9.9.tar.gz
+  cd ~/bin && tar xvfz /tmp/MultiBootUSB.tar.gz
 }
 
 Multisystem() {
@@ -989,7 +996,7 @@ Multisystem() {
 
 Music() {
   # Music Software
-  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 yoshimi zytrax
+  sudo apt install -y audacity easyeffects giada guitarix hydrogen kluppe mixxx muse qwinff rosegarden seq24 soundconverter tk707 tuxguitar yoshimi zytrax
 }
 
 NeoVim() {
@@ -1012,6 +1019,13 @@ nicotine() {
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6CEB6050A30E5769
   sudo apt update
   sudo apt install -y nicotine
+}
+
+nix() {
+  # Nix https://nix.dev/manual/nix/2.32/installation/multi-user.html?highlight=%22nix-users%22#restricting-access
+  sudo chgrp nix-users /nix/var/nix/daemon-socket
+  sudo chmod ug=rwx,o= /nix/var/nix/daemon-socket
+  sudo usermod -aG nix-users daffy
 }
 
 npmfx() {
@@ -1097,13 +1111,13 @@ ProtonBridge() {
 
 ProtonVPN() {
   # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
-  version=1.0.3-3
+  version=1.0.8
   cd /tmp || exit
   wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
-  echo "c68a0b8dad58ab75080eed7cb989e5634fc88fca051703139c025352a6ee19ad protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
+  echo "0b14e71586b22e498eb20926c48c7b434b751149b1f2af9902ef1cfe6b03e180 protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
   sudo apt-get update
   sudo dpkg -i protonvpn-stable-release_${version}_all.deb
-  sudo apt install -y protonvpn
+  sudo apt install -y proton-vpn-gnome-desktop
   sudo apt install -y libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 }
 
@@ -1303,7 +1317,12 @@ Terminal() {
 
 TLDR() {
   # TLDR
-  go get 4d63.com/tldr
+  # go get 4d63.com/tldr
+  sudo apt -y install tldr-py
+  git clone git@github.com:tldr-pages/tldr.git ~/.tldr
+  tldr init
+  tldr reindex
+  tldr update
 }
 
 Trello() {
@@ -1328,12 +1347,6 @@ urbackup() {
   # urbackup
   TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF
   rm $TF
-}
-
-Ventoy() {
-  # Ventoy : multisystem alternative
-  cd /tmp/ && wget https://github.com/ventoy/Ventoy/releases/download/v1.0.61/ventoy-1.0.61-linux.tar.gz
-  cd ~/bin && tar xvfz /tmp/ventoy-1.0.61-linux.tar.gz
 }
 
 VIM() {
@@ -1562,18 +1575,19 @@ Annexes() {
 }
 
 Main() {
-  #  Setup
+  Setup
   #  WIFI
   #  PPA
   Packages
-  #  Python
-  #  GO
+  Python
+  GO
   #  Albert
   #  Android
   #  Ansible
   #  Argbash
   #  Atom
   #  Bat
+  BootRepair
   #  bcctools
   #  bluegriffon
   #  Brew
@@ -1590,7 +1604,7 @@ Main() {
   #  Crowdsec
   #  Ctop
   Delta
-  #  Docker
+  Docker
   #  Douane
   Dropbox
   #  DroidCAM
@@ -1601,8 +1615,8 @@ Main() {
   Fuzzy
   #  GCStar
   #  Github
-  GnomeConfigurations
   GnomeExtensions
+  GnomeConfigurations
   #  GrafTCP
   #  GRAPH
   #  Infrakit
@@ -1617,10 +1631,11 @@ Main() {
   #  lynishardening
   Minishift
   mkcert
-  #  MultiBootUSB
+  MultiOSUSB
   #  Multisystem
   Music
   nicotine
+  nix
   #  npmfx
   OfflineImap
   #  OneDrive
@@ -1651,7 +1666,6 @@ Main() {
   #  Trello
   ttfmscorefontsinstaller
   urbackup
-  Ventoy
   VIM
   VirtualBox
   Vivaldi
