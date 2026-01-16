@@ -7,7 +7,13 @@
 
 # Variables
 SHELL := /bin/bash
-CONFIG_ALIAS := git --git-dir=$(HOME)/dotfiles --work-tree=$(HOME)
+# Détection automatique : si on est dans un dépôt git normal, utiliser git directement
+# sinon utiliser l'alias du bare repository
+ifneq ($(wildcard .git),)
+	CONFIG_ALIAS := git
+else
+	CONFIG_ALIAS := git --git-dir=$(HOME)/dotfiles --work-tree=$(HOME)
+endif
 SETUP_SCRIPT := ./setup.sh
 
 # Couleurs pour les messages
