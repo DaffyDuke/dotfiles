@@ -1,12 +1,26 @@
 {
   "dependencies": {
     "d3-force": "^3.0.0",
-    "gitbook-cli": "^2.3.2",
     "stream-json": "^1.9.1",
     "tweet-to-toot": "^0.7.3"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.0.1",
+    "esbuild": "^0.27.2",
+    "vite": "^7.3.1",
+    "vitepress": "^1.6.4"
+  },
+  "overrides": {
+    "vitepress": {
+      "esbuild": "^0.27.2",
+      "vite": "^7.3.1"
+    },
+    "tmp": "^0.2.4"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "config": {
     "commitizen": {
