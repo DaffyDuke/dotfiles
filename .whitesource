@@ -3,6 +3,20 @@
     "shouldScanRepo": true
   },
   "checkRunSettings": {
-    "vulnerableCheckRunConclusionLevel": "success"
+    "vulnerableCheckRunConclusionLevel": "failure",
+    "displayMode": "diff"
+  },
+  "remediateSettings": {
+    "workflowRules": {
+      "enabled": true
+    },
+    "enableRenovate": true,
+    "extends": [
+      "config:base"
+    ]
+  },
+  "issueSettings": {
+    "minSeverityLevel": "LOW",
+    "issueType": "DEPENDENCY"
   }
 }
