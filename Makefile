@@ -132,26 +132,27 @@ merge-branches: ## 🔀 Merge les branches: debian → develop, macos → develo
 		echo "$(GREEN)✓ Branches poussées$(NC)" || \
 		echo "$(RED)✗ Échec du push$(NC)"
 	@echo ""
-	@echo "$(YELLOW)Étape 4/4:$(NC) Création d'une Pull Request develop → main..."
+	@echo "$(YELLOW)Étape 4/4:$(NC) Création d'une Pull Request develop → main avec auto-merge..."
 	@if command -v gh &> /dev/null; then \
 		$(CONFIG_ALIAS) checkout develop && \
 		gh pr create --base main --head develop --title "chore: merge develop into main" \
-			--body "Merge automatique de develop vers main via Makefile" --fill 2>/dev/null || \
+			--body "Merge automatique de develop vers main via Makefile" --fill 2>/dev/null && \
+		gh pr merge --auto --squash 2>/dev/null && \
+		echo "$(GREEN)✓ Pull Request créée avec auto-merge activé$(NC)" || \
 		(echo "$(YELLOW)⚠ PR déjà existante ou erreur, vérifiez manuellement$(NC)"; \
 		 echo "$(BLUE)URL:$(NC) https://github.com/DaffyDuke/dotfiles/compare/main...develop"); \
-		echo "$(GREEN)✓ Pull Request créée ou déjà existante$(NC)"; \
 	else \
 		echo "$(YELLOW)⚠ GitHub CLI (gh) non installé$(NC)"; \
 		echo "$(BLUE)Créez manuellement la PR:$(NC) https://github.com/DaffyDuke/dotfiles/compare/main...develop"; \
 	fi
 	@echo ""
 	@echo "$(GREEN)════════════════════════════════════════════════════════════$(NC)"
-	@echo "$(GREEN)✓ Merges terminés ! PR créée pour main$(NC)"
+	@echo "$(GREEN)✓ Merges terminés ! PR créée avec auto-merge$(NC)"
 	@echo "$(GREEN)════════════════════════════════════════════════════════════$(NC)"
 	@echo ""
 	@echo "$(BLUE)Prochaines étapes:$(NC)"
-	@echo "  1. Approuvez et mergez la PR sur GitHub"
-	@echo "  2. Puis exécutez: $(YELLOW)git checkout main && git pull$(NC)""
+	@echo "  1. La PR sera automatiquement mergée une fois les checks passés"
+	@echo "  2. Puis exécutez: $(YELLOW)git checkout main && git pull$(NC)"
 
 merge: merge-branches ## Alias pour merge-branches
 
