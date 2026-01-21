@@ -15,7 +15,8 @@
       "esbuild": "^0.27.2",
       "vite": "^7.3.1"
     },
-    "tmp": "^0.2.4"
+    "tmp": "^0.2.4",
+    "tar": "^7.5.4"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
