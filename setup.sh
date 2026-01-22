@@ -1,3 +1,63 @@
+# Installation d'applications AppImage
+install_appimages() {
+    DESKTOP_DIR="$HOME/.local/share/applications"
+    mkdir -p "$DESKTOP_DIR"
+  APPIMAGE_DIR="$HOME/AppImages"
+  mkdir -p "$APPIMAGE_DIR"
+
+  # Table associative : nom du fichier => URL d'origine
+  declare -A APPIMAGES_URLS=(
+    ["cables.appimage"]="https://github.com/cables-gl/cables/releases/latest/download/cables.appimage"
+    ["chataigne.appimage"]="https://github.com/benkuper/Chataigne/releases/latest/download/Chataigne-x86_64.AppImage"
+    ["cozy_drive.appimage"]="https://github.com/cozy/cozy-drive/releases/latest/download/Cozy-Drive-x86_64.AppImage"
+    ["flightgear.appimage"]="https://github.com/FlightGear/flightgear/releases/latest/download/FlightGear-x86_64.AppImage"
+    ["heron_animation_beta.appimage"]="https://github.com/heronanimation/heron-animation-beta/releases/latest/download/HeronAnimation-x86_64.AppImage"
+    ["lmms.appimage"]="https://github.com/LMMS/lmms/releases/latest/download/lmms-x86_64.AppImage"
+    ["mednum_offline_player.appimage"]="https://github.com/mednum-offline-player/mednum-offline-player/releases/latest/download/mednum-offline-player-x86_64.AppImage"
+    ["pia.appimage"]="https://github.com/pia-foss/pia-app/releases/latest/download/pia-x86_64.AppImage"
+    ["plingstore.appimage"]="https://github.com/blingstore/PlingStore/releases/latest/download/PlingStore-x86_64.AppImage"
+    ["prusaslicer.appimage"]="https://github.com/prusa3d/PrusaSlicer/releases/latest/download/PrusaSlicer-x86_64.AppImage"
+    ["siril.appimage"]="https://github.com/Free-astro/siril/releases/latest/download/siril-x86_64.AppImage"
+    ["synfig_studio.appimage"]="https://github.com/synfig/synfig/releases/latest/download/SynfigStudio-x86_64.AppImage"
+    ["webcamoid.appimage"]="https://github.com/webcamoid/webcamoid/releases/latest/download/Webcamoid-x86_64.AppImage"
+    ["freelens.appimage"]="https://github.com/freelens/freelens/releases/latest/download/freelens-x86_64.AppImage"
+  )
+
+  for filename in "${!APPIMAGES_URLS[@]}"; do
+    dest="$APPIMAGE_DIR/$filename"
+    url="${APPIMAGES_URLS[$filename]}"
+    if [ ! -f "$dest" ]; then
+      echo "Téléchargement de $filename depuis $url ..."
+      curl -L "$url" -o "$dest"
+    fi
+    if [ -f "$dest" ]; then
+      chmod +x "$dest"
+      echo "AppImage prêt : $dest"
+
+      # Création du raccourci .desktop
+      appname="${filename%.appimage}"
+      desktopfile="$DESKTOP_DIR/${appname}.desktop"
+      cat > "$desktopfile" <<EOF
+[Desktop Entry]
+Type=Application
+Name=${appname^}
+Exec="$dest"
+Icon=$APPIMAGE_DIR/${appname}.png
+Comment=AppImage $appname
+Terminal=false
+Categories=Utility;
+EOF
+      # Optionnel : extraire l'icône si possible
+      if command -v bsdtar >/dev/null 2>&1; then
+        bsdtar -xf "$dest" '*.png' -O 2>/dev/null | head -c 1000000 > "$APPIMAGE_DIR/${appname}.png" || true
+      fi
+      update-desktop-database "$DESKTOP_DIR" 2>/dev/null || true
+    else
+      echo "Erreur de téléchargement : $filename"
+    fi
+  done
+  echo "AppImages traités dans $APPIMAGE_DIR"
+}
 #!/bin/bash
 
 Setup() {
@@ -1581,6 +1641,7 @@ Main() {
   Packages
   Python
   GO
+  install_appimages
   #  Albert
   #  Android
   #  Ansible
@@ -1681,7 +1742,12 @@ Main() {
   #  zquests
 }
 
-if [ -n $1 ]; then
+
+# Appel automatique ou manuel de la fonction d'installation AppImage
+# Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
+# install_appimages
+
+if [ -n "$1" ]; then
   $1
 else
   Main
