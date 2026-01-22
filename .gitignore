@@ -32,6 +32,7 @@
 .CFUserTextEncoding
 .chatgpt_history
 .clamtk/
+.claude/
 .cmake/
 .codestream
 .colima/
