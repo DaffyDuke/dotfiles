@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "d3-force": "^3.0.0",
+    "diagnostic-languageserver": "^1.15.0",
     "stream-json": "^1.9.1",
     "tweet-to-toot": "^0.7.3"
   },
