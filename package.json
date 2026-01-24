@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.19",
     "d3-force": "^3.0.0",
     "diagnostic-languageserver": "^1.15.0",
     "stream-json": "^1.9.1",

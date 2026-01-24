@@ -67,7 +67,7 @@ plugins=(aws brew bundler debian direnv docker git gitignore golang keychain kit
 
 # User configuration
 
-export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
+export PATH=$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.npm-global/bin:/usr/local/bin:/usr/share/bcc/tools/:$PATH
 export RUST_USER_BIN=$HOME/.cargo/bin
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -187,6 +187,8 @@ if [ -n "$IS_DEBIAN" ]; then
   # GnuPG configuration
   ln -sf ~/.gnupg/gpg-agent.conf-debian ~/.gnupg/gpg-agent.conf
 
+  # claude, mammouth and goose are in same boat
+  eval "$(goose term init zsh)"
 elif [ -n "$IS_MACOS" ]; then
   # -------------------- macOS CONFIGURATION --------------------
   
