@@ -32,7 +32,7 @@
 .CFUserTextEncoding
 .chatgpt_history
 .clamtk/
-.claude/
+.claude*
 .cmake/
 .codestream
 .colima/
@@ -175,6 +175,7 @@
 .sane/
 .scribus/
 .selected_editor
+.shiv/
 .shutter/
 .slack/
 .snap/

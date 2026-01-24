@@ -188,6 +188,7 @@ if [ -n "$IS_DEBIAN" ]; then
   ln -sf ~/.gnupg/gpg-agent.conf-debian ~/.gnupg/gpg-agent.conf
 
   # claude, mammouth and goose are in same boat
+  eval "$(wake init zsh)"
   eval "$(goose term init zsh)"
 elif [ -n "$IS_MACOS" ]; then
   # -------------------- macOS CONFIGURATION --------------------
