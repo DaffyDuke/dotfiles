@@ -131,8 +131,8 @@ Packages() {
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam direnv dnsperf dnstracer dos2unix duf \
     easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
-    fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
-    gajim geary geogebra-gnome gimp git-extras gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla fonts-powerline fortunes fonts-radisnoir fpart ftp \
+    gajim geary geogebra-gnome gimp git-extras gnome-screenshot gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
     josm josm-l10n jq jxplorer \
@@ -184,7 +184,7 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
+  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim pypandoc search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
     pip install "${pkg}" --upgrade --break-system-packages
   done
   # uv An extremely fast Python package and project manager, written in Rust.
@@ -820,6 +820,9 @@ EOF'
   #  Newelle - Your Ultimate Virtual Assistant
   /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
   gsettings set org.gnome.mutter center-new-windows true
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding 'Print'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/bin/gnome-screenshot --interactive'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name "Capture d'Ecran"
 }
 
 GrafTCP() {
