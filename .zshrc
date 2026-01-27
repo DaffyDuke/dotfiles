@@ -173,7 +173,9 @@ if [ -n "$IS_DEBIAN" ]; then
   howto() { h="$@"; eval $(acli --script howCmd "$h") ; }
   
   # ARA vars for ansible
-  export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+  if python3 -c "import ara.setup.callback_plugins" 2>/dev/null; then
+    export ANSIBLE_CALLBACK_PLUGINS="$(python3 -m ara.setup.callback_plugins)"
+  fi
   
   # fx.wtf
   source <(fx --comp zsh)
