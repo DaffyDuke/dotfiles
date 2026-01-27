@@ -30,7 +30,7 @@ path=/home/daffy/Mail
 #
 [user]
 name=Olivier Duquesne aka DaffyDuke
-primary_email=daffy@colerpia.(none)
+primary_email=daffyduke@lautre.net
 other_email=daffyduke@coincoin.fr.eu.org;daffyduke@lautre.net;olivier.duquesne@laposte.net;o.duquesne@techsys.fr;olivier.duquesne@coincoin.fr.eu.org;contact@lautre.net;root@lautre.net;president@clx.asso.fr;daffyduke@gmail.com;
 
 # Configuration for "notmuch new"
