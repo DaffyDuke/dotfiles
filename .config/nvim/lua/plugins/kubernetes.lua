@@ -6,4 +6,10 @@ return {
     end,
     ft = { "yaml", "json" },
   },
+  {
+    "ramilito/kubectl.nvim",
+    config = function()
+      require("kubectl").setup()
+    end,
+  },
 }

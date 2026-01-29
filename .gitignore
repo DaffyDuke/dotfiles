@@ -32,7 +32,7 @@
 .CFUserTextEncoding
 .chatgpt_history
 .clamtk/
-.claude/
+.claude*
 .cmake/
 .codestream
 .colima/
@@ -141,6 +141,7 @@
 .offlineimap.pyc
 .offlineimap/
 .oh-my-zsh/
+.ollama/
 .openshot_qt/
 .passw*
 .pEp*
@@ -169,12 +170,14 @@
 .remotelauncherserver
 .repo_.gitconfig.json
 .repoconfig/
+.rovodev/
 .rnd
 .rpmdb/
 .rustup/
 .sane/
 .scribus/
 .selected_editor
+.shiv/
 .shutter/
 .slack/
 .snap/
@@ -233,6 +236,7 @@
 .xsel.log
 .xsession-errors
 .xsession-errors.old
+.winboat/
 .yoshimi_history
 .z
 .z.*
@@ -274,6 +278,7 @@ nohup.out
 Notes/
 OneDrive*
 OS.js-v2/
+stack.json
 T*chargements/
 Vid*
 VirtualBox*
@@ -293,9 +298,10 @@ PlayOnLinux's virtual drives
 Public/
 PycharmProjects/
 snap/
+ssh_logs/
 Steam/
 Templates/
-workspace/
+winboat/
 Windows.md~
 # Wine
 dosdevices/
@@ -303,5 +309,4 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
-stack.json
-ssh_logs/
+workspace/

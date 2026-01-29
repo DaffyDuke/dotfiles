@@ -1,63 +1,3 @@
-# Installation d'applications AppImage
-install_appimages() {
-    DESKTOP_DIR="$HOME/.local/share/applications"
-    mkdir -p "$DESKTOP_DIR"
-  APPIMAGE_DIR="$HOME/AppImages"
-  mkdir -p "$APPIMAGE_DIR"
-
-  # Table associative : nom du fichier => URL d'origine
-  declare -A APPIMAGES_URLS=(
-    ["cables.appimage"]="https://github.com/cables-gl/cables/releases/latest/download/cables.appimage"
-    ["chataigne.appimage"]="https://github.com/benkuper/Chataigne/releases/latest/download/Chataigne-x86_64.AppImage"
-    ["cozy_drive.appimage"]="https://github.com/cozy/cozy-drive/releases/latest/download/Cozy-Drive-x86_64.AppImage"
-    ["flightgear.appimage"]="https://github.com/FlightGear/flightgear/releases/latest/download/FlightGear-x86_64.AppImage"
-    ["heron_animation_beta.appimage"]="https://github.com/heronanimation/heron-animation-beta/releases/latest/download/HeronAnimation-x86_64.AppImage"
-    ["lmms.appimage"]="https://github.com/LMMS/lmms/releases/latest/download/lmms-x86_64.AppImage"
-    ["mednum_offline_player.appimage"]="https://github.com/mednum-offline-player/mednum-offline-player/releases/latest/download/mednum-offline-player-x86_64.AppImage"
-    ["pia.appimage"]="https://github.com/pia-foss/pia-app/releases/latest/download/pia-x86_64.AppImage"
-    ["plingstore.appimage"]="https://github.com/blingstore/PlingStore/releases/latest/download/PlingStore-x86_64.AppImage"
-    ["prusaslicer.appimage"]="https://github.com/prusa3d/PrusaSlicer/releases/latest/download/PrusaSlicer-x86_64.AppImage"
-    ["siril.appimage"]="https://github.com/Free-astro/siril/releases/latest/download/siril-x86_64.AppImage"
-    ["synfig_studio.appimage"]="https://github.com/synfig/synfig/releases/latest/download/SynfigStudio-x86_64.AppImage"
-    ["webcamoid.appimage"]="https://github.com/webcamoid/webcamoid/releases/latest/download/Webcamoid-x86_64.AppImage"
-    ["freelens.appimage"]="https://github.com/freelens/freelens/releases/latest/download/freelens-x86_64.AppImage"
-  )
-
-  for filename in "${!APPIMAGES_URLS[@]}"; do
-    dest="$APPIMAGE_DIR/$filename"
-    url="${APPIMAGES_URLS[$filename]}"
-    if [ ! -f "$dest" ]; then
-      echo "Téléchargement de $filename depuis $url ..."
-      curl -L "$url" -o "$dest"
-    fi
-    if [ -f "$dest" ]; then
-      chmod +x "$dest"
-      echo "AppImage prêt : $dest"
-
-      # Création du raccourci .desktop
-      appname="${filename%.appimage}"
-      desktopfile="$DESKTOP_DIR/${appname}.desktop"
-      cat > "$desktopfile" <<EOF
-[Desktop Entry]
-Type=Application
-Name=${appname^}
-Exec="$dest"
-Icon=$APPIMAGE_DIR/${appname}.png
-Comment=AppImage $appname
-Terminal=false
-Categories=Utility;
-EOF
-      # Optionnel : extraire l'icône si possible
-      if command -v bsdtar >/dev/null 2>&1; then
-        bsdtar -xf "$dest" '*.png' -O 2>/dev/null | head -c 1000000 > "$APPIMAGE_DIR/${appname}.png" || true
-      fi
-      update-desktop-database "$DESKTOP_DIR" 2>/dev/null || true
-    else
-      echo "Erreur de téléchargement : $filename"
-    fi
-  done
-  echo "AppImages traités dans $APPIMAGE_DIR"
-}
 #!/bin/bash
 
 Setup() {
@@ -191,10 +131,10 @@ Packages() {
     ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam direnv dnsperf dnstracer dos2unix duf \
     easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
-    fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla flameshot fonts-powerline fortunes fonts-radisnoir fpart ftp \
-    gajim geary geogebra-gnome gimp git-extras gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
+    fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla fonts-powerline fortunes fonts-radisnoir fpart ftp \
+    gajim geary geogebra-gnome gimp git-extras gnome-screenshot gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
-    i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate \
+    i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate isync \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
     lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
@@ -244,7 +184,7 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
+  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim pypandoc search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
     pip install "${pkg}" --upgrade --break-system-packages
   done
   # uv An extremely fast Python package and project manager, written in Rust.
@@ -296,6 +236,67 @@ Crontab() {
 16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
 EOF
   crontab crontab && rm crontab
+}
+
+# Installation d'applications AppImage
+install_appimages() {
+  DESKTOP_DIR="$HOME/.local/share/applications"
+  mkdir -p "$DESKTOP_DIR"
+  APPIMAGE_DIR="$HOME/AppImages"
+  mkdir -p "$APPIMAGE_DIR"
+
+  # Table associative : nom du fichier => URL d'origine
+  declare -a APPIMAGES_URLS=(
+    ["cables.appimage"]="https://github.com/cables-gl/cables/releases/latest/download/cables.appimage"
+    ["chataigne.appimage"]="https://github.com/benkuper/Chataigne/releases/latest/download/Chataigne-x86_64.AppImage"
+    ["cozy_drive.appimage"]="https://github.com/cozy/cozy-drive/releases/latest/download/Cozy-Drive-x86_64.AppImage"
+    ["flightgear.appimage"]="https://github.com/FlightGear/flightgear/releases/latest/download/FlightGear-x86_64.AppImage"
+    ["heron_animation_beta.appimage"]="https://github.com/heronanimation/heron-animation-beta/releases/latest/download/HeronAnimation-x86_64.AppImage"
+    ["lmms.appimage"]="https://github.com/LMMS/lmms/releases/latest/download/lmms-x86_64.AppImage"
+    ["mednum_offline_player.appimage"]="https://github.com/mednum-offline-player/mednum-offline-player/releases/latest/download/mednum-offline-player-x86_64.AppImage"
+    ["pia.appimage"]="https://github.com/pia-foss/pia-app/releases/latest/download/pia-x86_64.AppImage"
+    ["plingstore.appimage"]="https://github.com/blingstore/PlingStore/releases/latest/download/PlingStore-x86_64.AppImage"
+    ["prusaslicer.appimage"]="https://github.com/prusa3d/PrusaSlicer/releases/latest/download/PrusaSlicer-x86_64.AppImage"
+    ["siril.appimage"]="https://github.com/Free-astro/siril/releases/latest/download/siril-x86_64.AppImage"
+    ["synfig_studio.appimage"]="https://github.com/synfig/synfig/releases/latest/download/SynfigStudio-x86_64.AppImage"
+    ["webcamoid.appimage"]="https://github.com/webcamoid/webcamoid/releases/latest/download/Webcamoid-x86_64.AppImage"
+    ["freelens.appimage"]="https://github.com/freelens/freelens/releases/latest/download/freelens-x86_64.AppImage"
+  )
+
+  for filename in "${!APPIMAGES_URLS[@]}"; do
+    dest="$APPIMAGE_DIR/$filename"
+    url="${APPIMAGES_URLS[$filename]}"
+    if [ ! -f "$dest" ]; then
+      echo "Téléchargement de $filename depuis $url ..."
+      curl -L "$url" -o "$dest"
+    fi
+    if [ -f "$dest" ]; then
+      chmod +x "$dest"
+      echo "AppImage prêt : $dest"
+
+      # Création du raccourci .desktop
+      appname="${filename%.appimage}"
+      desktopfile="$DESKTOP_DIR/${appname}.desktop"
+      cat >"$desktopfile" <<EOF
+[Desktop Entry]
+Type=Application
+Name=${appname^}
+Exec="$dest"
+Icon=$APPIMAGE_DIR/${appname}.png
+Comment=AppImage $appname
+Terminal=false
+Categories=Utility;
+EOF
+      # Optionnel : extraire l'icône si possible
+      if command -v bsdtar >/dev/null 2>&1; then
+        bsdtar -xf "$dest" '*.png' -O 2>/dev/null | head -c 1000000 >"$APPIMAGE_DIR/${appname}.png" || true
+      fi
+      update-desktop-database "$DESKTOP_DIR" 2>/dev/null || true
+    else
+      echo "Erreur de téléchargement : $filename"
+    fi
+  done
+  echo "AppImages traités dans $APPIMAGE_DIR"
 }
 
 Albert() {
@@ -474,6 +475,13 @@ Chrome() {
 chromeIPass() {
   # chromeIPass : https://github.com/pfn/passifox/
   sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
+}
+
+claude() {
+  # claude : https://github.com/joemckenney/wake
+  # brew install --cask claude-code
+  curl -sSf https://raw.githubusercontent.com/joemckenney/wake/main/install.sh | sh
+  # claude mcp add --transport stdio --scope user wake-mcp -- wake-mcp
 }
 
 CLOUD() {
@@ -812,6 +820,9 @@ EOF'
   #  Newelle - Your Ultimate Virtual Assistant
   /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
   gsettings set org.gnome.mutter center-new-windows true
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding 'Print'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/bin/gnome-screenshot --interactive'
+  gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 name "Capture d'Ecran"
 }
 
 GrafTCP() {
@@ -1658,6 +1669,7 @@ Main() {
   #  Children
   #  Chrome
   #  chromeIPass
+  #  claude
   #  CLOUD
   #  coolretroterm
   #  CozyDrive
@@ -1741,7 +1753,6 @@ Main() {
   ZSH
   #  zquests
 }
-
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
 # Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
