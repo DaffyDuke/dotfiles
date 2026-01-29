@@ -13,12 +13,6 @@ return {
     end,
   },
   {
-    "ravitemer/mcphub",
-    config = function()
-      require("mcphub").setup()
-    end,
-  },
-  {
     "someone-stole-my-name/yaml-companion.nvim",
     dependencies = {
       { "neovim/nvim-lspconfig" },
