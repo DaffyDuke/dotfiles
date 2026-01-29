@@ -96,11 +96,11 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # # ssh
-if [ -z $SSH_AUTH_SOCK ]; then
+if ! ssh-add -l 2>/dev/null | grep -q -v 'no identities'; then
   # export SSH_KEY_PATH="~/.ssh/dsa_id"
-  eval `keychain --eval --agents ssh id_rsa`
+  eval "$(keychain id_rsa --eval)"
   if [ -f ~/.ssh/id_ecdsa ]; then
-   eval `keychain --eval --agents ssh ~/.ssh/id_ecdsa`
+    eval "$(keychain id_ecdsa --eval)"
   fi
 fi
 # 
