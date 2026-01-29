@@ -141,6 +141,7 @@
 .offlineimap.pyc
 .offlineimap/
 .oh-my-zsh/
+.ollama/
 .openshot_qt/
 .passw*
 .pEp*
@@ -169,6 +170,7 @@
 .remotelauncherserver
 .repo_.gitconfig.json
 .repoconfig/
+.rovodev/
 .rnd
 .rpmdb/
 .rustup/
