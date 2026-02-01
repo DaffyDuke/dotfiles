@@ -95,8 +95,8 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# # ssh
-if ! ssh-add -l 2>/dev/null | grep -q -v 'no identities'; then
+# ssh
+if [ -z $SSH_AUTH_SOCK ]; then
   # export SSH_KEY_PATH="~/.ssh/dsa_id"
   eval "$(keychain id_rsa --eval)"
   if [ -f ~/.ssh/id_ecdsa ]; then
