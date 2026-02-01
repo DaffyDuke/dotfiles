@@ -205,6 +205,7 @@
 .todo.cfg
 .tomatoes/
 .tor-browser-en/
+.Trash
 .trello-cli/
 .tuxmath/
 .tuxtype/
@@ -310,3 +311,4 @@ system.reg
 user.reg
 userdef.reg
 workspace/
+Zotero/
