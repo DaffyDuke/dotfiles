@@ -116,6 +116,7 @@
 .lyx/
 .m2/
 .macromedia/
+.mcp-auth/
 .minetest/
 .minikube/
 .minishift/
