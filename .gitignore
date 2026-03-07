@@ -33,6 +33,7 @@
 .chatgpt_history
 .clamtk/
 .claude*
+.cline/
 .cmake/
 .codestream
 .colima/
@@ -241,6 +242,7 @@
 .yoshimi_history
 .z
 .z.*
+.zen/
 .zsh_sessions/
 .zoom
 .zcompdump*

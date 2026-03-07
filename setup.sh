@@ -166,7 +166,7 @@ Packages() {
 SNAP() {
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
-    keepassxc magnus mailspring onlyoffice-desktopeditors popeye procs pycharm-community \
+    keepassxc magnus mailspring onlyoffice-desktopeditors popeye procs pycharm-community qobuz-linux \
     rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak; do
     snap install --classic ${snap}
   done
@@ -261,6 +261,7 @@ install_appimages() {
     ["synfig_studio.appimage"]="https://github.com/synfig/synfig/releases/latest/download/SynfigStudio-x86_64.AppImage"
     ["webcamoid.appimage"]="https://github.com/webcamoid/webcamoid/releases/latest/download/Webcamoid-x86_64.AppImage"
     ["freelens.appimage"]="https://github.com/freelens/freelens/releases/latest/download/freelens-x86_64.AppImage"
+    ["worldmonitor.appimage"]="https://www.worldmonitor.app/api/download?platform=linux-appimage"
   )
 
   for filename in "${!APPIMAGES_URLS[@]}"; do
@@ -692,7 +693,8 @@ FlatPackages() {
   FlatPack
   for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever; do
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever \
+    app.zen_browser.zen com.brave.Browser io.github.tobagin.karere net.lutris.Lutris; do
     flatpak install flathub "${pkg}"
   done
 }
@@ -1063,6 +1065,19 @@ Multisystem() {
   sudo apt-get update
   sudo apt-get install -y multisystem
   sudo usermod -a -G adm ${USER}
+}
+
+Mullvad() {
+  # Mullvad VPN anonymous as possible
+  # Télécharger la clé de signature Mullvad
+  sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+
+  # Ajouter le serveur de dépôt Mullvad à apt
+  echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$(dpkg --print-architecture)] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+
+  # Installer le pack
+  sudo apt update
+  sudo apt install -y mullvad-vpn
 }
 
 Music() {
@@ -1706,6 +1721,7 @@ Main() {
   mkcert
   MultiOSUSB
   #  Multisystem
+  Mullvad
   Music
   nicotine
   nix
