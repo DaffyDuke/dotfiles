@@ -33,6 +33,7 @@
 .chatgpt_history
 .clamtk/
 .claude*
+.cline/
 .cmake/
 .codestream
 .colima/
@@ -76,6 +77,7 @@
 .gimp-2.8/
 .gitconfig
 .gk/
+.ghcp-appmod/
 .gradle/
 .grip/
 .gksu.lock
@@ -144,6 +146,7 @@
 .oh-my-zsh/
 .ollama/
 .openshot_qt/
+.opensre/
 .passw*
 .pEp*
 .phoronix-test-suite/
@@ -206,6 +209,7 @@
 .todo.cfg
 .tomatoes/
 .tor-browser-en/
+.tracer/
 .Trash
 .trello-cli/
 .tuxmath/
