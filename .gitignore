@@ -1,5 +1,4 @@
 .AMD/
-.antigravity-ide/
 .ICEauthority
 .PlayOnLinux/
 .Popcorn-Time/
@@ -9,6 +8,7 @@
 .Xauthority
 .android/
 .ansible*
+.antigravity-ide/
 .apport-ignore.xml
 .aptitude/
 .ara/
@@ -22,6 +22,7 @@
 .azure/
 .bash_history
 .bash_logout
+.bmad/
 .bogofilter/
 .byobu/
 .ca-certificates/
@@ -41,6 +42,7 @@
 .composer/
 .compiz/
 .config/
+.continue/
 .cookiecutter*
 .copilot/
 .cozy-desktop/
@@ -91,6 +93,7 @@
 .gtkboard/
 .guake-indicator/
 .history
+.homebrew/
 .hplip/
 .hugin
 .httpie/
@@ -126,6 +129,7 @@
 .mono/
 .moby/
 .mozilla/
+.mp3splt-gtk/
 .mplayer/
 .multirust
 .multisystem-theme
@@ -200,8 +204,9 @@
 .terraform.d/
 .terraform/
 .thumbnails/
-.tig_history
 .thunderbird/
+.tig_history
+.tin/
 .tldrc/
 .tldr*
 .tmux
@@ -273,6 +278,7 @@ LICENSE
 Lightworks/
 LOG_imapsync/
 Mail*
+MiMo-Pro/
 Mod*
 Movies/
 Music/
