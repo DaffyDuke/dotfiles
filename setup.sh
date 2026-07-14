@@ -1578,6 +1578,72 @@ VSCodium() {
   done
 }
 
+AntigravityIDE() {
+  # Antigravity IDE shortcut creation
+  local desktop_dir="$HOME/.local/share/applications"
+  local icons_dir="$HOME/.local/share/icons"
+  local ide_dir="/opt/Antigravity IDE"
+  local ide_bin="$ide_dir/antigravity-ide"
+  local source_icon="$ide_dir/resources/app/out/vs/platform/browserOnboarding/static/antigravity.svg"
+
+  if [ -d "$ide_dir" ]; then
+    echo "Configuring desktop shortcuts for Antigravity IDE..."
+    mkdir -p "$desktop_dir"
+    mkdir -p "$icons_dir"
+
+    # Copy icon if available
+    if [ -f "$source_icon" ]; then
+      cp "$source_icon" "$icons_dir/antigravity-ide.svg"
+      icon_path="antigravity-ide"
+    else
+      icon_path="$ide_dir/resources/app/resources/linux/code.png"
+    fi
+
+    # Create .desktop content
+    local desktop_content="[Desktop Entry]
+Name=Antigravity IDE
+Comment=AI-powered IDE by Google DeepMind
+GenericName=Text Editor
+Exec=\"$ide_bin\" %F
+Icon=$icon_path
+Type=Application
+StartupNotify=true
+StartupWMClass=antigravity-ide
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;
+Actions=new-empty-window;
+Keywords=antigravity;ide;gemini;ai;
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Name[fr]=Nouvelle fenêtre vide
+Exec=\"$ide_bin\" --new-window %F
+Icon=$icon_path"
+
+    # Write to local applications menu
+    echo "$desktop_content" > "$desktop_dir/antigravity-ide.desktop"
+    chmod +x "$desktop_dir/antigravity-ide.desktop"
+
+    # Write to Bureau (Desktop) if exists
+    if [ -d "$HOME/Bureau" ]; then
+      echo "$desktop_content" > "$HOME/Bureau/antigravity-ide.desktop"
+      chmod +x "$HOME/Bureau/antigravity-ide.desktop"
+    fi
+
+    # Write to Desktop if exists (just in case)
+    if [ -d "$HOME/Desktop" ]; then
+      echo "$desktop_content" > "$HOME/Desktop/antigravity-ide.desktop"
+      chmod +x "$HOME/Desktop/antigravity-ide.desktop"
+    fi
+
+    # Update desktop database
+    update-desktop-database "$desktop_dir" 2>/dev/null || true
+    echo "Antigravity IDE desktop shortcuts successfully created/updated."
+  else
+    echo "Antigravity IDE is not installed in $ide_dir. Skipping shortcut creation."
+  fi
+}
+
 WakeMeOps() {
   # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
   curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
@@ -1759,6 +1825,7 @@ Main() {
   VirtualBox
   Vivaldi
   VSCodium
+  AntigravityIDE
   WakeMeOps
   WSS
   WTF
