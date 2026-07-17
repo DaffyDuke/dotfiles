@@ -40,6 +40,7 @@
 .composer/
 .compiz/
 .config/
+.continue/
 .cookiecutter*
 .copilot/
 .cozy-desktop/
@@ -73,6 +74,7 @@
 .geeknote/
 .gem/
 .gemini/
+.gemrc
 .gervill/
 .gimp-2.8/
 .gitconfig
@@ -90,6 +92,7 @@
 .gtkboard/
 .guake-indicator/
 .history
+.homebrew/
 .hplip/
 .hugin
 .httpie/
@@ -134,10 +137,12 @@
 .mutt_certificates
 .nb
 .neighbornote/
+.net/
 .netrc
 .nix*
 .node-gyp/
 .npm/
+.nuget/
 .nvpy/
 .nvm/
 .nylas-mail/
@@ -170,6 +175,7 @@
 .rancher/
 .rclone.conf
 .recently-used
+.redhat/
 .remmina/
 .remotelauncherserver
 .repo_.gitconfig.json
