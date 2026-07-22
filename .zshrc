@@ -21,6 +21,7 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="powerlevel10k/powerlevel10k"
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL9K_DISABLE_GITSTATUS=true
 
 
 # Uncomment the following line to use case-sensitive completion.
