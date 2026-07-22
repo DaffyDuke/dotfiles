@@ -1,20 +1,16 @@
-tap "atlassian/acli"
-tap "busser/tap"
-tap "datadog-labs/pack"
-tap "derailed/popeye"
-tap "fairwindsops/tap", "https://github.com/FairwindsOps/homebrew-tap"
-tap "fluxcd/tap"
-tap "harvard-cns/orla", "https://github.com/harvard-cns/homebrew-orla.git"
-tap "instrumenta/instrumenta"
-tap "jnsahaj/lumen"
-tap "k8sgpt-ai/k8sgpt"
+tap "atlassian/acli", trusted: true
+tap "busser/tap", trusted: true
+tap "datadog-labs/pack", trusted: true
+tap "derailed/popeye", trusted: true
+tap "fairwindsops/tap", "https://github.com/FairwindsOps/homebrew-tap", trusted: true
+tap "fluxcd/tap", trusted: true
+tap "harvard-cns/orla", "https://github.com/harvard-cns/homebrew-orla.git", trusted: true
+tap "jnsahaj/lumen", trusted: true
 tap "matthart1983/tap"
-tap "mike-engel/jwt-cli"
-tap "ngrok/ngrok"
-tap "norwoodj/tap"
-tap "puppetlabs/puppet"
-tap "stakpak/stakpak"
-tap "ymtdzzz/tap"
+tap "mike-engel/jwt-cli", trusted: true
+tap "norwoodj/tap", trusted: true
+tap "stakpak/stakpak", trusted: true
+tap "ymtdzzz/tap", trusted: true
 # Codec library for encoding and decoding AV1 video streams
 brew "aom"
 # Cryptography and SSL/TLS Toolkit
@@ -307,8 +303,31 @@ brew "youplot"
 brew "yq"
 # File transfer program
 brew "zsync"
+# Software to interact with Atlassian Cloud from the terminal
+brew "atlassian/acli/acli", trusted: true
+# Generate Terraform moved blocks automatically for painless refactoring
+brew "busser/tap/tfautomv", trusted: true
+# Go-based command-line wrapper for easy interaction with Datadog APIs
+brew "datadog-labs/pack/pup", trusted: true
+# A Kubernetes Cluster sanitizer and linter!
+brew "derailed/popeye/popeye", trusted: true
+# Detect deprecated Kubernetes apiVersions
+brew "fairwindsops/tap/pluto", trusted: true
+# Open Source Best Practices for Kubernetes
+brew "fairwindsops/tap/polaris", trusted: true
+# Flux CLI
+brew "fluxcd/tap/flux", trusted: true
+# lumen is a command-line tool that can show pretty diff, generate commit messages with AI, summarise diffs / commits, and more without requiring an API key.
+brew "jnsahaj/lumen/lumen", trusted: true
 # Real-time network diagnostics in your terminal — zero config, instant visibility
 brew "matthart1983/tap/netwatch", trusted: true
+# Super fast CLI tool to decode and encode JWTs built in Rust
+brew "mike-engel/jwt-cli/jwt-cli", trusted: true
+# Automatically generate markdown documentation for helm charts
+brew "norwoodj/tap/helm-docs", trusted: true
+# Stakpak CLI tool
+brew "stakpak/stakpak/stakpak", trusted: true
+brew "ymtdzzz/tap/otel-tui", trusted: true
 # Android SDK component
 cask "android-platform-tools"
 # Terminal interface for Antigravity agents
@@ -351,7 +370,8 @@ cask "microsoft-edge"
 cask "obs"
 # Open source build of Lens Kubernetes IDE
 cask "openlens"
-cask "orla"
+# A dead-simple unix tool for lightweight agents
+cask "harvard-cns/orla/orla"
 # Collaboration platform for API development
 cask "postman"
 # Simple Sass processor
