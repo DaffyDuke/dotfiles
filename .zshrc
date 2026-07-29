@@ -255,3 +255,6 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 
 # Added by Antigravity CLI installer
 export PATH="/home/daffy/.local/bin:$PATH"
+
+# Mammouth Code
+export PATH="$HOME/.mammouth/bin:$PATH"

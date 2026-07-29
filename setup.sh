@@ -1026,6 +1026,13 @@ lynishardening() {
   sudo systemctl restart ssh
 }
 
+MammouthCode() {
+  # MammouthCode
+  # https://info.mammouth.ai/fr/docs/mammouth-code/
+  cd /tmp || exit
+  curl -fsSL "https://code.mammouth.ai/install.sh" | bash
+}
+
 Minishift() {
   # Minishift
   # https://github.com/MiniShift/minishift#getting-started
@@ -1783,6 +1790,7 @@ Main() {
   lutris
   lynis
   #  lynishardening
+  MammouthCode
   Minishift
   mkcert
   MultiOSUSB
