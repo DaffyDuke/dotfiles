@@ -53,7 +53,7 @@ bootstrap: ## 🚀 Configure un nouvel ordinateur (clone dotfiles, installe conf
 	@if [ -d "$(HOME)/dotfiles" ]; then \
 		echo "$(YELLOW)⚠ Le dépôt existe déjà dans ~/dotfiles$(NC)"; \
 	else \
-		git clone --bare https://github.com/daffycricket/dotfiles.git $(HOME)/dotfiles && \
+		git clone --bare git@github.com:DaffyDuke/dotfiles.git $(HOME)/dotfiles && \
 		echo "$(GREEN)✓ Dépôt cloné$(NC)"; \
 	fi
 	@echo ""

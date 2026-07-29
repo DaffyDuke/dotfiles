@@ -136,9 +136,9 @@ Packages() {
     handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
     i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate isync \
     josm josm-l10n jq jxplorer \
-    kdenlive kdocker keepassxc keychain kigo klavaro kodi krita krita-l10n \
+    kdenlive kdocker keepassxc keychain kid3 kid3-cli kigo klavaro kodi krita krita-l10n \
     lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
-    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh multitail mumble mutt \
+    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh mp3splt mp3splt-gtk multitail mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt neovim nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils pre-commit postgresql-client pre-commit progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
@@ -166,7 +166,7 @@ Packages() {
 SNAP() {
   # for snap in androidsdk chromium czkawka code github-desktop gnome-system-monitor hub hugo ipfs-desktop \
   for snap in chromium czkawka code codium github-desktop gnome-system-monitor hub hugo ipfs-desktop \
-    keepassxc magnus mailspring onlyoffice-desktopeditors popeye procs pycharm-community \
+    keepassxc magnus mailspring onlyoffice-desktopeditors popeye procs pycharm-community qobuz-linux \
     rambox shellcheck slack spotify strawberry telegram-desktop whatsdesk yakyak; do
     snap install --classic ${snap}
   done
@@ -261,6 +261,7 @@ install_appimages() {
     ["synfig_studio.appimage"]="https://github.com/synfig/synfig/releases/latest/download/SynfigStudio-x86_64.AppImage"
     ["webcamoid.appimage"]="https://github.com/webcamoid/webcamoid/releases/latest/download/Webcamoid-x86_64.AppImage"
     ["freelens.appimage"]="https://github.com/freelens/freelens/releases/latest/download/freelens-x86_64.AppImage"
+    ["worldmonitor.appimage"]="https://www.worldmonitor.app/api/download?platform=linux-appimage"
   )
 
   for filename in "${!APPIMAGES_URLS[@]}"; do
@@ -692,7 +693,8 @@ FlatPackages() {
   FlatPack
   for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
-    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever; do
+    org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever \
+    app.zen_browser.zen com.brave.Browser io.github.tobagin.karere net.lutris.Lutris; do
     flatpak install flathub "${pkg}"
   done
 }
@@ -1063,6 +1065,19 @@ Multisystem() {
   sudo apt-get update
   sudo apt-get install -y multisystem
   sudo usermod -a -G adm ${USER}
+}
+
+Mullvad() {
+  # Mullvad VPN anonymous as possible
+  # Télécharger la clé de signature Mullvad
+  sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+
+  # Ajouter le serveur de dépôt Mullvad à apt
+  echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$(dpkg --print-architecture)] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+
+  # Installer le pack
+  sudo apt update
+  sudo apt install -y mullvad-vpn
 }
 
 Music() {
@@ -1563,6 +1578,72 @@ VSCodium() {
   done
 }
 
+AntigravityIDE() {
+  # Antigravity IDE shortcut creation
+  local desktop_dir="$HOME/.local/share/applications"
+  local icons_dir="$HOME/.local/share/icons"
+  local ide_dir="/opt/Antigravity IDE"
+  local ide_bin="$ide_dir/antigravity-ide"
+  local source_icon="$ide_dir/resources/app/out/vs/platform/browserOnboarding/static/antigravity.svg"
+
+  if [ -d "$ide_dir" ]; then
+    echo "Configuring desktop shortcuts for Antigravity IDE..."
+    mkdir -p "$desktop_dir"
+    mkdir -p "$icons_dir"
+
+    # Copy icon if available
+    if [ -f "$source_icon" ]; then
+      cp "$source_icon" "$icons_dir/antigravity-ide.svg"
+      icon_path="antigravity-ide"
+    else
+      icon_path="$ide_dir/resources/app/resources/linux/code.png"
+    fi
+
+    # Create .desktop content
+    local desktop_content="[Desktop Entry]
+Name=Antigravity IDE
+Comment=AI-powered IDE by Google DeepMind
+GenericName=Text Editor
+Exec=\"$ide_bin\" %F
+Icon=$icon_path
+Type=Application
+StartupNotify=true
+StartupWMClass=antigravity-ide
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;
+Actions=new-empty-window;
+Keywords=antigravity;ide;gemini;ai;
+
+[Desktop Action new-empty-window]
+Name=New Empty Window
+Name[fr]=Nouvelle fenêtre vide
+Exec=\"$ide_bin\" --new-window %F
+Icon=$icon_path"
+
+    # Write to local applications menu
+    echo "$desktop_content" > "$desktop_dir/antigravity-ide.desktop"
+    chmod +x "$desktop_dir/antigravity-ide.desktop"
+
+    # Write to Bureau (Desktop) if exists
+    if [ -d "$HOME/Bureau" ]; then
+      echo "$desktop_content" > "$HOME/Bureau/antigravity-ide.desktop"
+      chmod +x "$HOME/Bureau/antigravity-ide.desktop"
+    fi
+
+    # Write to Desktop if exists (just in case)
+    if [ -d "$HOME/Desktop" ]; then
+      echo "$desktop_content" > "$HOME/Desktop/antigravity-ide.desktop"
+      chmod +x "$HOME/Desktop/antigravity-ide.desktop"
+    fi
+
+    # Update desktop database
+    update-desktop-database "$desktop_dir" 2>/dev/null || true
+    echo "Antigravity IDE desktop shortcuts successfully created/updated."
+  else
+    echo "Antigravity IDE is not installed in $ide_dir. Skipping shortcut creation."
+  fi
+}
+
 WakeMeOps() {
   # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
   curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
@@ -1706,6 +1787,7 @@ Main() {
   mkcert
   MultiOSUSB
   #  Multisystem
+  Mullvad
   Music
   nicotine
   nix
@@ -1743,6 +1825,7 @@ Main() {
   VirtualBox
   Vivaldi
   VSCodium
+  AntigravityIDE
   WakeMeOps
   WSS
   WTF

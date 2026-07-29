@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=MySignal
+Exec=/opt/Signal/signal-desktop %U --use-tray-icon
+Terminal=false
+Type=Application
+Icon=signal-desktop
+StartupWMClass=signal
+Comment=Private messaging from your desktop
+MimeType=x-scheme-handler/sgnl;x-scheme-handler/signalcaptcha;
+Categories=Network;InstantMessaging;Chat;

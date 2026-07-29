@@ -1,0 +1,140 @@
+#!/bin/bash
+
+# --- Configuration & Secret Retrieval ---
+# Priority: Environment Variables > secret-tool
+
+# 1. Nextcloud API URL
+NC_URL="${NEXTCLOUD_URL:-$(secret-tool lookup name passcli_url)}"
+# 2. Nextcloud Username
+NC_USER="${NEXTCLOUD_USER:-$(secret-tool lookup name passcli_user)}"
+# 3. Nextcloud Password (Secret Tool Name)
+NC_PASS_NAME="${NEXTCLOUD_PASS_NAME:-passcli}"
+NC_PASS=$(secret-tool lookup name "$NC_PASS_NAME")
+
+# Validation
+if [ -z "$NC_URL" ]; then
+    echo "Error: Nextcloud URL not found. Please store it:"
+    echo "secret-tool store --label=\"Nextcloud URL\" name passcli_url"
+    exit 1
+fi
+
+if [ -z "$NC_USER" ]; then
+    echo "Error: Nextcloud Username not found. Please store it:"
+    echo "secret-tool store --label=\"Nextcloud User\" name passcli_user"
+    exit 1
+fi
+
+if [ -z "$NC_PASS" ]; then
+    echo "Error: Password for '$NC_PASS_NAME' not found in secret-tool."
+    echo "Please store your Nextcloud App Password using:"
+    echo "secret-tool store --label=\"Nextcloud Password\" name $NC_PASS_NAME"
+    exit 1
+fi
+
+# Check for jq
+if ! command -v jq >/dev/null 2>&1; then
+    echo "Error: 'jq' is not installed."
+    exit 1
+fi
+
+search_nc() {
+    local query="$1"
+    local response body status
+
+    # Ensure URL ends with /index.php/apps/passwords/api/1.0 if not already present
+    local api_endpoint="$NC_URL"
+    [[ ! "$api_endpoint" =~ /api/1.0$ ]] && api_endpoint="${api_endpoint%/}/index.php/apps/passwords/api/1.0"
+
+    response=$(curl -s -u "$NC_USER:$NC_PASS" \
+        -H "Accept: application/json" \
+        -w "\n%{http_code}" \
+        "$api_endpoint/password/list")
+    
+    body=$(echo "$response" | sed '$d')
+    status=$(echo "$response" | tail -n1)
+    
+    if [ "$status" -ne 200 ]; then
+        echo "Error: API returned HTTP $status" >&2
+        [ -n "$body" ] && echo "Response: $body" >&2
+        return 1
+    fi
+    
+    # Filter locally (Case-insensitive)
+    echo "$body" | jq --arg q "${query,,}" '[.[] | select(
+        ((.label // "") | ascii_downcase | contains($q)) or 
+        ((.username // "") | ascii_downcase | contains($q)) or 
+        ((.url // "") | ascii_downcase | contains($q))
+    )]'
+}
+
+list_results() {
+    local results="$1"
+    echo "$results" | jq -r '.[] | "\(.id): \(.label) (User: \(.username))"'
+}
+
+show_entry() {
+    local results="$1"
+    local index="${2:-0}"
+    echo "$results" | jq -r ".[$index] | \"Label:    \(.label)\nUsername: \(.username)\nPassword: \(.password)\nURL:      \(.url)\nNotes:    \(.notes // \"\")\""
+}
+
+case "$1" in
+    search)
+        if [ -z "$2" ]; then
+            echo "Usage: passcli search <query>"
+            exit 1
+        fi
+        results=$(search_nc "$2") || exit 1
+        count=$(echo "$results" | jq '. | length')
+        if [ "$count" -eq 0 ]; then
+            echo "No matches found for '$2'."
+        else
+            list_results "$results"
+        fi
+        ;;
+    show)
+        if [ -z "$2" ]; then
+            echo "Usage: passcli show <query_or_id>"
+            exit 1
+        fi
+        query="$2"
+        results=$(search_nc "$query") || exit 1
+        count=$(echo "$results" | jq '. | length')
+        
+        if [ "$count" -eq 0 ] && [[ "$query" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]; then
+             # Direct fetch fallback
+             local api_endpoint="$NC_URL"
+             [[ ! "$api_endpoint" =~ /api/1.0$ ]] && api_endpoint="${api_endpoint%/}/index.php/apps/passwords/api/1.0"
+             response=$(curl -s -u "$NC_USER:$NC_PASS" -H "Accept: application/json" -w "\n%{http_code}" "$api_endpoint/password/get?id=$query")
+             body=$(echo "$response" | sed '$d')
+             status=$(echo "$response" | tail -n1)
+             if [ "$status" -eq 200 ] && [ "$(echo "$body" | jq -r '.id // empty')" ]; then
+                 results="[$body]"
+                 count=1
+             fi
+        fi
+
+        if [ "$count" -eq 0 ]; then
+            echo "No match found for '$query'."
+        elif [ "$count" -eq 1 ]; then
+            show_entry "$results"
+        else
+            exact_match=$(echo "$results" | jq -c --arg q "${query,,}" '.[] | select((.label // "") | ascii_downcase == $q)')
+            exact_count=$(echo "$exact_match" | jq -s '. | length')
+            
+            if [ "$exact_count" -eq 1 ]; then
+                 show_entry "[$exact_match]"
+            else
+                echo "Multiple matches found:"
+                list_results "$results"
+                echo ""
+                echo "Use a more specific query or the ID."
+            fi
+        fi
+        ;;
+    *)
+        echo "Nextcloud Passwords CLI"
+        echo "Usage: passcli {search|show} <query>"
+        exit 1
+        ;;
+esac
