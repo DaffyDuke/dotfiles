@@ -19,7 +19,7 @@
     },
     "tmp": "^0.2.4",
     "tar": "^7.5.4",
-    "lodash": "^4.17.23"
+    "lodash": "^4.18.1"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
