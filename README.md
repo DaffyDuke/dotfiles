@@ -1,7 +1,8 @@
 # Credits
-Forked from https://github.com/owulveryck/dotfiles
-Adapted with https://lord.re/posts/62-dotfiles-home-git/
-Lots of fun from https://catonmat.net/linux-and-vim-notes
+
+Forked from <https://github.com/owulveryck/dotfiles>
+Adapted with <https://lord.re/posts/62-dotfiles-home-git/>
+Lots of fun from <https://catonmat.net/linux-and-vim-notes>
 
 ---
 
@@ -13,13 +14,17 @@ Pour configurer rapidement un nouvel ordinateur avec vos dotfiles :
 
 ```bash
 # Option 1 : Avec Make (recommandé)
-git clone https://github.com/daffycricket/dotfiles.git ~/dotfiles-tmp
+ssh-keygen
+sudo apt install -y git curl zsh make
+git clone git@github.com:DaffyDuke/dotfiles.git ~/dotfiles-tmp
 cd ~/dotfiles-tmp
 make bootstrap
 make install
 
 # Option 2 : Manuel
-git clone --bare https://github.com/daffycricket/dotfiles.git $HOME/dotfiles
+ssh-keygen
+sudo apt install -y git curl zsh
+git clone --bare git@github.com:DaffyDuke/dotfiles.git $HOME/dotfiles
 echo "alias config='git --git-dir=\$HOME/dotfiles --work-tree=\$HOME'" >> ~/.zshrc
 source ~/.zshrc
 config config --local status.showUntrackedFiles no

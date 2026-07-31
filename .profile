@@ -31,3 +31,7 @@ PATH="/usr/games:$PATH"
 QT_QPA_PLATFORM="wayland;xcb"
 
 . "$HOME/.cargo/env"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/daffy/.local/bin:$PATH"

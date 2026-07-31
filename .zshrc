@@ -21,6 +21,7 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="powerlevel10k/powerlevel10k"
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL9K_DISABLE_GITSTATUS=true
 
 
 # Uncomment the following line to use case-sensitive completion.
@@ -95,8 +96,8 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# # ssh
-if ! ssh-add -l 2>/dev/null | grep -q -v 'no identities'; then
+# ssh
+if [ -z $SSH_AUTH_SOCK ]; then
   # export SSH_KEY_PATH="~/.ssh/dsa_id"
   eval "$(keychain id_rsa --eval)"
   if [ -f ~/.ssh/id_ecdsa ]; then
@@ -251,3 +252,9 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.z.work ]] || source ~/.z.work
+
+# Added by Antigravity CLI installer
+export PATH="/home/daffy/.local/bin:$PATH"
+
+# Mammouth Code
+export PATH="$HOME/.mammouth/bin:$PATH"

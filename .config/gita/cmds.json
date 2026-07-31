@@ -1,0 +1,27 @@
+{
+  "stat": {
+    "cmd": "git diff --stat",
+    "help": "show edit statistics"
+  },
+  "difftool": {
+    "cmd": "git difftool",
+    "disable_async": true,
+    "help": "show differences using a tool"
+  },
+  "comaster": {
+    "cmd": "checkout master",
+    "allow_all": true,
+    "help": "checkout the master branch"
+  },
+  "fetchcrt": {
+    "cmd": "git rev-parse --abbrev-ref HEAD | xargs git fetch --prune upstream",
+    "allow_all": true,
+    "shell": true,
+    "help": "fetch current branch only"
+  },
+  "cod": {
+    "cmd": "git cod",
+    "allow_all": true,
+    "help": "check out default branch"
+  }
+}

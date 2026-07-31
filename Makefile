@@ -53,7 +53,7 @@ bootstrap: ## 🚀 Configure un nouvel ordinateur (clone dotfiles, installe conf
 	@if [ -d "$(HOME)/dotfiles" ]; then \
 		echo "$(YELLOW)⚠ Le dépôt existe déjà dans ~/dotfiles$(NC)"; \
 	else \
-		git clone --bare https://github.com/daffycricket/dotfiles.git $(HOME)/dotfiles && \
+		git clone --bare git@github.com:DaffyDuke/dotfiles.git $(HOME)/dotfiles && \
 		echo "$(GREEN)✓ Dépôt cloné$(NC)"; \
 	fi
 	@echo ""
@@ -119,17 +119,17 @@ merge-branches: ## 🔀 Merge: penguin→develop, debian→develop, macos→deve
 	@echo "$(BLUE)Phase 1: Consolidation vers develop$(NC)"
 	@echo "$(YELLOW)Étape 1/9:$(NC) Merge penguin → develop..."
 	@$(CONFIG_ALIAS) checkout develop || (echo "$(RED)✗ Échec du checkout develop$(NC)" && exit 1)
-	@$(CONFIG_ALIAS) merge penguin -m "chore: merge penguin into develop" && \
+	@$(CONFIG_ALIAS) merge --no-ff penguin -m "chore: merge penguin into develop" && \
 		echo "$(GREEN)✓ penguin → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge penguin → develop$(NC)" && exit 1)
 	@echo ""
 	@echo "$(YELLOW)Étape 2/9:$(NC) Merge debian → develop..."
-	@$(CONFIG_ALIAS) merge debian -m "chore: merge debian into develop" && \
+	@$(CONFIG_ALIAS) merge --no-ff debian -m "chore: merge debian into develop" && \
 		echo "$(GREEN)✓ debian → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge debian → develop$(NC)" && exit 1)
 	@echo ""
 	@echo "$(YELLOW)Étape 3/9:$(NC) Merge macos → develop..."
-	@$(CONFIG_ALIAS) merge macos -m "chore: merge macos into develop" && \
+	@$(CONFIG_ALIAS) merge --no-ff macos -m "chore: merge macos into develop" && \
 		echo "$(GREEN)✓ macos → develop$(NC)" || \
 		(echo "$(RED)✗ Conflit lors du merge macos → develop$(NC)" && exit 1)
 	@echo ""

@@ -1,0 +1,170 @@
+import argparse
+import feedparser
+import time
+import xml.etree.ElementTree as ET
+
+def check_rss_feed(url, verbose):
+    """
+    Vérifie si un flux RSS est valide en étant plus tolérant.
+    Retourne True si le flux est valide, False sinon.
+    """
+    try:
+        # Ajout d'un User-Agent courant pour ne pas être bloqué par les serveurs
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+        feed = feedparser.parse(url, request_headers={'User-Agent': user_agent})
+
+        # Si feedparser retourne une erreur HTTP, c'est un problème.
+        if hasattr(feed, 'status') and feed.status not in [200, 301, 302]:
+            if verbose:
+                print(f"   -> Erreur HTTP {feed.status}.")
+            return False
+
+        # Si le flux n'a pas pu être analysé, c'est aussi une erreur.
+        if feed.bozo != 0:
+            if verbose:
+                # Affiche la raison de l'erreur si elle est disponible
+                if hasattr(feed, 'bozo_exception'):
+                    print(f"   -> Erreur de parsing : {feed.bozo_exception}.")
+                else:
+                    print(f"   -> Erreur de parsing indéfinie.")
+            return False
+
+        # Si le flux ne contient pas d'articles ou de titre, il est probablement vide ou mal formaté.
+        if not feed.entries and not feed.feed.get('title'):
+            if verbose:
+                print("   -> Le flux est vide ou ne contient pas de titre/articles.")
+            return False
+
+        return True
+
+    except Exception as e:
+        if verbose:
+            print(f"   -> Erreur inattendue : {e}.")
+        return False
+
+def process_outlines(outlines_list, all_feeds_count, invalid_feeds, verbose):
+    """
+    Parcourt récursivement les outlines pour tester les flux et reconstruire la structure.
+    """
+    new_outlines = []
+    
+    for i, outline in enumerate(outlines_list):
+        children = list(outline)
+        
+        # Si l'outline est un dossier (il a des enfants)
+        if children:
+            # On appelle récursivement la fonction pour traiter les enfants
+            new_children, children_valid_count = process_outlines(children, all_feeds_count, invalid_feeds, verbose)
+            
+            # Si le dossier contient au moins un flux valide, on le garde
+            if new_children:
+                # On crée un nouvel élément de dossier pour éviter de modifier l'original
+                new_folder = ET.Element("outline")
+                for key, value in outline.attrib.items():
+                    new_folder.set(key, value)
+                
+                # On ajoute les enfants valides au nouveau dossier
+                for child in new_children:
+                    new_folder.append(child)
+                
+                new_outlines.append(new_folder)
+        
+        # Si l'outline est un flux RSS
+        elif outline.get("type") == "rss":
+            all_feeds_count[0] += 1
+            feed_url = outline.get("xmlUrl")
+            feed_title = outline.get("title") or outline.get("text") or feed_url
+
+            if verbose:
+                print(f"[{all_feeds_count[0]}] Test de '{feed_title}' ({feed_url})...")
+            
+            if check_rss_feed(feed_url, verbose):
+                new_outlines.append(outline)
+            else:
+                invalid_feeds.append(outline)
+            
+            # Attente d'une demi-seconde
+            time.sleep(0.5)
+        
+        # Si c'est un autre type d'outline (qui n'est pas un flux RSS ou un dossier), on le garde
+        else:
+            new_outlines.append(outline)
+            
+    return new_outlines, len(new_outlines)
+
+def clean_opml_file(input_file, output_file, verbose):
+    """
+    Lit un fichier OPML, nettoie les flux et génère un nouveau fichier
+    en préservant la structure des dossiers.
+    """
+    try:
+        tree = ET.parse(input_file)
+        root = tree.getroot()
+        
+        invalid_feeds = []
+        all_feeds_count = [0] # Utilise une liste mutable pour passer le compteur par référence
+
+        # On trouve le body et on commence le traitement récursif
+        body = root.find('body')
+        if body is None:
+            print("Erreur : Le fichier OPML ne contient pas de balise <body>.")
+            return
+
+        print(f"Analyse du fichier : {input_file}...")
+        
+        # Le traitement récursif retourne les outlines valides
+        valid_outlines, _ = process_outlines(list(body), all_feeds_count, invalid_feeds, verbose)
+        
+        total_feeds = all_feeds_count[0]
+        
+        if total_feeds == 0:
+            print("Aucun abonnement de type 'rss' trouvé dans le fichier. Le fichier de sortie ne sera pas créé.")
+            return
+
+        print(f"Total des abonnements trouvés : {total_feeds}")
+        
+        # --- Écriture du nouveau fichier OPML ---
+        new_body = ET.Element("body")
+        for outline in valid_outlines:
+            new_body.append(outline)
+        
+        old_body = root.find('body')
+        if old_body is not None:
+            root.remove(old_body)
+        root.append(new_body)
+
+        tree.write(output_file, encoding="utf-8", xml_declaration=True)
+        print(f"Nouveau fichier OPML créé avec succès : {output_file}")
+
+        # --- Affichage des statistiques ---
+        print("\n--- Résumé ---")
+        print(f"Abonnements valides : {total_feeds - len(invalid_feeds)} sur {total_feeds}")
+        
+        if invalid_feeds:
+            print(f"Abonnements supprimés : {len(invalid_feeds)}")
+            if verbose:
+                print("\n--- Liste des abonnements supprimés : ---")
+                for outline in invalid_feeds:
+                    feed_title = outline.get("title") or outline.get("text") or 'Titre inconnu'
+                    print(f"- Titre : '{feed_title}', URL : {outline.get('xmlUrl')}")
+        else:
+            print("Aucun abonnement non valide trouvé. Le fichier est propre !")
+
+    except FileNotFoundError:
+        print(f"Erreur : Le fichier '{input_file}' n'a pas été trouvé.")
+    except Exception as e:
+        print(f"Une erreur s'est produite : {e}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="""
+    Nettoie un fichier OPML de ses abonnements de flux RSS non valides
+    en préservant la structure des dossiers.
+    """)
+    parser.add_argument("input_file", help="Le chemin du fichier OPML à analyser.")
+    parser.add_argument("output_file", help="Le chemin du nouveau fichier OPML à créer.")
+    parser.add_argument("-v", "--verbose", action="store_true", 
+                        help="Affiche la progression du test et la liste des sites supprimés.")
+
+    args = parser.parse_args()
+    
+    clean_opml_file(args.input_file, args.output_file, args.verbose)
