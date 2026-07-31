@@ -1,46 +1,102 @@
-tap "busser/tap"
-tap "derailed/popeye"
-tap "fairwindsops/tap"
-tap "fluxcd/tap"
-tap "instrumenta/instrumenta"
-tap "jnsahaj/lumen"
-tap "k8sgpt-ai/k8sgpt"
-tap "mike-engel/jwt-cli"
-tap "ngrok/ngrok"
-tap "norwoodj/tap"
-tap "puppetlabs/puppet"
-tap "ymtdzzz/tap"
+tap "atlassian/acli", trusted: true
+tap "busser/tap", trusted: true
+tap "datadog-labs/pack", trusted: true
+tap "derailed/popeye", trusted: true
+tap "fairwindsops/tap", trusted: true
+tap "fluxcd/tap", trusted: true
+tap "instrumenta/instrumenta", trusted: true
+tap "jnsahaj/lumen", trusted: true
+tap "k8sgpt-ai/k8sgpt", trusted: true
+tap "matthart1983/tap"
+tap "mike-engel/jwt-cli", trusted: true
+tap "ngrok/ngrok", trusted: true
+tap "norwoodj/tap", trusted: true
+tap "puppetlabs/puppet", trusted: true
+tap "ymtdzzz/tap", trusted: true
+tap "yoanbernabeu/tap", trusted: true
+# GitOps Continuous Delivery for Kubernetes
 brew "argocd"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Open source, extensible AI agent that goes beyond code suggestions
 brew "block-goose-cli"
+# Tool for exploring each layer in a docker image
 brew "dive"
+# Tool to analyze file system usage written in Rust
 brew "dutree"
+# Multi-threaded file-tree visualizer and disk usage analyzer
 brew "erdtree"
+# Simple, fast and user-friendly alternative to find
 brew "fd"
+# X11 implementation of the Remote Desktop Protocol (RDP)
+brew "freerdp"
+# Ping, but with a graph
 brew "gping"
+# CLI email client written in Rust
 brew "himalaya"
+# Uses CSS selectors to extract bits content from HTML files
 brew "htmlq"
+# Handy way to save and run project-specific commands
 brew "just"
+# Scanning your k8s clusters, diagnosing, and triaging issues in simple English
 brew "k8sgpt"
+# Run local Kubernetes cluster in Docker
 brew "kind"
+# Much more powerful alternative to kubectx and kubens
 brew "kubie"
+# Simple terminal UI for git commands
 brew "lazygit"
+# LLM inference in C/C++
+brew "llama.cpp"
+# Find what models run on your hardware
+brew "llmfit"
+# Show uncommitted, untracked and unpushed changes for multiple Git repos
 brew "multi-git-status"
+# Interactive cheatsheet tool for the command-line
 brew "navi"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
+# Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Prettier way to inspect network connections
 brew "snitch"
+# Tool to generate documentation from Terraform modules
 brew "terraform-docs"
+# CLI tool to generate terraform files from existing infrastructure
 brew "terraformer"
+# Linter for Terraform files
 brew "tflint"
+# Simplified and community-driven man pages
 brew "tldr"
+# Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Network diagnostic tool, inspired by mtr
 brew "trippy"
+# Extensible command-line tool to format YAML files
 brew "yamlfmt"
+# JavaScript package manager
+brew "yarn"
+# Software to interact with Atlassian Cloud from the terminal
+brew "atlassian/acli/acli"
+# Generate Terraform moved blocks automatically for painless refactoring
 brew "busser/tap/tfautomv"
+# Go-based command-line wrapper for easy interaction with Datadog APIs
+brew "datadog-labs/pack/pup"
+# Detect deprecated Kubernetes apiVersions
 brew "fairwindsops/tap/pluto"
+# lumen is a command-line tool that can show pretty diff, generate commit messages with AI, summarise diffs / commits, and more without requiring an API key.
 brew "jnsahaj/lumen/lumen"
+# Real-time network diagnostics in your terminal — zero config, instant visibility
+brew "matthart1983/tap/netwatch", trusted: true
 brew "ymtdzzz/tap/otel-tui"
+# Privacy-first semantic code search CLI
+brew "yoanbernabeu/tap/grepai"
+# Android SDK component
 cask "android-platform-tools"
+# Terminal-based AI coding assistant
+cask "claude-code"
+# Brings the power of Copilot coding agent directly to your terminal
+cask "copilot-cli"
 vscode "aaronthomas.vscode-snazzy-operator"
 vscode "adzero.vscode-sievehighlight"
 vscode "ahmadalli.vscode-nginx-conf"
@@ -52,7 +108,7 @@ vscode "atlassian.atlascode"
 vscode "automatalabs.copilot-mcp"
 vscode "bbenoist.vagrant"
 vscode "be5invis.toml"
-vscode "bitzl.vscode-puppet"
+vscode "bierner.markdown-mermaid"
 vscode "bmarkovic.haproxy"
 vscode "bruno-api-client.bruno"
 vscode "buildwithlayer.mcp-integration-expert-eligr"
@@ -64,6 +120,7 @@ vscode "ciarant.vscode-structurizr"
 vscode "codestream.codestream"
 vscode "codezombiech.gitignore"
 vscode "compilenix.vscode-zonefile"
+vscode "continue.continue"
 vscode "ctf0.macros"
 vscode "d4nyll.devops-extension-pack"
 vscode "damonsk.vscode-wardley-maps"
@@ -86,11 +143,11 @@ vscode "formulahendry.code-runner"
 vscode "foxundermoon.shell-format"
 vscode "gera2ld.markmap-vscode"
 vscode "gistart.theme-desert-dawn"
-vscode "github.copilot"
-vscode "github.copilot-chat"
 vscode "github.vscode-github-actions"
 vscode "github.vscode-pull-request-github"
 vscode "golang.go"
+vscode "google.gemini-cli-vscode-ide-companion"
+vscode "google.geminicodeassist"
 vscode "grapecity.gc-excelviewer"
 vscode "graphql.vscode-graphql"
 vscode "graphql.vscode-graphql-syntax"
@@ -132,6 +189,7 @@ vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-ceintl.vscode-language-pack-fr"
 vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
+vscode "ms-ossdata.vscode-pgsql"
 vscode "ms-python.debugpy"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
@@ -149,6 +207,7 @@ vscode "ms-vscode-remote.vscode-remote-extensionpack"
 vscode "ms-vscode.makefile-tools"
 vscode "ms-vscode.remote-explorer"
 vscode "ms-vscode.remote-server"
+vscode "ms-vscode.vscode-chat-customizations-evaluations"
 vscode "mycelo.oracle-plsql"
 vscode "naco-siren.gradle-language"
 vscode "nhoizey.gremlins"
@@ -158,7 +217,6 @@ vscode "peterschmalfeldt.explorer-exclude"
 vscode "phoihos.markdown-markmap"
 vscode "pnp.polacode"
 vscode "pomdtr.excalidraw-editor"
-vscode "puppet.puppet-vscode"
 vscode "qezhu.gitlink"
 vscode "randomchance.logstash"
 vscode "raynigon.nginx-formatter"
@@ -197,17 +255,29 @@ vscode "william-voyek.vscode-nginx"
 vscode "xyz.local-history"
 go "cmd/go"
 go "cmd/gofmt"
+cargo "cargo-cache"
 cargo "cargo-update"
 cargo "mdcat"
 cargo "spotify-tui"
+uv "gita"
 flatpak "app.drey.Dialect"
+flatpak "app.zen_browser.zen"
+flatpak "com.brave.Browser"
 flatpak "com.github.tchx84.Flatseal"
+flatpak "com.gitlab.j0chn.nextcloud_password_client"
+flatpak "com.opera.Opera"
 flatpak "io.github.qwersyk.Newelle"
 flatpak "io.github.tobagin.karere"
 flatpak "io.gitlab.adhami3310.Impression"
 flatpak "it.mijorus.gearlever"
 flatpak "net.lutris.Lutris"
 flatpak "org.jdownloader.JDownloader"
+flatpak "org.kicad.KiCad"
 flatpak "org.qownnotes.QOwnNotes"
 flatpak "org.soundconverter.SoundConverter"
 flatpak "org.vinegarhq.Sober"
+krew "krew"
+krew "score"
+npm "@google/gemini-cli"
+npm "markmap-cli"
+npm "mcp-hub"

@@ -41,5 +41,6 @@
         "surveyPromptDate": "2026-06-20T12:14:22.944Z",
         "surveyPromptIgnoredCount": 0
     },
-    "datadog.connection.oauth.setup.domain": "app.datadoghq.eu"
+    "datadog.connection.oauth.setup.domain": "app.datadoghq.eu",
+    "go.useLanguageServer": true
 }
