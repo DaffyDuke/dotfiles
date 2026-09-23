@@ -10,15 +10,15 @@
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
+  # include .bashrc if it exists
+  if [ -f "$HOME/.bashrc" ]; then
+    . "$HOME/.bashrc"
+  fi
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [ -d "$HOME/bin" ]; then
+  PATH="$HOME/bin:$PATH"
 fi
 
 # Go variables
@@ -32,6 +32,5 @@ QT_QPA_PLATFORM="wayland;xcb"
 
 . "$HOME/.cargo/env"
 
-
 # Added by Antigravity CLI installer
-export PATH="/home/daffy/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"

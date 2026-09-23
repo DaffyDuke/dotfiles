@@ -1,7 +1,9 @@
+[init]
+	defaultBranch = main
 [user]
-	email = olivier.duquesne.partner@decathlon.com
+	email = olivier.duquesne@ext.adeo.com
 	name = Olivier Duquesne
-	signingkey = EFE05E0404C2F5FE061DAAD93A5C73FBC6B8527C
+	signingkey = C6B4ACF4F146469B
 [push]
 	default = simple
 # [merge]
@@ -16,7 +18,7 @@
 [color]
 	ui = always
 [gpg]
-	program = /opt/homebrew/bin/gpg
+	program = /home/linuxbrew/.linuxbrew/bin/gpg
 [commit]
 	gpgsign = true
         verbose = true
@@ -118,3 +120,9 @@
 
 [merge]
 	tool = meld
+[credential "https://github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/linuxbrew/.linuxbrew/bin/gh auth git-credential

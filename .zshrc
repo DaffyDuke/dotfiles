@@ -189,9 +189,6 @@ if [ -n "$IS_DEBIAN" ]; then
   # GnuPG configuration
   ln -sf ~/.gnupg/gpg-agent.conf-debian ~/.gnupg/gpg-agent.conf
 
-  # claude, mammouth and goose are in same boat
-  eval "$(wake init zsh)"
-  eval "$(goose term init zsh)"
 elif [ -n "$IS_MACOS" ]; then
   # -------------------- macOS CONFIGURATION --------------------
   
@@ -258,3 +255,4 @@ export PATH="/home/daffy/.local/bin:$PATH"
 
 # Mammouth Code
 export PATH="$HOME/.mammouth/bin:$PATH"
+

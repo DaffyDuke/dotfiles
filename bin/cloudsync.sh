@@ -16,7 +16,7 @@ SyncKimsufiToPassport()
 
 GoogleDrive()
 {
-    rclone --size-only --drive-acknowledge-abuse --ignore-checksum -v copy GoogleDrive:/ Google\ Drive
+    rclone --size-only --drive-acknowledge-abuse --ignore-checksum --tpslimit 10 --fast-list -v copy GDrive:/ Google\ Drive
 }
 
 SyncDropboxNextcloud()

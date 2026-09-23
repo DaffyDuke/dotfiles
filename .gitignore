@@ -325,7 +325,9 @@ userdef.reg
 workspace/
 Zotero/
 
+.adeo/
 .agent/
+.agents/
 .augment/
 .clinerules/
 .codex/
@@ -337,9 +339,14 @@ Zotero/
 .kilocodemodes
 .kiro/
 .mcp.json
+.netskope/
 .opencode/
 .qwen/
 .roo/
 .trae/
 .windsurf/
 _bmad/
+
+
+
+

@@ -118,7 +118,7 @@ PPA() {
     quickgui quickemu
   # can not install on focal (dependancy problems) sudo apt install -y oqapy
   # install some github cli extensions
-  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh meiji163/gh-notify; do
+  for extension in dlvhdr/gh-dash seachicken/gh-poi AaronMoat/gh-pulls fundor333/gh-bofh meiji163/gh-notify linnea-bakshi/gh-doctor; do
     gh extension install "${extension}"
   done
 }
@@ -128,9 +128,9 @@ Packages() {
   sudo apt install -y \
     acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
     baobab barrier bc bleachbit blueman brasero build-essential bundler \
-    ca-certificates cargo checkinstall cheese chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
+    ca-certificates cargo checkinstall chrome-gnome-shell cifs-utils clipit checksecurity cloc cmake colord-gtk-utils colordiff corkscrew cowsay cpuid curl \
     darktable ddgr debian-goodies default-jre debsecan debsums deluge-gtk deluged dfc dkms digikam direnv dnsperf dnstracer dos2unix duf \
-    easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews exa extrace exuberant-ctags \
+    easytag eatmydata ethstatus ethtool ettercap-graphical evince evolution evolution-ews extrace exuberant-ctags \
     fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla fonts-powerline fortunes fonts-radisnoir fpart ftp \
     gajim geary geogebra-gnome gimp git-extras gnome-screenshot gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
@@ -144,11 +144,11 @@ Packages() {
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils pre-commit postgresql-client pre-commit progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
     qalc qemu-system-gui qtpass qtractor \
     rclone rdesktop redshift-gtk refind remmina rename ripgrep rpm rsync \
-    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic synfigstudio sysstat \
+    s3cmd screen screenkey scribus seahorse scdaemon shc shotwell ssh-import-id sshuttle simple-scan simplescreenrecorder smartmontools sound-juicer sosreport source-highlight spectre-meltdown-checker speedtest-cli sshfs sshpass sslscan socat software-properties-common stopmotion strace stubby stunnel4 synaptic sysstat \
     tcpdump tellico termshark testssl.sh thefuck thunderbird tig tilix toilet torbrowser-launcher traceroute trash-cli tshark \
     unison-gtk unrar urlview \
-    vagrant vhs vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
-    whois winbind wireshark wkhtmltopdf \
+    vifm vim-fugitive vim-gtk3 vim-nox vim-python-jedi vim-youcompleteme virt-manager virtualenv vlc \
+    whois winbind wireshark \
     xauth xdg-utils xournalpp xscreensaver xsane \
     yamllint \
     zmap
@@ -159,7 +159,8 @@ Packages() {
   # Python alternatives
   # sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
   # sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 2
-  sudo update-alternatives --set python /usr/bin/python3.11
+  # sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.14 3
+  sudo update-alternatives --set python /usr/bin/python3.14
 
 }
 
@@ -695,7 +696,7 @@ FlatPackages() {
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
     org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever \
     app.zen_browser.zen com.brave.Browser io.github.tobagin.karere net.lutris.Lutris; do
-    flatpak install flathub "${pkg}"
+    flatpak install -y flathub "${pkg}"
   done
 }
 
@@ -1628,18 +1629,18 @@ Exec=\"$ide_bin\" --new-window %F
 Icon=$icon_path"
 
     # Write to local applications menu
-    echo "$desktop_content" > "$desktop_dir/antigravity-ide.desktop"
+    echo "$desktop_content" >"$desktop_dir/antigravity-ide.desktop"
     chmod +x "$desktop_dir/antigravity-ide.desktop"
 
     # Write to Bureau (Desktop) if exists
     if [ -d "$HOME/Bureau" ]; then
-      echo "$desktop_content" > "$HOME/Bureau/antigravity-ide.desktop"
+      echo "$desktop_content" >"$HOME/Bureau/antigravity-ide.desktop"
       chmod +x "$HOME/Bureau/antigravity-ide.desktop"
     fi
 
     # Write to Desktop if exists (just in case)
     if [ -d "$HOME/Desktop" ]; then
-      echo "$desktop_content" > "$HOME/Desktop/antigravity-ide.desktop"
+      echo "$desktop_content" >"$HOME/Desktop/antigravity-ide.desktop"
       chmod +x "$HOME/Desktop/antigravity-ide.desktop"
     fi
 
