@@ -256,3 +256,8 @@ export PATH="/home/daffy/.local/bin:$PATH"
 # Mammouth Code
 export PATH="$HOME/.mammouth/bin:$PATH"
 
+# RClone options
+export RCLONE_BUFFER_SIZE="0M"
+export RCLONE_TRANSFERS="2"
+export RCLONE_CHECKERS="2"
+export RCLONE_DRIVE_CHUNK_SIZE="32M"
