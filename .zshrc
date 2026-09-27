@@ -62,7 +62,7 @@ LESSHISTFILE=/dev/null
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws brew bundler debian direnv docker git gitignore golang keychain kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
+plugins=(aws brew bundler debian direnv docker git gitignore golang kitchen kubectl mise rake ruby terraform thefuck tmuxinator ubuntu ugit zsh-wakatime z zsh-autosuggestions)
 # plugins=(aws bundler debian docker git gitignore golang kitchen kubectl rake ruby gpg-ssh-smartcard-yubikey-keybase terraform thefuck tmuxinator ubuntu )
 
 # User configuration
@@ -96,7 +96,30 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-if [ -z $SSH_AUTH_SOCK ]; then
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+  if [ -n "$IS_DEBIAN" ]; then
+    for _sock in \
+      "/run/user/$(id -u)/gcr/ssh" \
+      "/run/user/$(id -u)/openssh_agent" \
+      "/run/user/$(id -u)/keyring/ssh" \
+      "/run/user/$(id -u)/gnupg/S.gpg-agent.ssh"; do
+      if [ -S "$_sock" ]; then
+        export SSH_AUTH_SOCK="$_sock"
+        break
+      fi
+    done
+    unset _sock
+    if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+      _systemd_sock=$(systemctl --user show-environment 2>/dev/null | sed -n 's/^SSH_AUTH_SOCK=//p')
+      if [ -n "$_systemd_sock" ] && [ -S "$_systemd_sock" ]; then
+        export SSH_AUTH_SOCK="$_systemd_sock"
+      fi
+      unset _systemd_sock
+    fi
+  fi
+fi
+
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
   # export SSH_KEY_PATH="~/.ssh/dsa_id"
   eval "$(keychain id_rsa --eval)"
   if [ -f ~/.ssh/id_ecdsa ]; then
@@ -183,8 +206,20 @@ if [ -n "$IS_DEBIAN" ]; then
   # Homebrew (Linux)
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   
-  # SSH Auth Socket (for keyring)
-  export SSH_AUTH_SOCK=$(find /run/user/$(id -u)/keyring/ -type s -name "ssh")
+  # SSH Auth Socket (for keyring / gcr-ssh-agent / openssh)
+  if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    for _sock in \
+      "/run/user/$(id -u)/gcr/ssh" \
+      "/run/user/$(id -u)/openssh_agent" \
+      "/run/user/$(id -u)/keyring/ssh" \
+      "/run/user/$(id -u)/gnupg/S.gpg-agent.ssh"; do
+      if [ -S "$_sock" ]; then
+        export SSH_AUTH_SOCK="$_sock"
+        break
+      fi
+    done
+    unset _sock
+  fi
   
   # GnuPG configuration
   ln -sf ~/.gnupg/gpg-agent.conf-debian ~/.gnupg/gpg-agent.conf
@@ -251,7 +286,7 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 
 
 # Added by Antigravity CLI installer
-export PATH="/home/daffy/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Mammouth Code
 export PATH="$HOME/.mammouth/bin:$PATH"
