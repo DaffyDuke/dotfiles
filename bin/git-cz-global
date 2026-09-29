@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+config="$HOME/.cz.toml.work"
+repo_root=$(git rev-parse --show-toplevel) || exit 1
+git_dir=$(git rev-parse --absolute-git-dir) || exit 1
+if [[ ! -f "$config" ]]; then
+  printf 'Commitizen config not found: %s\n' "$config" >&2
+  exit 1
+fi
+
+tmpdir=$(mktemp -d "${TMPDIR:-/tmp}/git-cz-global.XXXXXX")
+cleanup() {
+  rm -rf -- "$tmpdir"
+}
+trap cleanup EXIT INT TERM
+
+python - "$config" "$tmpdir/pyproject.toml" <<'PY'
+import sys
+import tomllib
+from pathlib import Path
+
+source, destination = map(Path, sys.argv[1:])
+data = tomllib.loads(source.read_text())
+settings = data.get("tool", {}).get("commitizen")
+if not isinstance(settings, dict):
+    raise SystemExit("~/.cz.toml must contain a [tool.commitizen] section")
+
+lines = ["[tool.commitizen]"]
+for key, value in settings.items():
+    import json
+    encoded = json.dumps(value, ensure_ascii=False)
+    lines.append(f"{key} = {encoded}")
+destination.write_text("\n".join(lines) + "\n")
+PY
+
+command=(/usr/bin/python3 -c 'import os, sys; config_dir, repo_root, *arguments = sys.argv[1:]; os.chdir(config_dir); from commitizen.cli import main; os.chdir(repo_root); sys.argv = ["cz", "--config", os.path.join(config_dir, "pyproject.toml"), *arguments]; raise SystemExit(main())' "$tmpdir" "$repo_root" "$@")
+if [[ -t 0 ]]; then
+  "${command[@]}"
+elif { true </dev/tty; } 2>/dev/null; then
+  "${command[@]}" </dev/tty
+else
+  printf 'git cz commit requires an interactive terminal.\n' >&2
+  exit 1
+fi
