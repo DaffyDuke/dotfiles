@@ -48,6 +48,7 @@
 .cozy-desktop/
 .cpan/
 .cups/
+.cz.toml.work
 .dbus/
 .dia/
 .disruptive innovations sarl/
@@ -205,6 +206,7 @@
 .t4k_common/
 .terraform.d/
 .terraform/
+.tflint.d/
 .thumbnails/
 .thunderbird/
 .tig_history
