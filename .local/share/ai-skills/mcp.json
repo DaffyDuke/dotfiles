@@ -1,0 +1,123 @@
+{
+  "servers": {
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/sse"
+    },
+    "atlassian-local": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-atlassian"
+      ],
+      "env": {
+        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}",
+        "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
+        "ATLASSIAN_URL": "${ATLASSIAN_URL}"
+      }
+    },
+    "aws-cost": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@aws/aws-cost-explorer-mcp-server"
+      ],
+      "env": {
+        "AWS_PROFILE": "${AWS_PROFILE}"
+      }
+    },
+    "cloud-cost": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "cloud-cost-mcp"
+      ]
+    },
+    "datadog": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "datadog-mcp"
+      ],
+      "env": {
+        "DD_API_KEY": "${DD_API_KEY}",
+        "DD_APP_KEY": "${DD_APP_KEY}",
+        "DD_SITE": "datadoghq.eu"
+      }
+    },
+    "docker": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@docker/hub-mcp"
+      ],
+      "env": {
+        "DOCKER_HUB_TOKEN": "${DOCKER_HUB_TOKEN}"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "github-mcp-server",
+        "stdio"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "kubernetes": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-server-kubernetes"
+      ]
+    },
+    "pagerduty": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "pagerduty-mcp-server"
+      ],
+      "env": {
+        "PAGERDUTY_API_KEY": "${PAGERDUTY_API_KEY}"
+      }
+    },
+    "safedep-pinner": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "safedep/pinner-mcp"
+      ]
+    },
+    "safedep-vet": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@safedep/vet-mcp"
+      ]
+    },
+    "terraform": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "terraform-mcp-server",
+        "stdio"
+      ],
+      "env": {
+        "TF_TOKEN_app_terraform_io": "${TF_TOKEN_app_terraform_io}"
+      }
+    }
+  }
+}
