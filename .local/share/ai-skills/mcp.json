@@ -43,14 +43,6 @@
         "DOCKER_HUB_TOKEN": "${DOCKER_HUB_TOKEN}"
       }
     },
-    "forgejo": {
-      "type": "stdio",
-      "command": "/home/daffy/.local/bin/forgejo-mcp",
-      "env": {
-        "FORGEJO_TOKEN": "${FORGEJO_TOKEN}",
-        "FORGEJO_URL": "${FORGEJO_URL}"
-      }
-    },
     "github": {
       "type": "stdio",
       "command": "npx",
@@ -81,22 +73,6 @@
       "env": {
         "PAGERDUTY_API_KEY": "${PAGERDUTY_API_KEY}"
       }
-    },
-    "safedep-pinner": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "safedep/pinner-mcp"
-      ]
-    },
-    "safedep-vet": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@safedep/vet-mcp"
-      ]
     },
     "terraform": {
       "type": "stdio",

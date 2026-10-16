@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -20,6 +21,54 @@ type UnifiedServer struct {
 	Env         map[string]string `json:"env,omitempty"`
 	URL         string            `json:"url,omitempty"`
 	SourceTools []string          `json:"source_tools,omitempty"`
+}
+
+func (s UnifiedServer) Equal(o UnifiedServer) bool {
+	if s.URL != o.URL {
+		return false
+	}
+	if s.Command != o.Command {
+		return false
+	}
+	if !reflect.DeepEqual(s.Args, o.Args) {
+		return false
+	}
+	if len(s.Env) != len(o.Env) {
+		return false
+	}
+	for k, v := range s.Env {
+		if o.Env[k] != v {
+			return false
+		}
+	}
+	return true
+}
+
+func (s UnifiedServer) DiffDescription(central UnifiedServer) []string {
+	var diffs []string
+	if s.URL != central.URL {
+		diffs = append(diffs, fmt.Sprintf("URL: '%s' (local) vs '%s' (central)", s.URL, central.URL))
+	}
+	if s.Command != central.Command {
+		diffs = append(diffs, fmt.Sprintf("Command: '%s' (local) vs '%s' (central)", s.Command, central.Command))
+	}
+	if !reflect.DeepEqual(s.Args, central.Args) {
+		diffs = append(diffs, fmt.Sprintf("Args: %v (local) vs %v (central)", s.Args, central.Args))
+	}
+	// Analyse détaillée de l'environnement (clés ajoutées, modifiées, supprimées)
+	for k, v := range s.Env {
+		if centVal, exists := central.Env[k]; !exists {
+			diffs = append(diffs, fmt.Sprintf("+ Env: %s=%s (nouvelle variable)", k, v))
+		} else if centVal != v {
+			diffs = append(diffs, fmt.Sprintf("~ Env %s: '%s' (local) vs '%s' (central)", k, v, centVal))
+		}
+	}
+	for k, v := range central.Env {
+		if _, exists := s.Env[k]; !exists {
+			diffs = append(diffs, fmt.Sprintf("- Env: %s=%s (absent en local)", k, v))
+		}
+	}
+	return diffs
 }
 
 // 1. Format Canonique Central & VS Code
@@ -55,15 +104,21 @@ type OpenCodeServer struct {
 	Environment map[string]string `json:"environment,omitempty"`
 }
 
+type ServerDifference struct {
+	ServerName string
+	ClientName string
+	LocalSrv   UnifiedServer
+	CentralSrv UnifiedServer
+	Diffs      []string
+}
+
 func main() {
-	// Drapeaux CLI
 	excludeFlag := flag.String("exclude", "", "Liste de serveurs MCP à exclure, séparés par des virgules (ex: -exclude forgejo,datadog)")
-	interactiveFlag := flag.Bool("interactive", false, "Mode interactif (-i) : demande confirmation pour chaque nouveau serveur détecté et pour le sens de synchronisation")
+	interactiveFlag := flag.Bool("interactive", false, "Mode interactif (-i) : demande confirmation pour les nouveautés, modifications de variables et sens de synchronisation")
 	flag.BoolVar(interactiveFlag, "i", false, "Alias court pour -interactive")
 	dryRunFlag := flag.Bool("dry-run", false, "Affiche uniquement les différences et actions prévues sans modifier les fichiers")
 	flag.Parse()
 
-	// Construction du set d'exclusions
 	excludedSet := make(map[string]bool)
 	if *excludeFlag != "" {
 		for _, name := range strings.Split(*excludeFlag, ",") {
@@ -128,26 +183,43 @@ func main() {
 	clientServers["OpenCode"] = make(map[string]UnifiedServer)
 	readOpenCodeServers(opencodePath, "OpenCode", clientServers["OpenCode"])
 
-	// 3. Détecter tous les serveurs existants et repérer les nouveautés
+	// 3. Détecter :
+	//    A. Les NOUVEAUX serveurs (présents dans un client mais pas dans central)
+	//    B. Les DIFFÉRENCES DE CONTENU (variables modifiées/ajoutées, arguments changés...)
+	newInClients := make(map[string][]string) // serverName -> []clientName
+	var contentDiffs []ServerDifference
+
 	allDetected := make(map[string]UnifiedServer)
 	for name, s := range centralServers {
 		allDetected[name] = s
 	}
 
-	// Nouveautés par client (serveurs présents dans un client mais absents du hub central)
-	newInClients := make(map[string][]string) // serverName -> []clientName
 	for clientName, srvs := range clientServers {
-		for name, s := range srvs {
-			if _, inCentral := centralServers[name]; !inCentral {
+		for name, localS := range srvs {
+			centS, inCentral := centralServers[name]
+			if !inCentral {
 				newInClients[name] = append(newInClients[name], clientName)
+				mergeServer(allDetected, localS, clientName)
+			} else {
+				// Le serveur existe : vérifier si son contenu diffère (variables, commande, args)
+				if !localS.Equal(centS) {
+					diffs := localS.DiffDescription(centS)
+					contentDiffs = append(contentDiffs, ServerDifference{
+						ServerName: name,
+						ClientName: clientName,
+						LocalSrv:   localS,
+						CentralSrv: centS,
+						Diffs:      diffs,
+					})
+				}
+				mergeServer(allDetected, localS, clientName)
 			}
-			mergeServer(allDetected, s, clientName)
 		}
 	}
 
 	reader := bufio.NewReader(os.Stdin)
 
-	// Si des nouveaux serveurs ont été détectés dans les clients
+	// --- A. Affichage des nouveaux serveurs ---
 	if len(newInClients) > 0 {
 		fmt.Printf("\n✨ %d nouveau(x) serveur(s) détecté(s) dans vos clients :\n", len(newInClients))
 		for name, clients := range newInClients {
@@ -155,7 +227,7 @@ func main() {
 		}
 
 		if *interactiveFlag {
-			fmt.Print("\nSouhaitez-vous intégrer ces nouveaux serveurs dans le hub central mcp.json ? [O/n] : ")
+			fmt.Print("Souhaitez-vous intégrer ces nouveaux serveurs dans le hub central mcp.json ? [O/n] : ")
 			ans, _ := reader.ReadString('\n')
 			ans = strings.TrimSpace(strings.ToLower(ans))
 			if ans == "n" || ans == "non" {
@@ -163,6 +235,32 @@ func main() {
 					delete(allDetected, name)
 				}
 				fmt.Println("⏭️  Nouveaux serveurs ignorés pour cette synchronisation.")
+			}
+		}
+	}
+
+	// --- B. Affichage et gestion des différences de contenu (variables, etc.) ---
+	if len(contentDiffs) > 0 {
+		fmt.Printf("\n🔄 %d différence(s) de configuration détectée(s) entre vos clients et le hub central :\n", len(contentDiffs))
+		for _, d := range contentDiffs {
+			fmt.Printf("   ⚙️  Serveur '%s' [Source: %s] :\n", d.ServerName, d.ClientName)
+			for _, diffLine := range d.Diffs {
+				fmt.Printf("       %s\n", diffLine)
+			}
+		}
+
+		if *interactiveFlag {
+			fmt.Print("\nComment synchroniser ces modifications ?\n [1] Mettre à jour le hub central avec ces nouvelles valeurs (Local -> Central -> Tous)\n [2] Conserver les valeurs du hub central et écraser le client (Central -> Local)\nChoix [1/2] (défaut: 1) : ")
+			ans, _ := reader.ReadString('\n')
+			ans = strings.TrimSpace(ans)
+			if ans == "2" {
+				// Revenir aux valeurs de central pour ces serveurs
+				for _, d := range contentDiffs {
+					allDetected[d.ServerName] = d.CentralSrv
+				}
+				fmt.Println("🔄 Rétablissement des valeurs du hub central.")
+			} else {
+				fmt.Println("✓ Nouvelles variables / modifications fusionnées dans le hub central.")
 			}
 		}
 	}
@@ -176,7 +274,7 @@ func main() {
 		finalServers[name] = s
 	}
 
-	// Confirmation en mode interactif pour la destination
+	// Confirmation en mode interactif
 	if *interactiveFlag {
 		fmt.Printf("\n📋 %d serveur(s) seront synchronisés sur l'ensemble des 5 outils :\n", len(finalServers))
 		var sortedNames []string
@@ -185,7 +283,17 @@ func main() {
 		}
 		sort.Strings(sortedNames)
 		for _, name := range sortedNames {
-			fmt.Printf("   ✔ %s\n", name)
+			s := finalServers[name]
+			var envKeys []string
+			for k := range s.Env {
+				envKeys = append(envKeys, k)
+			}
+			sort.Strings(envKeys)
+			envSummary := ""
+			if len(envKeys) > 0 {
+				envSummary = fmt.Sprintf(" (envs: %s)", strings.Join(envKeys, ", "))
+			}
+			fmt.Printf("   ✔ %s%s\n", name, envSummary)
 		}
 
 		fmt.Print("\nConfirmer l'écriture et la propagation vers tous les outils ? [O/n] : ")
@@ -266,9 +374,7 @@ func mergeServer(dest map[string]UnifiedServer, s UnifiedServer, sourceName stri
 		existing.Env = s.Env
 	} else if s.Env != nil {
 		for k, v := range s.Env {
-			if _, hasKey := existing.Env[k]; !hasKey {
-				existing.Env[k] = v
-			}
+			existing.Env[k] = v
 		}
 	}
 
