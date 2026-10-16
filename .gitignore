@@ -49,6 +49,7 @@
 .cpan/
 .cups/
 .cz.toml.work
+.dataplatform-genai/
 .dbus/
 .dia/
 .disruptive innovations sarl/
@@ -82,6 +83,7 @@
 .gimp-2.8/
 .gitconfig
 .gk/
+.google_workspace_mcp/
 .gradle/
 .grip/
 .gksu.lock

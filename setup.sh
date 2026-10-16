@@ -1154,6 +1154,12 @@ OneDrive() {
   systemctl --user start onedrive
 }
 
+orionbrowser() {
+  # orionbrowser : https://orionbrowser.com/platforms/linux/install
+  flatpak remote-add --if-not-exists orion-beta https://flatpak.orionbrowser.com/orion-beta.flatpakrepo
+  flatpak install orion-beta com.kagi.Orion
+}
+
 OSQuery() {
   # OSQuery : https://itnext.io/auditing-containers-with-osquery-389636f8c420
   export OSQUERY_KEY=1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
@@ -1803,6 +1809,7 @@ Main() {
   #  npmfx
   OfflineImap
   #  OneDrive
+  orionbrowser
   #  OSQuery
   PlayOnLinux
   Powershell
