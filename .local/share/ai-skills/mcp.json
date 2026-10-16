@@ -1,22 +1,5 @@
 {
   "servers": {
-    "atlassian": {
-      "type": "http",
-      "url": "https://mcp.atlassian.com/v1/sse"
-    },
-    "atlassian-local": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-atlassian"
-      ],
-      "env": {
-        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}",
-        "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
-        "ATLASSIAN_URL": "${ATLASSIAN_URL}"
-      }
-    },
     "aws-cost": {
       "type": "stdio",
       "command": "npx",
@@ -58,6 +41,14 @@
       ],
       "env": {
         "DOCKER_HUB_TOKEN": "${DOCKER_HUB_TOKEN}"
+      }
+    },
+    "forgejo": {
+      "type": "stdio",
+      "command": "/home/daffy/.local/bin/forgejo-mcp",
+      "env": {
+        "FORGEJO_TOKEN": "${FORGEJO_TOKEN}",
+        "FORGEJO_URL": "${FORGEJO_URL}"
       }
     },
     "github": {

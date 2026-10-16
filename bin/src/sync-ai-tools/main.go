@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -19,7 +22,7 @@ type UnifiedServer struct {
 	SourceTools []string          `json:"source_tools,omitempty"`
 }
 
-// 1. Format Canonique Central & VS Code (~/.local/share/ai-skills/mcp.json & ~/.config/Code/User/mcp.json)
+// 1. Format Canonique Central & VS Code
 type CanonicalMCPConfig struct {
 	Servers map[string]CanonicalServer `json:"servers"`
 }
@@ -53,21 +56,49 @@ type OpenCodeServer struct {
 }
 
 func main() {
+	// Drapeaux CLI
+	excludeFlag := flag.String("exclude", "", "Liste de serveurs MCP à exclure, séparés par des virgules (ex: -exclude forgejo,datadog)")
+	interactiveFlag := flag.Bool("interactive", false, "Mode interactif (-i) : demande confirmation pour chaque nouveau serveur détecté et pour le sens de synchronisation")
+	flag.BoolVar(interactiveFlag, "i", false, "Alias court pour -interactive")
+	dryRunFlag := flag.Bool("dry-run", false, "Affiche uniquement les différences et actions prévues sans modifier les fichiers")
+	flag.Parse()
+
+	// Construction du set d'exclusions
+	excludedSet := make(map[string]bool)
+	if *excludeFlag != "" {
+		for _, name := range strings.Split(*excludeFlag, ",") {
+			trimmed := strings.TrimSpace(name)
+			if trimmed != "" {
+				excludedSet[trimmed] = true
+			}
+		}
+	}
+
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Impossible de déterminer le répertoire HOME : %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println("=== Synchronisation des MCP & Skills IA (Hub Central ~/.local/share/ai-skills) ===")
+	fmt.Println("=== Synchronisation des MCP & Skills IA ===")
+	if len(excludedSet) > 0 {
+		var list []string
+		for k := range excludedSet {
+			list = append(list, k)
+		}
+		sort.Strings(list)
+		fmt.Printf("ℹ️  Serveur(s) exclu(s) : %s\n", strings.Join(list, ", "))
+	}
+	if *interactiveFlag {
+		fmt.Println("🔍 Mode interactif activé")
+	}
+	if *dryRunFlag {
+		fmt.Println("⚠️  Mode DRY-RUN activé (aucune modification ne sera écrite)")
+	}
 
 	centralSkillsDir := filepath.Join(homeDir, ".local/share/ai-skills")
 	centralMcpPath := filepath.Join(centralSkillsDir, "mcp.json")
-
 	_ = os.MkdirAll(centralSkillsDir, 0755)
-
-	// Carte globale de tous les serveurs unifiés
-	mergedServers := make(map[string]UnifiedServer)
 
 	// Chemins des 5 clients
 	vscodePath := filepath.Join(homeDir, ".config/Code/User/mcp.json")
@@ -76,42 +107,119 @@ func main() {
 	mammouthPath := filepath.Join(homeDir, ".config/mammouth/mammouth.jsonc")
 	opencodePath := filepath.Join(homeDir, ".config/opencode/opencode.jsonc")
 
-	// --- Étape A : COLLECTE & FUSION (Merge) ---
-	// 1. Lire d'abord la source centrale (prioritaire)
-	readCanonicalServers(centralMcpPath, "Central ai-skills/mcp.json", mergedServers)
+	// 1. Lire les serveurs du Hub Central
+	centralServers := make(map[string]UnifiedServer)
+	readCanonicalServers(centralMcpPath, "Hub Central", centralServers)
 
-	// 2. Lire les configurations de tous les clients existants pour capter tout ajout local
-	readCanonicalServers(vscodePath, "VS Code", mergedServers)
-	readStandardServers(geminiPath, "Antigravity", mergedServers)
-	readStandardServers(copilotPath, "Copilot CLI", mergedServers)
-	readOpenCodeServers(mammouthPath, "Mammouth", mergedServers)
-	readOpenCodeServers(opencodePath, "OpenCode", mergedServers)
+	// 2. Lire les serveurs de chaque outil client
+	clientServers := make(map[string]map[string]UnifiedServer)
+	clientServers["VS Code"] = make(map[string]UnifiedServer)
+	readCanonicalServers(vscodePath, "VS Code", clientServers["VS Code"])
 
-	fmt.Printf("\nTotal de serveurs MCP uniques identifiés après fusion : %d\n\n", len(mergedServers))
+	clientServers["Antigravity"] = make(map[string]UnifiedServer)
+	readStandardServers(geminiPath, "Antigravity", clientServers["Antigravity"])
+
+	clientServers["Copilot CLI"] = make(map[string]UnifiedServer)
+	readStandardServers(copilotPath, "Copilot CLI", clientServers["Copilot CLI"])
+
+	clientServers["Mammouth"] = make(map[string]UnifiedServer)
+	readOpenCodeServers(mammouthPath, "Mammouth", clientServers["Mammouth"])
+
+	clientServers["OpenCode"] = make(map[string]UnifiedServer)
+	readOpenCodeServers(opencodePath, "OpenCode", clientServers["OpenCode"])
+
+	// 3. Détecter tous les serveurs existants et repérer les nouveautés
+	allDetected := make(map[string]UnifiedServer)
+	for name, s := range centralServers {
+		allDetected[name] = s
+	}
+
+	// Nouveautés par client (serveurs présents dans un client mais absents du hub central)
+	newInClients := make(map[string][]string) // serverName -> []clientName
+	for clientName, srvs := range clientServers {
+		for name, s := range srvs {
+			if _, inCentral := centralServers[name]; !inCentral {
+				newInClients[name] = append(newInClients[name], clientName)
+			}
+			mergeServer(allDetected, s, clientName)
+		}
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+
+	// Si des nouveaux serveurs ont été détectés dans les clients
+	if len(newInClients) > 0 {
+		fmt.Printf("\n✨ %d nouveau(x) serveur(s) détecté(s) dans vos clients :\n", len(newInClients))
+		for name, clients := range newInClients {
+			fmt.Printf("   • '%s' (trouvé dans: %s)\n", name, strings.Join(clients, ", "))
+		}
+
+		if *interactiveFlag {
+			fmt.Print("\nSouhaitez-vous intégrer ces nouveaux serveurs dans le hub central mcp.json ? [O/n] : ")
+			ans, _ := reader.ReadString('\n')
+			ans = strings.TrimSpace(strings.ToLower(ans))
+			if ans == "n" || ans == "non" {
+				for name := range newInClients {
+					delete(allDetected, name)
+				}
+				fmt.Println("⏭️  Nouveaux serveurs ignorés pour cette synchronisation.")
+			}
+		}
+	}
+
+	// Filtrer les exclusions
+	finalServers := make(map[string]UnifiedServer)
+	for name, s := range allDetected {
+		if excludedSet[name] {
+			continue
+		}
+		finalServers[name] = s
+	}
+
+	// Confirmation en mode interactif pour la destination
+	if *interactiveFlag {
+		fmt.Printf("\n📋 %d serveur(s) seront synchronisés sur l'ensemble des 5 outils :\n", len(finalServers))
+		var sortedNames []string
+		for name := range finalServers {
+			sortedNames = append(sortedNames, name)
+		}
+		sort.Strings(sortedNames)
+		for _, name := range sortedNames {
+			fmt.Printf("   ✔ %s\n", name)
+		}
+
+		fmt.Print("\nConfirmer l'écriture et la propagation vers tous les outils ? [O/n] : ")
+		ans, _ := reader.ReadString('\n')
+		ans = strings.TrimSpace(strings.ToLower(ans))
+		if ans == "n" || ans == "non" {
+			fmt.Println("Annulé par l'utilisateur.")
+			return
+		}
+	}
+
+	if *dryRunFlag {
+		fmt.Println("\n[DRY-RUN] Fin de simulation. Aucun fichier n'a été modifié.")
+		return
+	}
 
 	// --- Étape B : ÉCRITURE DANS LE HUB CENTRAL ---
-	writeCanonicalConfig(centralMcpPath, mergedServers)
-	fmt.Printf("[✓] Hub central mis à jour -> %s\n", centralMcpPath)
+	writeCanonicalConfig(centralMcpPath, finalServers)
+	fmt.Printf("\n[✓] Hub central mis à jour -> %s\n", centralMcpPath)
 
 	// --- Étape C : DISTRIBUTION AUX 5 OUTILS ---
-	// 1. VS Code
-	writeCanonicalConfig(vscodePath, mergedServers)
+	writeCanonicalConfig(vscodePath, finalServers)
 	fmt.Printf("[✓] VS Code mis à jour -> %s\n", vscodePath)
 
-	// 2. Antigravity
-	writeStandardConfig(geminiPath, mergedServers)
+	writeStandardConfig(geminiPath, finalServers)
 	fmt.Printf("[✓] Antigravity mis à jour -> %s\n", geminiPath)
 
-	// 3. Copilot CLI
-	writeStandardConfig(copilotPath, mergedServers)
+	writeStandardConfig(copilotPath, finalServers)
 	fmt.Printf("[✓] Copilot CLI mis à jour -> %s\n", copilotPath)
 
-	// 4. Mammouth CLI
-	writeOpenCodeConfig(mammouthPath, mergedServers)
+	writeOpenCodeConfig(mammouthPath, finalServers)
 	fmt.Printf("[✓] Mammouth CLI mis à jour -> %s\n", mammouthPath)
 
-	// 5. OpenCode
-	writeOpenCodeConfig(opencodePath, mergedServers)
+	writeOpenCodeConfig(opencodePath, finalServers)
 	fmt.Printf("[✓] OpenCode mis à jour -> %s\n", opencodePath)
 
 	// --- Étape D : VÉRIFICATION DES SYMLINKS POUR LES SKILLS ---
@@ -132,6 +240,12 @@ func main() {
 
 // Fusion d'un serveur dans la carte globale
 func mergeServer(dest map[string]UnifiedServer, s UnifiedServer, sourceName string) {
+	name := strings.TrimSpace(s.Name)
+	if name == "" || name == "servers" || name == "inputs" {
+		return
+	}
+	s.Name = name
+
 	existing, found := dest[s.Name]
 	if !found {
 		s.SourceTools = []string{sourceName}
