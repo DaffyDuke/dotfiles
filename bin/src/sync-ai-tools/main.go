@@ -117,6 +117,7 @@ func main() {
 	interactiveFlag := flag.Bool("interactive", false, "Mode interactif (-i) : demande confirmation pour les nouveautés, modifications de variables et sens de synchronisation")
 	flag.BoolVar(interactiveFlag, "i", false, "Alias court pour -interactive")
 	dryRunFlag := flag.Bool("dry-run", false, "Affiche uniquement les différences et actions prévues sans modifier les fichiers")
+	workFileFlag := flag.String("work-file", "", "Chemin vers un fichier MCP annexe. Défaut: ~/.local/share/ai-skills/mcp-work.json. Les serveurs de ce fichier sont synchronisés vers tous les clients mais PAS écrits dans le hub central mcp.json. Utile pour des outils spécifiques (ex: bigquery, servicenow) que tu ne veux pas mélanger au hub principal")
 	flag.Parse()
 
 	excludedSet := make(map[string]bool)
@@ -155,6 +156,19 @@ func main() {
 	centralMcpPath := filepath.Join(centralSkillsDir, "mcp.json")
 	_ = os.MkdirAll(centralSkillsDir, 0755)
 
+	// Fichier annexe : serveurs MCP à synchroniser séparément du hub central
+	workFilePath := *workFileFlag
+	if workFilePath == "" {
+		workFilePath = filepath.Join(centralSkillsDir, "mcp-work.json")
+	}
+	workServers := make(map[string]UnifiedServer)
+	if _, err := os.Stat(workFilePath); err == nil {
+		readCanonicalServers(workFilePath, "Fichier annexe", workServers)
+		fmt.Printf("ℹ️  Fichier annexe chargé : %s (%d serveur(s))\n", workFilePath, len(workServers))
+	} else {
+		fmt.Printf("ℹ️  Aucun fichier annexe trouvé (%s) - la sync continue sans serveurs supplémentaires\n", workFilePath)
+	}
+
 	// Chemins des 5 clients
 	vscodePath := filepath.Join(homeDir, ".config/Code/User/mcp.json")
 	geminiPath := filepath.Join(homeDir, ".gemini/config/mcp_config.json")
@@ -191,6 +205,11 @@ func main() {
 
 	allDetected := make(map[string]UnifiedServer)
 	for name, s := range centralServers {
+		allDetected[name] = s
+	}
+
+	// Ajouter les serveurs du fichier annexe (prioritaire sur le hub central)
+	for name, s := range workServers {
 		allDetected[name] = s
 	}
 
@@ -311,7 +330,14 @@ func main() {
 	}
 
 	// --- Étape B : ÉCRITURE DANS LE HUB CENTRAL ---
-	writeCanonicalConfig(centralMcpPath, finalServers)
+	// Les serveurs du fichier annexe ne sont PAS écrits dans le hub central
+	centralOnlyServers := make(map[string]UnifiedServer)
+	for name, s := range finalServers {
+		if _, isWorkServer := workServers[name]; !isWorkServer {
+			centralOnlyServers[name] = s
+		}
+	}
+	writeCanonicalConfig(centralMcpPath, centralOnlyServers)
 	fmt.Printf("\n[✓] Hub central mis à jour -> %s\n", centralMcpPath)
 
 	// --- Étape C : DISTRIBUTION AUX 5 OUTILS ---

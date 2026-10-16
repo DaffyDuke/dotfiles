@@ -1,15 +1,8 @@
 {
   "servers": {
-    "aws-cost": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@aws/aws-cost-explorer-mcp-server"
-      ],
-      "env": {
-        "AWS_PROFILE": "${AWS_PROFILE}"
-      }
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/sse"
     },
     "cloud-cost": {
       "type": "stdio",
@@ -18,6 +11,10 @@
         "-y",
         "cloud-cost-mcp"
       ]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
     },
     "datadog": {
       "type": "stdio",
@@ -32,27 +29,34 @@
         "DD_SITE": "datadoghq.eu"
       }
     },
-    "docker": {
+    "forgejo": {
       "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
-        "@docker/hub-mcp"
+        "@rubicontv/forgejo-mcp"
       ],
       "env": {
-        "DOCKER_HUB_TOKEN": "${DOCKER_HUB_TOKEN}"
+        "FORGEJO_BASE_URL": "https://git.lautre.net",
+        "FORGEJO_TOKEN": "${env:FORGEJO_TOKEN}"
       }
     },
     "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "google-workspace": {
       "type": "stdio",
-      "command": "npx",
+      "command": "uvx",
       "args": [
-        "-y",
-        "github-mcp-server",
-        "stdio"
+        "workspace-mcp",
+        "--tools",
+        "drive",
+        "chat"
       ],
       "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+        "GOOGLE_OAUTH_CLIENT_ID": "${GOOGLE_OAUTH_CLIENT_ID}",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "${GOOGLE_OAUTH_CLIENT_SECRET}"
       }
     },
     "kubernetes": {
@@ -62,17 +66,6 @@
         "-y",
         "mcp-server-kubernetes"
       ]
-    },
-    "pagerduty": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "pagerduty-mcp-server"
-      ],
-      "env": {
-        "PAGERDUTY_API_KEY": "${PAGERDUTY_API_KEY}"
-      }
     },
     "terraform": {
       "type": "stdio",
