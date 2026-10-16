@@ -1842,9 +1842,44 @@ Main() {
   YakYak
   youtube
   #  YunoHost
-  ZSH
-  #  zquests
+  SetupAISkillsMCP
 }
+
+SetupAISkillsMCP() {
+  echo "=== Configuration des Skills et MCP IA ==="
+  local central_skills="$HOME/.local/share/ai-skills"
+  mkdir -p "$central_skills"
+
+  # Liens symboliques pour centraliser les skills entre tous les outils
+  local targets=(
+    "$HOME/.config/opencode/skills"
+    "$HOME/.gemini/config/skills"
+    "$HOME/.copilot/skills"
+    "$HOME/.config/mammouth/skills"
+  )
+
+  for target in "${targets[@]}"; do
+    mkdir -p "$(dirname "$target")"
+    if [ -L "$target" ]; then
+      if [ "$(readlink "$target")" != "$central_skills" ]; then
+        rm -f "$target"
+        ln -s "$central_skills" "$target"
+      fi
+    else
+      [ -d "$target" ] && cp -r "$target"/* "$central_skills"/ 2>/dev/null
+      rm -rf "$target"
+      ln -s "$central_skills" "$target"
+    fi
+    echo "[✓] Lien symbolique créé : $target -> $central_skills"
+  done
+
+  # Compilation et installation de l'outil sync-ai-tools en Go si disponible
+  if [ -d "$HOME/bin/src/sync-ai-tools" ] && command -v go >/dev/null 2>&1; then
+    echo "Compilation de sync-ai-tools..."
+    (cd "$HOME/bin/src/sync-ai-tools" && make install)
+  fi
+}
+
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
 # Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
