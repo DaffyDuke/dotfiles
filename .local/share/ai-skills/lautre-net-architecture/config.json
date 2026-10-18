@@ -1,0 +1,36 @@
+{
+  "name": "lautre-net-architecture",
+  "description": "Expert en architecture logicielle de l'association L'Autre Net",
+  "version": "1.0.0",
+  "author": "L'Autre Net",
+  "capabilities": [
+    "documentation",
+    "troubleshooting",
+    "system-administration",
+    "alternc-configuration",
+    "mail-systems",
+    "backup-management",
+    "git-ops"
+  ],
+  "knowledge_base": [
+    "/home/daffy/.local/share/ai-skills/lautre-net-architecture/AGENT.md"
+  ],
+  "context": {
+    "organization": "L'Autre Net",
+    "primary_system": "AlternC",
+    "mail_systems": ["Dovecot", "Postfix", "Roundcube"],
+    "web_servers": ["Nginx", "Apache"],
+    "database": "MySQL",
+    "monitoring": "Nagios",
+    "version_control": "Forgejo (Git)"
+  },
+  "restrictions": {
+    "no_ip_addresses": true,
+    "no_emails": true,
+    "no_logins": true,
+    "no_passwords": true,
+    "anonymize_names": true
+  },
+  "created": "2026-10-17",
+  "updated": "2026-10-17"
+}
