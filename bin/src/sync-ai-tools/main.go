@@ -150,6 +150,16 @@ type UnifiedAgent struct {
 	Body        string // instructions / prompt système
 	Raw         []byte // octets du fichier hub central (préservés si existant)
 	SourceTools []string
+
+	// Déclaration des sous-agents que cet agent peut invoquer :
+	//   Subagents = ["*"]        -> tous les sous-agents disponibles
+	//   Subagents = ["a", "b"]   -> liste restreinte (roster)
+	//   NoSubagents = true       -> interdiction explicite (roster vide)
+	// Les deux restent à leur valeur zéro si l'agent ne déclare rien.
+	// Conversion : OpenCode/Mammouth -> règles permissions "subagent",
+	// Copilot CLI/VS Code et Antigravity -> champ frontmatter "agents".
+	Subagents   []string
+	NoSubagents bool
 }
 
 type AgentDifference struct {
@@ -1058,6 +1068,15 @@ func addAgentFromFile(dest map[string]UnifiedAgent, name string, data []byte, fo
 		if a.Mode == "" {
 			a.Mode = "all"
 		}
+		roster, all, deny := parseSubagentRules(fm)
+		switch {
+		case all:
+			a.Subagents = []string{"*"}
+		case len(roster) > 0:
+			a.Subagents = roster
+		case deny:
+			a.NoSubagents = true
+		}
 	case agentFormatCopilot:
 		a.Model = "" // pas d'équivalent fiable entre fournisseurs de modèles
 		userInvocable := fmBool(fm, "user-invocable", true)
@@ -1069,6 +1088,9 @@ func addAgentFromFile(dest map[string]UnifiedAgent, name string, data []byte, fo
 			a.Mode = "subagent"
 		default:
 			a.Mode = "all"
+		}
+		if list, present := fmSubagentList(fm); present {
+			applySubagentList(&a, list)
 		}
 	case agentFormatAntigravity:
 		a.Model = ""
@@ -1082,6 +1104,9 @@ func addAgentFromFile(dest map[string]UnifiedAgent, name string, data []byte, fo
 		default:
 			a.Mode = "all"
 		}
+		if list, present := fmSubagentList(fm); present {
+			applySubagentList(&a, list)
+		}
 	}
 
 	if strings.TrimSpace(a.Description) == "" && a.Body == "" {
@@ -1089,6 +1114,31 @@ func addAgentFromFile(dest map[string]UnifiedAgent, name string, data []byte, fo
 	}
 	dest[name] = a
 	return true
+}
+
+// applySubagentList normalise un roster lu en frontmatter ("agents: [...]").
+func applySubagentList(a *UnifiedAgent, list []string) {
+	var cleaned []string
+	star := false
+	for _, s := range list {
+		if s == "*" {
+			star = true
+			continue
+		}
+		cleaned = append(cleaned, s)
+	}
+	switch {
+	case star:
+		a.Subagents = []string{"*"}
+		a.NoSubagents = false
+	case len(cleaned) > 0:
+		sort.Strings(cleaned)
+		a.Subagents = cleaned
+		a.NoSubagents = false
+	default:
+		a.Subagents = nil
+		a.NoSubagents = true
+	}
 }
 
 // agentDiffLines compare un agent client au hub central (modèle canonique).
@@ -1103,10 +1153,39 @@ func agentDiffLines(local, central UnifiedAgent, compareModel bool) []string {
 	if compareModel && local.Model != central.Model {
 		diffs = append(diffs, fmt.Sprintf("~ Model: '%s' (local) vs '%s' (central)", local.Model, central.Model))
 	}
+	if !subagentDeclEqual(local, central) {
+		diffs = append(diffs, fmt.Sprintf("~ Sous-agents: [%s] (local) vs [%s] (central)", subagentDeclLabel(local), subagentDeclLabel(central)))
+	}
 	if local.Body != central.Body {
 		diffs = append(diffs, "~ Instructions (corps du fichier): différentes")
 	}
 	return diffs
+}
+
+func subagentDeclEqual(a, b UnifiedAgent) bool {
+	if a.NoSubagents != b.NoSubagents {
+		return false
+	}
+	if len(a.Subagents) != len(b.Subagents) {
+		return false
+	}
+	for i := range a.Subagents {
+		if a.Subagents[i] != b.Subagents[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func subagentDeclLabel(a UnifiedAgent) string {
+	switch {
+	case a.NoSubagents:
+		return "aucun"
+	case len(a.Subagents) == 1 && a.Subagents[0] == "*":
+		return "tous"
+	default:
+		return strings.Join(a.Subagents, ", ")
+	}
 }
 
 // renderCanonicalAgent produit le format canonique OpenCode/Mammouth/hub.
@@ -1123,6 +1202,19 @@ func renderCanonicalAgent(a UnifiedAgent) []byte {
 	b.WriteString("mode: " + mode + "\n")
 	if a.Model != "" {
 		b.WriteString("model: " + a.Model + "\n")
+	}
+	// Roster de sous-agents -> règles permissions "subagent" (dernière règle
+	// gagnante : on part d'un deny "*" puis on autorise chaque sous-agent).
+	if len(a.Subagents) > 0 || a.NoSubagents {
+		b.WriteString("permissions:\n")
+		if len(a.Subagents) == 1 && a.Subagents[0] == "*" {
+			b.WriteString("  - action: subagent\n    resource: \"*\"\n    effect: allow\n")
+		} else {
+			b.WriteString("  - action: subagent\n    resource: \"*\"\n    effect: deny\n")
+			for _, s := range a.Subagents {
+				fmt.Fprintf(&b, "  - action: subagent\n    resource: %s\n    effect: allow\n", yamlQuote(s))
+			}
+		}
 	}
 	b.WriteString("---\n\n")
 	b.WriteString(a.Body)
@@ -1144,6 +1236,7 @@ func renderCopilotAgent(a UnifiedAgent) []byte {
 	case "subagent":
 		b.WriteString("user-invocable: false\n")
 	}
+	writeSubagentsField(&b, a)
 	b.WriteString("---\n\n")
 	b.WriteString(a.Body)
 	b.WriteString("\n")
@@ -1170,10 +1263,25 @@ func renderAntigravityAgent(a UnifiedAgent) []byte {
 		b.WriteString("subagent: true\n")
 	}
 	b.WriteString("model: inherit\n")
+	writeSubagentsField(&b, a)
 	b.WriteString("---\n\n")
 	b.WriteString(a.Body)
 	b.WriteString("\n")
 	return []byte(b.String())
+}
+
+// writeSubagentsField émet le champ frontmatter "agents" (Copilot / Antigravity).
+func writeSubagentsField(b *strings.Builder, a UnifiedAgent) {
+	switch {
+	case len(a.Subagents) > 0:
+		quoted := make([]string, 0, len(a.Subagents))
+		for _, s := range a.Subagents {
+			quoted = append(quoted, yamlQuote(s))
+		}
+		fmt.Fprintf(b, "agents: [%s]\n", strings.Join(quoted, ", "))
+	case a.NoSubagents:
+		b.WriteString("agents: []\n")
+	}
 }
 
 func truncateLine(s string, n int) string {
@@ -1245,7 +1353,7 @@ func parseYAMLFrontmatter(text string) map[string]any {
 		switch {
 		case val == "":
 			// Liste en bloc (ou valeur vide) : consommer les lignes indentées suivantes
-			var list []string
+			var raw []string
 			for i < len(lines) {
 				l := lines[i]
 				if strings.TrimSpace(l) == "" {
@@ -1255,10 +1363,10 @@ func parseYAMLFrontmatter(text string) map[string]any {
 				if l[0] != ' ' && l[0] != '\t' {
 					break
 				}
-				list = append(list, strings.TrimSpace(l))
+				raw = append(raw, strings.TrimSpace(l))
 				i++
 			}
-			out[key] = list
+			out[key] = parseBlockItems(raw)
 		case val == ">-" || val == ">" || val == ">+" || val == "|" || val == "|-" || val == "|+":
 			// Scalaire en bloc : joindre les lignes indentées suivantes
 			var parts []string
@@ -1300,6 +1408,108 @@ func parseYAMLFrontmatter(text string) map[string]any {
 	return out
 }
 
+// parseBlockItems transforme les lignes indentées d'une liste en bloc YAML en
+// éléments []any : scalaires ("- reviewer") ou mini-cartes enchaînées
+// ("- action: subagent" puis "resource: ..." / "effect: allow").
+func parseBlockItems(raw []string) []any {
+	var items []any
+	var cur map[string]any
+	flush := func() {
+		if cur != nil {
+			items = append(items, cur)
+			cur = nil
+		}
+	}
+	for _, l := range raw {
+		if l == "-" || strings.HasPrefix(l, "- ") {
+			flush()
+			rest := strings.TrimSpace(strings.TrimPrefix(l, "-"))
+			if k, v, found := strings.Cut(rest, ":"); found {
+				k = strings.TrimSpace(k)
+				if k != "" && !strings.Contains(k, " ") {
+					cur = map[string]any{k: unquoteScalar(strings.TrimSpace(v))}
+					continue
+				}
+			}
+			if rest != "" {
+				items = append(items, unquoteScalar(rest))
+			}
+			continue
+		}
+		if k, v, found := strings.Cut(l, ":"); found && cur != nil {
+			cur[strings.TrimSpace(k)] = unquoteScalar(strings.TrimSpace(v))
+		}
+	}
+	flush()
+	return items
+}
+
+// fmItems renvoie une liste de frontmatter sous forme []any + un booléen
+// indiquant si la clé était présente (permet de distinguer absent vs vide).
+func fmItems(fm map[string]any, key string) ([]any, bool) {
+	if fm == nil {
+		return nil, false
+	}
+	v, present := fm[key]
+	if !present {
+		return nil, false
+	}
+	switch t := v.(type) {
+	case []string:
+		out := make([]any, 0, len(t))
+		for _, s := range t {
+			out = append(out, s)
+		}
+		return out, true
+	case []any:
+		return t, true
+	}
+	return nil, true
+}
+
+// fmSubagentList lit le champ frontmatter "agents" (Copilot / Antigravity).
+// Retourne (roster, present) ; "*" dans le roster signifie "tous".
+func fmSubagentList(fm map[string]any) ([]string, bool) {
+	items, present := fmItems(fm, "agents")
+	if !present {
+		return nil, false
+	}
+	var out []string
+	for _, it := range items {
+		if s, ok := it.(string); ok && s != "" {
+			out = append(out, s)
+		}
+	}
+	return out, true
+}
+
+// parseSubagentRules lit les règles permissions "subagent" au format OpenCode.
+// (roster = autorisations explicites ; all = règle allow sur "*" ; deny = règle deny sur "*").
+func parseSubagentRules(fm map[string]any) (roster []string, all, deny bool) {
+	items, _ := fmItems(fm, "permissions")
+	for _, it := range items {
+		m, ok := it.(map[string]any)
+		if !ok {
+			continue
+		}
+		if fmString(m, "action") != "subagent" {
+			continue
+		}
+		res := fmString(m, "resource")
+		eff := fmString(m, "effect")
+		switch {
+		case eff == "allow" && res == "*":
+			all = true
+		case eff == "allow" && res != "":
+			roster = append(roster, res)
+		case eff == "deny" && res == "*":
+			deny = true
+		}
+	}
+	sort.Strings(roster)
+	return roster, all, deny
+}
+
 func unquoteScalar(v string) any {
 	switch v {
 	case "true":
@@ -1332,6 +1542,14 @@ func fmString(fm map[string]any, key string) string {
 		return fmt.Sprintf("%v", v)
 	case []string:
 		return strings.Join(v, " ")
+	case []any:
+		var parts []string
+		for _, it := range v {
+			if s, ok := it.(string); ok {
+				parts = append(parts, s)
+			}
+		}
+		return strings.Join(parts, " ")
 	}
 	return ""
 }
