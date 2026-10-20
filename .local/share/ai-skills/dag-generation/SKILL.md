@@ -1,0 +1,130 @@
+---
+name: dag-generation
+description: Generate task DAGs for modernization projects — select fragments from task catalog, produce initial DAG (Stage 1), and execute/validate DAG from plan artifacts (Stage 2).
+triggers:
+  - "generate DAG"
+  - "generate plan tasks"
+  - "generate execute tasks"
+  - "compose task list for project"
+NOT for:
+  - Greenfield, hotfix, or single-question requests (coordinator handles inline)
+  - Pure architecture analysis (use analyzing-architecture)
+  - Grouping / topology decisions (coordinator handles directly)
+  - Recon / measurement (use project-recon FIRST)
+---
+
+# DAG Generation
+
+Two-stage DAG generation for modernization projects:
+1. **Stage 1** (§1.4) — select fragments from task-catalog, determine deep_planning, produce DAG JSON
+2. **Stage 2** (§3.2.2) — when deep planning, read plan artifacts, produce execute+validate DAG
+
+## Reference Files
+
+- `references/task-catalog.md` — fragment library with when/skip-when/after/scope
+- `references/dag-rules.md` — DAG construction rules (dependencies, compression, sizing)
+
+## Stage 1: Initial DAG
+
+Select fragments from the task catalog and produce a DAG.
+
+### Inputs
+
+1. **Project profile** — read from `{{BASE_PATH}}/artifacts/project-profile.yaml` (project.loc, project.languages, project.modules, assessment.change_type, assessment.grouping_needed)
+2. **user_ask** — natural-language migration target (passed by coordinator)
+
+If `user_ask` names an explicit target stack or version, preserve it verbatim in every selected task. Do not replace, downgrade, or reinterpret the requested version based on model familiarity or LTS defaults.
+
+### Decision Procedure
+
+#### Step 1: Determine deep_planning
+
+Decide whether the project needs deep planning (two-stage DAG) or can produce a complete DAG upfront.
+
+**`deep_planning: true`** when:
+- Multiple modules with cross-module dependencies that require discovery before execute tasks can be defined
+- change_type is rewrite or extract AND the target architecture is not yet clear (needs design exploration)
+- The project is large enough that execute task structure genuinely cannot be enumerated without plan-phase artifacts
+
+**`deep_planning: false`** when:
+- Single module or few modules with clear structure
+- change_type is upgrade — target is well-defined (version to version)
+- Execute tasks can be directly derived from the project profile without intermediate artifacts
+- Small projects where one developer could hold the full context
+
+#### Step 2: Select fragments
+Read `references/task-catalog.md`. For each fragment, decide include/exclude based on:
+- change_type (upgrade | extract | rewrite)
+- user_ask intent
+- Project profile (LOC, modules)
+- `deep_planning` decision from Step 1 (drives `implementation-plan` selection)
+
+Always include `target-env-prep` when the target runtime/framework/language/tooling differs from source or when the user specifies an explicit target version. This is an environment preparation task: it must install/provision/activate the requested target when possible, produce a preparation artifact, and run before scaffold/implementation/build/test tasks. It normally has no dependency on architecture/source analysis and should run in parallel with those tasks. This is true even for small projects and even when `deep_planning: false`.
+
+Respect `when` / `skip-when` conditions and `after` ordering from the catalog.
+
+**⛔ Skip-when enforcement (mandatory post-selection gate):**
+After initial selection, sweep every selected fragment and check its `skip-when` against the current context (deep_planning value, change_type, project scale, other selected fragments). Any fragment whose skip-when condition is satisfied MUST be removed — no exceptions. Specifically:
+- `implementation-plan`: remove if `deep_planning: false`
+
+This gate catches cases where the initial selection included fragments that looked relevant but conflict with the deep_planning decision or project scale.
+
+**✅ Explicit-request override (runs AFTER skip-when enforcement — highest precedence):**
+If `user_ask` explicitly requests a completeness, consistency, or feature-parity check (e.g. "run a completeness check", "verify nothing was missed", "enforce consistency", "feature parity sign-off"), force-include the completeness/conformance validation fragment (`conformance-review`, and `feature-parity-signoff` when applicable) **even if its `skip-when` condition matched and removed it above**. User intent overrides the size/type heuristic. This override is **one-directional** — it can only ADD a gate the heuristics dropped, never remove one they selected. It must run after the skip-when sweep, otherwise the sweep would strip the fragment back out (e.g. `skip-when: same-stack upgrade`).
+
+Fragment selection is an internal decision — do NOT output the selection rationale to the user. The DAG itself is the user-facing result.
+
+#### Step 3: Generate DAG
+Read `references/dag-rules.md` for construction rules.
+
+- **If `deep_planning: true`** → produce only plan-phase tasks as JSON
+- **If `deep_planning: false`** → produce the complete DAG (plan + execute + validate) as JSON
+
+### Output
+
+Return JSON to the coordinator (do NOT write files):
+
+```json
+{
+  "deep_planning": true,
+  "tasks": [
+    {"id": "t1", "role": "<role>", "title": "<title>", "depends_on": [], "phase_label": "<label>"},
+    {"id": "t2", "role": "<role>", "title": "<title>", "depends_on": ["t1"], "phase_label": "<label>"}
+  ]
+}
+```
+
+## Stage 2: Execute+Validate DAG
+
+When plan phase completes and `deep_planning: true`, generate the execute+validate DAG from plan artifacts.
+
+### Inputs (provided by coordinator)
+
+- Artifact base path
+- User ask (original migration request)
+- Change type (upgrade / extract / rewrite)
+- Grouping mode and in-scope groups
+- Fan-out file path
+- Task ID offset (continue from last plan-phase task)
+
+### Procedure
+
+1. Read plan artifacts (implementation plan, architecture analysis, etc.)
+2. Read `references/dag-rules.md` for construction rules
+3. Read `references/task-catalog.md` for fragment definitions
+4. Generate JSON task graph per dag-rules.md
+
+### Output
+
+```json
+{"tasks": [{"id": "t<N>", "role": "<role>", "title": "<title>", "depends_on": ["<id>", ...], "phase_label": "<label>"}]}
+```
+
+## What this skill does NOT do
+
+- Does NOT decide grouping / topology (coordinator decides in §1.3)
+- Does NOT compute topology groupings (that's `project-decomposition`)
+- Does NOT perform role discovery from charters (assigns roles based on task content; coordinator refines using team-charters at dispatch)
+- Does NOT match task → skill (that's worker subagent)
+- Does NOT execute anything (that's coordinator + workers)
+- Does NOT prompt user (that's coordinator at checkpoint)
