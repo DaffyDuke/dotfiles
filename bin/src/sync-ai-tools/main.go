@@ -8,10 +8,49 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 )
+
+// OAuthConfig représente la configuration OAuth d'un serveur MCP distant
+type OAuthConfig struct {
+	ClientID     string `json:"clientId,omitempty"`
+	ClientSecret string `json:"clientSecret,omitempty"`
+	Scope        string `json:"scope,omitempty"`
+	CallbackPort int    `json:"callbackPort,omitempty"`
+	RedirectURI  string `json:"redirectUri,omitempty"`
+}
+
+func (o *OAuthConfig) IsEmpty() bool {
+	if o == nil {
+		return true
+	}
+	return o.ClientID == "" && o.ClientSecret == "" && o.Scope == "" && o.CallbackPort == 0 && o.RedirectURI == ""
+}
+
+func (o *OAuthConfig) Clone() *OAuthConfig {
+	if o.IsEmpty() {
+		return nil
+	}
+	cp := *o
+	return &cp
+}
+
+func oauthEqual(a, b *OAuthConfig) bool {
+	if a.IsEmpty() && b.IsEmpty() {
+		return true
+	}
+	if a.IsEmpty() != b.IsEmpty() {
+		return false
+	}
+	return a.ClientID == b.ClientID &&
+		a.ClientSecret == b.ClientSecret &&
+		a.Scope == b.Scope &&
+		a.CallbackPort == b.CallbackPort &&
+		a.RedirectURI == b.RedirectURI
+}
 
 // UnifiedServer représente un serveur MCP dans notre modèle canonique interne
 type UnifiedServer struct {
@@ -21,24 +60,92 @@ type UnifiedServer struct {
 	Args        []string          `json:"args,omitempty"`
 	Env         map[string]string `json:"env,omitempty"`
 	URL         string            `json:"url,omitempty"`
+	Headers     map[string]string `json:"headers,omitempty"`
+	OAuth       *OAuthConfig      `json:"oauth,omitempty"`
 	SourceTools []string          `json:"source_tools,omitempty"`
 }
+
+// SyncExcludeConfig représente le fichier d'exclusions (~/.local/share/ai-skills/sync-exclude.json)
+type SyncExcludeConfig struct {
+	Patterns []string `json:"patterns,omitempty"`
+	MCP      []string `json:"mcp,omitempty"`
+	Agents   []string `json:"agents,omitempty"`
+	Skills   []string `json:"skills,omitempty"`
+}
+
+// Expressions régulières pour normaliser les variables d'environnement y compris
+// lorsqu'elles sont intégrées dans une chaîne (ex: "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}").
+var (
+	reDollarEnvRef = regexp.MustCompile(`\$\{(?:env:)+([A-Za-z0-9_]+)\}`)
+	reBraceEnvRef  = regexp.MustCompile(`\{(?:env:)+([A-Za-z0-9_]+)\}`)
+	reCanonicalRef = regexp.MustCompile(`\$\{([A-Za-z0-9_]+)\}`)
+)
 
 // normalizeEnvValue ramène les références d'environnement vers la forme
 // canonique interne "${VAR}". Évite les préfixes doubles comme
 // "${env:VAR}" (syntaxe VS Code) ou "{env:env:VAR}" après aller-retours.
 func normalizeEnvValue(v string) string {
-	if strings.HasPrefix(v, "${env:") && strings.HasSuffix(v, "}") {
-		return "${" + v[6:len(v)-1] + "}"
+	for {
+		next := reDollarEnvRef.ReplaceAllString(v, "${$1}")
+		next = reBraceEnvRef.ReplaceAllString(next, "${$1}")
+		if next == v {
+			break
+		}
+		v = next
 	}
 	return v
 }
 
+func toVSCodeEnvValue(v string) string {
+	v = normalizeEnvValue(v)
+	return reCanonicalRef.ReplaceAllString(v, "${env:$1}")
+}
+
+func toOpenCodeEnvValue(v string) string {
+	v = normalizeEnvValue(v)
+	return reCanonicalRef.ReplaceAllString(v, "{env:$1}")
+}
+
 func normalizeEnvMap(env map[string]string) map[string]string {
-	for k, v := range env {
-		env[k] = normalizeEnvValue(v)
+	if len(env) == 0 {
+		return nil
 	}
-	return env
+	out := make(map[string]string, len(env))
+	for k, v := range env {
+		out[k] = normalizeEnvValue(v)
+	}
+	return out
+}
+
+func convertEnvMap(env map[string]string, conv func(string) string) map[string]string {
+	if len(env) == 0 {
+		return nil
+	}
+	out := make(map[string]string, len(env))
+	for k, v := range env {
+		out[k] = conv(v)
+	}
+	return out
+}
+
+func normalizeOAuth(o *OAuthConfig) *OAuthConfig {
+	if o.IsEmpty() {
+		return nil
+	}
+	cp := o.Clone()
+	cp.ClientID = normalizeEnvValue(cp.ClientID)
+	cp.ClientSecret = normalizeEnvValue(cp.ClientSecret)
+	return cp
+}
+
+func convertOAuth(o *OAuthConfig, conv func(string) string) *OAuthConfig {
+	if o.IsEmpty() {
+		return nil
+	}
+	cp := o.Clone()
+	cp.ClientID = conv(cp.ClientID)
+	cp.ClientSecret = conv(cp.ClientSecret)
+	return cp
 }
 
 func (s UnifiedServer) Equal(o UnifiedServer) bool {
@@ -58,6 +165,17 @@ func (s UnifiedServer) Equal(o UnifiedServer) bool {
 		if o.Env[k] != v {
 			return false
 		}
+	}
+	if len(s.Headers) != len(o.Headers) {
+		return false
+	}
+	for k, v := range s.Headers {
+		if o.Headers[k] != v {
+			return false
+		}
+	}
+	if !oauthEqual(s.OAuth, o.OAuth) {
+		return false
 	}
 	return true
 }
@@ -86,6 +204,23 @@ func (s UnifiedServer) DiffDescription(central UnifiedServer) []string {
 			diffs = append(diffs, fmt.Sprintf("- Env: %s=%s (absent en local)", k, v))
 		}
 	}
+	// Headers
+	for k, v := range s.Headers {
+		if centVal, exists := central.Headers[k]; !exists {
+			diffs = append(diffs, fmt.Sprintf("+ Header: %s=%s", k, v))
+		} else if centVal != v {
+			diffs = append(diffs, fmt.Sprintf("~ Header %s: '%s' (local) vs '%s' (central)", k, v, centVal))
+		}
+	}
+	for k, v := range central.Headers {
+		if _, exists := s.Headers[k]; !exists {
+			diffs = append(diffs, fmt.Sprintf("- Header: %s=%s (absent en local)", k, v))
+		}
+	}
+	// OAuth
+	if !oauthEqual(s.OAuth, central.OAuth) {
+		diffs = append(diffs, fmt.Sprintf("~ OAuth: %+v (local) vs %+v (central)", s.OAuth, central.OAuth))
+	}
 	return diffs
 }
 
@@ -100,6 +235,8 @@ type CanonicalServer struct {
 	Args    []string          `json:"args,omitempty"`
 	Env     map[string]string `json:"env,omitempty"`
 	URL     string            `json:"url,omitempty"`
+	Headers map[string]string `json:"headers,omitempty"`
+	OAuth   *OAuthConfig      `json:"oauth,omitempty"`
 }
 
 // 2. Format Standard MCP (Antigravity & Copilot CLI)
@@ -112,6 +249,7 @@ type StandardServer struct {
 	Args    []string          `json:"args,omitempty"`
 	Env     map[string]string `json:"env,omitempty"`
 	URL     string            `json:"url,omitempty"`
+	Headers map[string]string `json:"headers,omitempty"`
 }
 
 // 3. Format OpenCode & Mammouth
@@ -120,6 +258,9 @@ type OpenCodeServer struct {
 	Command     []string          `json:"command,omitempty"`
 	URL         string            `json:"url,omitempty"`
 	Environment map[string]string `json:"environment,omitempty"`
+	Headers     map[string]string `json:"headers,omitempty"`
+	OAuth       *OAuthConfig      `json:"oauth,omitempty"`
+	Enabled     *bool             `json:"enabled,omitempty"`
 }
 
 type ServerDifference struct {
@@ -127,6 +268,7 @@ type ServerDifference struct {
 	ClientName string
 	LocalSrv   UnifiedServer
 	CentralSrv UnifiedServer
+	IsWork     bool
 	Diffs      []string
 }
 
@@ -171,36 +313,109 @@ type AgentDifference struct {
 	Diffs       []string
 }
 
+// parseCSVSet découpe une liste séparée par des virgules en ensemble normalisé (minuscules)
+func parseCSVSet(csv string, dest map[string]bool) {
+	if csv == "" {
+		return
+	}
+	for _, item := range strings.Split(csv, ",") {
+		trimmed := strings.ToLower(strings.TrimSpace(item))
+		if trimmed != "" {
+			dest[trimmed] = true
+		}
+	}
+}
+
+func addSliceToSet(items []string, dest map[string]bool) {
+	for _, item := range items {
+		trimmed := strings.ToLower(strings.TrimSpace(item))
+		if trimmed != "" {
+			dest[trimmed] = true
+		}
+	}
+}
+
+// containsTokenIgnoreCase vérifie si `pat` (en minuscules) apparaît dans `text`
+// en tant que mot/jeton (non entouré de lettres ASCII a-z), afin que "adeo"
+// matche "ADEO", "adeo-cli", "adeo.cloud", mais pas le mot anglais "tradeoff".
+func containsTokenIgnoreCase(text, pat string) bool {
+	if pat == "" || text == "" {
+		return false
+	}
+	lower := strings.ToLower(text)
+	offset := 0
+	for {
+		idx := strings.Index(lower[offset:], pat)
+		if idx < 0 {
+			return false
+		}
+		start := offset + idx
+		end := start + len(pat)
+		prevAlpha := start > 0 && lower[start-1] >= 'a' && lower[start-1] <= 'z'
+		nextAlpha := end < len(lower) && lower[end] >= 'a' && lower[end] <= 'z'
+		if !prevAlpha && !nextAlpha {
+			return true
+		}
+		offset = start + 1
+	}
+}
+
+// matchesExclusion vérifie si un élément (MCP, skill ou agent) est exclu soit par
+// son nom exact dans exactSet, soit parce que son nom ou ses métadonnées (extraTexts)
+// contiennent l'un des motifs de patterns (ex: "adeo", "lmfr").
+func matchesExclusion(name string, exactSet map[string]bool, patterns []string, extraTexts ...string) bool {
+	lowerName := strings.ToLower(strings.TrimSpace(name))
+	if exactSet[lowerName] {
+		return true
+	}
+	for pat := range exactSet {
+		if strings.ContainsAny(pat, "*?") {
+			if ok, _ := filepath.Match(pat, lowerName); ok {
+				return true
+			}
+		}
+	}
+	for _, rawPat := range patterns {
+		pat := strings.ToLower(strings.TrimSpace(rawPat))
+		if pat == "" {
+			continue
+		}
+		if strings.Contains(lowerName, pat) {
+			return true
+		}
+		for _, txt := range extraTexts {
+			if txt != "" && containsTokenIgnoreCase(txt, pat) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func loadExcludeConfig(path string) SyncExcludeConfig {
+	var cfg SyncExcludeConfig
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return cfg
+	}
+	_ = json.Unmarshal(stripJSONC(data), &cfg)
+	return cfg
+}
+
 func main() {
-	excludeFlag := flag.String("exclude", "", "Liste de serveurs MCP à exclure, séparés par des virgules (ex: -exclude forgejo,datadog)")
+	excludeFlag := flag.String("exclude", "", "Liste de serveurs MCP supplémentaires à exclure, séparés par des virgules")
+	excludeAgentsFlag := flag.String("exclude-agents", "", "Liste d'agents supplémentaires à exclure, séparés par des virgules")
+	excludeSkillsFlag := flag.String("exclude-skills", "", "Liste de skills supplémentaires à exclure, séparés par des virgules")
+	excludePatternsFlag := flag.String("exclude-patterns", "adeo,lmfr", "Motifs implicites (sous-chaînes insensibles à la casse) à exclure pour les MCP, skills et agents")
+	excludeFileFlag := flag.String("exclude-file", "", "Chemin vers le fichier d'exclusions JSON. Défaut: ~/.local/share/ai-skills/sync-exclude.json (et mcp-work.json)")
 	interactiveFlag := flag.Bool("interactive", false, "Mode interactif (-i) : demande confirmation pour les nouveautés, modifications de variables et sens de synchronisation")
 	flag.BoolVar(interactiveFlag, "i", false, "Alias court pour -interactive")
 	dryRunFlag := flag.Bool("dry-run", false, "Affiche uniquement les différences et actions prévues sans modifier les fichiers")
 	workFileFlag := flag.String("work-file", "", "Chemin vers un fichier MCP annexe. Défaut: ~/.local/share/ai-skills/mcp-work.json. Les serveurs de ce fichier sont synchronisés vers tous les clients mais PAS écrits dans le hub central mcp.json. Utile pour des outils spécifiques (ex: bigquery, servicenow) que tu ne veux pas mélanger au hub principal")
-	excludeAgentsFlag := flag.String("exclude-agents", "", "Liste d'agents personnalisés à exclure, séparés par des virgules (ex: -exclude-agents reviewer,traductor)")
 	noAgentsFlag := flag.Bool("no-agents", false, "Désactive la synchronisation des agents personnalisés entre les outils")
+	noSkillsFlag := flag.Bool("no-skills", false, "Désactive la synchronisation des skills entre les outils")
 	agentsDirFlag := flag.String("agents-dir", "", "Chemin du hub central des agents. Défaut: ~/.local/share/ai-agents. Les agents y sont stockés au format canonique OpenCode (.md avec frontmatter), puis convertis pour chaque outil (Copilot CLI/VS Code: .agent.md, Antigravity: agents globaux)")
 	flag.Parse()
-
-	excludedSet := make(map[string]bool)
-	if *excludeFlag != "" {
-		for _, name := range strings.Split(*excludeFlag, ",") {
-			trimmed := strings.TrimSpace(name)
-			if trimmed != "" {
-				excludedSet[trimmed] = true
-			}
-		}
-	}
-
-	excludedAgentsSet := make(map[string]bool)
-	if *excludeAgentsFlag != "" {
-		for _, name := range strings.Split(*excludeAgentsFlag, ",") {
-			trimmed := strings.TrimSpace(name)
-			if trimmed != "" {
-				excludedAgentsSet[trimmed] = true
-			}
-		}
-	}
 
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -208,14 +423,69 @@ func main() {
 		os.Exit(1)
 	}
 
+	centralSkillsDir := filepath.Join(homeDir, ".local/share/ai-skills")
+	centralMcpPath := filepath.Join(centralSkillsDir, "mcp.json")
+	_ = os.MkdirAll(centralSkillsDir, 0755)
+
+	// Chargement implicite des exclusions depuis sync-exclude.json ET mcp-work.json
+	excludeFilePath := *excludeFileFlag
+	if excludeFilePath == "" {
+		excludeFilePath = filepath.Join(centralSkillsDir, "sync-exclude.json")
+	}
+	workFilePathForExclude := *workFileFlag
+	if workFilePathForExclude == "" {
+		workFilePathForExclude = filepath.Join(centralSkillsDir, "mcp-work.json")
+	}
+	excludeCfg := loadExcludeConfig(excludeFilePath)
+	workExcludeCfg := loadExcludeConfig(workFilePathForExclude)
+
+	excludedMCPSet := map[string]bool{
+		"bigquery":            true,
+		"servicenow":          true,
+		"servicenow-mcp-prod": true,
+		"github-mcp":          true,
+	}
+	addSliceToSet(excludeCfg.MCP, excludedMCPSet)
+	addSliceToSet(workExcludeCfg.MCP, excludedMCPSet)
+	parseCSVSet(*excludeFlag, excludedMCPSet)
+
+	excludedAgentsSet := make(map[string]bool)
+	addSliceToSet(excludeCfg.Agents, excludedAgentsSet)
+	addSliceToSet(workExcludeCfg.Agents, excludedAgentsSet)
+	parseCSVSet(*excludeAgentsFlag, excludedAgentsSet)
+
+	excludedSkillsSet := make(map[string]bool)
+	addSliceToSet(excludeCfg.Skills, excludedSkillsSet)
+	addSliceToSet(workExcludeCfg.Skills, excludedSkillsSet)
+	parseCSVSet(*excludeSkillsFlag, excludedSkillsSet)
+
+	patternSet := map[string]bool{
+		"adeo": true,
+		"lmfr": true,
+	}
+	addSliceToSet(excludeCfg.Patterns, patternSet)
+	addSliceToSet(workExcludeCfg.Patterns, patternSet)
+	parseCSVSet(*excludePatternsFlag, patternSet)
+	var excludePatterns []string
+	for p := range patternSet {
+		excludePatterns = append(excludePatterns, p)
+	}
+	sort.Strings(excludePatterns)
+
 	fmt.Println("=== Synchronisation des MCP, Skills & Agents IA ===")
-	if len(excludedSet) > 0 {
+	if _, err := os.Stat(excludeFilePath); err == nil {
+		fmt.Printf("ℹ️  Fichier d'exclusions chargé : %s\n", excludeFilePath)
+	}
+	if len(excludePatterns) > 0 {
+		fmt.Printf("ℹ️  Motif(s) global(aux) d'exclusion : %s\n", strings.Join(excludePatterns, ", "))
+	}
+	if len(excludedMCPSet) > 0 {
 		var list []string
-		for k := range excludedSet {
+		for k := range excludedMCPSet {
 			list = append(list, k)
 		}
 		sort.Strings(list)
-		fmt.Printf("ℹ️  Serveur(s) exclu(s) : %s\n", strings.Join(list, ", "))
+		fmt.Printf("ℹ️  Serveur(s) MCP exclu(s) du hub central : %s\n", strings.Join(list, ", "))
 	}
 	if *interactiveFlag {
 		fmt.Println("🔍 Mode interactif activé")
@@ -224,17 +494,15 @@ func main() {
 		fmt.Println("⚠️  Mode DRY-RUN activé (aucune modification ne sera écrite)")
 	}
 
-	centralSkillsDir := filepath.Join(homeDir, ".local/share/ai-skills")
-	centralMcpPath := filepath.Join(centralSkillsDir, "mcp.json")
-	_ = os.MkdirAll(centralSkillsDir, 0755)
-
-	// Fichier annexe : serveurs MCP à synchroniser séparément du hub central
+	// Fichier annexe : serveurs MCP à synchroniser séparément du hub central (ex: bigquery, servicenow-mcp-prod)
 	workFilePath := *workFileFlag
 	if workFilePath == "" {
 		workFilePath = filepath.Join(centralSkillsDir, "mcp-work.json")
 	}
 	workServers := make(map[string]UnifiedServer)
+	hasWorkFile := false
 	if _, err := os.Stat(workFilePath); err == nil {
+		hasWorkFile = true
 		readCanonicalServers(workFilePath, "Fichier annexe", workServers)
 		fmt.Printf("ℹ️  Fichier annexe chargé : %s (%d serveur(s))\n", workFilePath, len(workServers))
 	} else {
@@ -246,6 +514,7 @@ func main() {
 	geminiPath := filepath.Join(homeDir, ".gemini/config/mcp_config.json")
 	copilotPath := filepath.Join(homeDir, ".copilot/mcp-config.json")
 	mammouthPath := filepath.Join(homeDir, ".config/mammouth/mammouth.jsonc")
+	opencodeJsonPath := filepath.Join(homeDir, ".config/opencode/opencode.json")
 	opencodePath := filepath.Join(homeDir, ".config/opencode/opencode.jsonc")
 
 	// 1. Lire les serveurs du Hub Central
@@ -267,43 +536,74 @@ func main() {
 	readOpenCodeServers(mammouthPath, "Mammouth", clientServers["Mammouth"])
 
 	clientServers["OpenCode"] = make(map[string]UnifiedServer)
+	// OpenCode charge opencode.json puis opencode.jsonc (qui écrase opencode.json).
+	// On lit opencode.json en premier pour récupérer oauth/headers éventuels, puis opencode.jsonc.
+	readOpenCodeServers(opencodeJsonPath, "OpenCode (opencode.json)", clientServers["OpenCode"])
 	readOpenCodeServers(opencodePath, "OpenCode", clientServers["OpenCode"])
 
 	// 3. Détecter :
-	//    A. Les NOUVEAUX serveurs (présents dans un client mais pas dans central)
+	//    A. Les NOUVEAUX serveurs (présents dans un client mais ni dans central ni dans workFile, et non exclus)
 	//    B. Les DIFFÉRENCES DE CONTENU (variables modifiées/ajoutées, arguments changés...)
 	newInClients := make(map[string][]string) // serverName -> []clientName
 	var contentDiffs []ServerDifference
 
 	allDetected := make(map[string]UnifiedServer)
 	for name, s := range centralServers {
+		if matchesExclusion(name, excludedMCPSet, excludePatterns, s.URL, s.Command) {
+			continue
+		}
 		allDetected[name] = s
 	}
 
-	// Ajouter les serveurs du fichier annexe (prioritaire sur le hub central)
+	// Ajouter les serveurs du fichier annexe (prioritaire sur le hub central, synchronisés vers les clients mais jamais écrits dans mcp.json)
 	for name, s := range workServers {
 		allDetected[name] = s
 	}
 
 	for clientName, srvs := range clientServers {
 		for name, localS := range srvs {
+			workS, inWork := workServers[name]
 			centS, inCentral := centralServers[name]
+
+			if inWork {
+				// Ce serveur appartient au fichier d'exclusion/annexe (mcp-work.json)
+				localMerged := enrichServerFromBase(localS, workS)
+				if !localMerged.Equal(workS) {
+					diffs := localMerged.DiffDescription(workS)
+					contentDiffs = append(contentDiffs, ServerDifference{
+						ServerName: name,
+						ClientName: clientName,
+						LocalSrv:   localMerged,
+						CentralSrv: workS,
+						IsWork:     true,
+						Diffs:      diffs,
+					})
+				}
+				continue
+			}
+
+			// Si le serveur est exclu (par liste mcp ou motif adeo/lmfr) et pas dans le hub central, on l'ignore
+			if matchesExclusion(name, excludedMCPSet, excludePatterns, localS.URL, localS.Command) {
+				continue
+			}
+
 			if !inCentral {
 				newInClients[name] = append(newInClients[name], clientName)
 				mergeServer(allDetected, localS, clientName)
 			} else {
-				// Le serveur existe : vérifier si son contenu diffère (variables, commande, args)
-				if !localS.Equal(centS) {
-					diffs := localS.DiffDescription(centS)
+				// Enrichir localS avec OAuth/Headers de centS si le client (ex: Antigravity/Copilot) ne supporte pas ces champs
+				localMerged := enrichServerFromBase(localS, centS)
+				if !localMerged.Equal(centS) {
+					diffs := localMerged.DiffDescription(centS)
 					contentDiffs = append(contentDiffs, ServerDifference{
 						ServerName: name,
 						ClientName: clientName,
-						LocalSrv:   localS,
+						LocalSrv:   localMerged,
 						CentralSrv: centS,
+						IsWork:     false,
 						Diffs:      diffs,
 					})
 				}
-				mergeServer(allDetected, localS, clientName)
 			}
 		}
 	}
@@ -331,35 +631,53 @@ func main() {
 	}
 
 	// --- B. Affichage et gestion des différences de contenu (variables, etc.) ---
+	workUpdated := false
 	if len(contentDiffs) > 0 {
-		fmt.Printf("\n🔄 %d différence(s) de configuration détectée(s) entre vos clients et le hub central :\n", len(contentDiffs))
+		fmt.Printf("\n🔄 %d différence(s) de configuration détectée(s) entre vos clients et le hub :\n", len(contentDiffs))
 		for _, d := range contentDiffs {
-			fmt.Printf("   ⚙️  Serveur '%s' [Source: %s] :\n", d.ServerName, d.ClientName)
+			hubLabel := "mcp.json"
+			if d.IsWork {
+				hubLabel = "mcp-work.json"
+			}
+			fmt.Printf("   ⚙️  Serveur '%s' [Source: %s vs %s] :\n", d.ServerName, d.ClientName, hubLabel)
 			for _, diffLine := range d.Diffs {
 				fmt.Printf("       %s\n", diffLine)
 			}
 		}
 
 		if *interactiveFlag {
-			fmt.Print("\nComment synchroniser ces modifications ?\n [1] Mettre à jour le hub central avec ces nouvelles valeurs (Local -> Central -> Tous)\n [2] Conserver les valeurs du hub central et écraser le client (Central -> Local)\nChoix [1/2] (défaut: 1) : ")
+			fmt.Print("\nComment synchroniser ces modifications ?\n [1] Mettre à jour le hub avec ces nouvelles valeurs (Local -> Hub -> Tous)\n [2] Conserver les valeurs du hub et écraser le client (Hub -> Local)\nChoix [1/2] (défaut: 2) : ")
 			ans, _ := reader.ReadString('\n')
 			ans = strings.TrimSpace(ans)
-			if ans == "2" {
-				// Revenir aux valeurs de central pour ces serveurs
+			if ans == "1" {
+				for _, d := range contentDiffs {
+					allDetected[d.ServerName] = d.LocalSrv
+					if d.IsWork {
+						workServers[d.ServerName] = d.LocalSrv
+						workUpdated = true
+					}
+				}
+				fmt.Println("✓ Nouvelles variables / modifications fusionnées dans le hub.")
+			} else {
 				for _, d := range contentDiffs {
 					allDetected[d.ServerName] = d.CentralSrv
 				}
-				fmt.Println("🔄 Rétablissement des valeurs du hub central.")
-			} else {
-				fmt.Println("✓ Nouvelles variables / modifications fusionnées dans le hub central.")
+				fmt.Println("🔄 Rétablissement des valeurs du hub.")
 			}
+		} else {
+			fmt.Println("ℹ️  Mode non-interactif : le hub est prioritaire, les clients divergents seront alignés.")
 		}
 	}
 
-	// Filtrer les exclusions
+	//Construire la carte finale des serveurs à distribuer aux clients :
+	// - tous les serveurs du hub central (non exclus)
+	// - tous les serveurs de mcp-work.json (sauf si explicitement passés dans -exclude en ligne de commande)
+	cliExcludedMCP := make(map[string]bool)
+	parseCSVSet(*excludeFlag, cliExcludedMCP)
+
 	finalServers := make(map[string]UnifiedServer)
 	for name, s := range allDetected {
-		if excludedSet[name] {
+		if cliExcludedMCP[strings.ToLower(name)] {
 			continue
 		}
 		finalServers[name] = s
@@ -384,6 +702,9 @@ func main() {
 			if len(envKeys) > 0 {
 				envSummary = fmt.Sprintf(" (envs: %s)", strings.Join(envKeys, ", "))
 			}
+			if _, isWork := workServers[name]; isWork {
+				envSummary += " [work/exclu de mcp.json]"
+			}
 			fmt.Printf("   ✔ %s%s\n", name, envSummary)
 		}
 
@@ -396,76 +717,111 @@ func main() {
 		}
 	}
 
-	// --- Étape A2 : SYNCHRONISATION DES AGENTS PERSONNALISÉS (simulation en dry-run) ---
+	// --- Étape A2 : SYNCHRONISATION DES AGENTS PERSONNALISÉS & SKILLS (simulation en dry-run) ---
 	centralAgentsDir := filepath.Join(homeDir, ".local/share/ai-agents")
 	if *agentsDirFlag != "" {
 		centralAgentsDir = *agentsDirFlag
 	}
 	if *dryRunFlag {
 		if !*noAgentsFlag {
-			syncAgents(centralAgentsDir, excludedAgentsSet, *interactiveFlag, true, homeDir, reader)
+			syncAgents(centralAgentsDir, excludedAgentsSet, excludePatterns, *interactiveFlag, true, homeDir, reader)
+		}
+		if !*noSkillsFlag {
+			syncSkills(centralSkillsDir, excludedSkillsSet, excludePatterns, true, homeDir)
 		}
 		fmt.Println("\n[DRY-RUN] Fin de simulation. Aucun fichier n'a été modifié.")
 		return
 	}
 
 	// --- Étape B : ÉCRITURE DANS LE HUB CENTRAL ---
-	// Les serveurs du fichier annexe ne sont PAS écrits dans le hub central
+	// Les serveurs du fichier annexe (mcp-work.json) et les serveurs exclus ne sont JAMAIS écrits dans mcp.json
 	centralOnlyServers := make(map[string]UnifiedServer)
 	for name, s := range finalServers {
-		if _, isWorkServer := workServers[name]; !isWorkServer {
-			centralOnlyServers[name] = s
+		if _, isWorkServer := workServers[name]; isWorkServer {
+			continue
 		}
+		if matchesExclusion(name, excludedMCPSet, excludePatterns, s.URL, s.Command) {
+			continue
+		}
+		centralOnlyServers[name] = s
 	}
-	writeCanonicalConfig(centralMcpPath, centralOnlyServers, false)
+	writeCanonicalConfig(centralMcpPath, centralOnlyServers, false, nil, nil)
 	fmt.Printf("\n[✓] Hub central mis à jour -> %s\n", centralMcpPath)
 
+	if hasWorkFile && workUpdated {
+		writeCanonicalConfig(workFilePath, workServers, false, nil, nil)
+		fmt.Printf("[✓] Fichier annexe mis à jour -> %s\n", workFilePath)
+	}
+
 	// --- Étape C : DISTRIBUTION AUX 5 OUTILS ---
-	writeCanonicalConfig(vscodePath, finalServers, true)
+	writeCanonicalConfig(vscodePath, finalServers, true, excludedMCPSet, excludePatterns)
 	fmt.Printf("[✓] VS Code mis à jour -> %s\n", vscodePath)
 
-	writeStandardConfig(geminiPath, finalServers)
+	writeStandardConfig(geminiPath, finalServers, excludedMCPSet, excludePatterns)
 	fmt.Printf("[✓] Antigravity mis à jour -> %s\n", geminiPath)
 
-	writeStandardConfig(copilotPath, finalServers)
+	writeStandardConfig(copilotPath, finalServers, excludedMCPSet, excludePatterns)
 	fmt.Printf("[✓] Copilot CLI mis à jour -> %s\n", copilotPath)
 
-	writeOpenCodeConfig(mammouthPath, finalServers)
+	writeOpenCodeConfig(mammouthPath, finalServers, excludedMCPSet, excludePatterns)
 	fmt.Printf("[✓] Mammouth CLI mis à jour -> %s\n", mammouthPath)
 
-	writeOpenCodeConfig(opencodePath, finalServers)
+	writeOpenCodeConfig(opencodePath, finalServers, excludedMCPSet, excludePatterns)
 	fmt.Printf("[✓] OpenCode mis à jour -> %s\n", opencodePath)
 
 	// --- Étape C2 : SYNCHRONISATION DES AGENTS PERSONNALISÉS ---
 	if !*noAgentsFlag {
-		syncAgents(centralAgentsDir, excludedAgentsSet, *interactiveFlag, false, homeDir, reader)
+		syncAgents(centralAgentsDir, excludedAgentsSet, excludePatterns, *interactiveFlag, false, homeDir, reader)
 	} else {
 		fmt.Println("\nℹ️  Synchronisation des agents désactivée (-no-agents)")
 	}
 
-	// --- Étape D : VÉRIFICATION DES SYMLINKS POUR LES SKILLS ---
-	skillTargets := []string{
-		filepath.Join(homeDir, ".config/opencode/skills"),
-		filepath.Join(homeDir, ".gemini/config/skills"),
-		filepath.Join(homeDir, ".copilot/skills"),
-		filepath.Join(homeDir, ".config/mammouth/skills"),
+	// --- Étape D : SYNCHRONISATION DES SKILLS & SYMLINKS ---
+	if !*noSkillsFlag {
+		syncSkills(centralSkillsDir, excludedSkillsSet, excludePatterns, false, homeDir)
+	} else {
+		fmt.Println("\nℹ️  Synchronisation des skills désactivée (-no-skills)")
 	}
-
-	for _, target := range skillTargets {
-		ensureSymlink(centralSkillsDir, target)
-	}
-	fmt.Printf("[✓] Skills unifiés et interconnectés -> %s\n", centralSkillsDir)
 
 	fmt.Println("\nSynchronisation terminée avec succès !")
 }
 
-// Fusion d'un serveur dans la carte globale
+// enrichServerFromBase préserve OAuth/Headers de la base centrale lorsque le client
+// (ex: format Standard Antigravity/Copilot) ne stocke pas ces champs.
+func enrichServerFromBase(local, base UnifiedServer) UnifiedServer {
+	// Si le type de serveur a changé (ex: local stdio vs remote http), ne pas mélanger
+	if (local.URL != "") != (base.URL != "") {
+		return local
+	}
+	if local.URL != "" {
+		if local.OAuth.IsEmpty() && !base.OAuth.IsEmpty() {
+			local.OAuth = base.OAuth.Clone()
+		}
+		if len(local.Headers) == 0 && len(base.Headers) > 0 {
+			local.Headers = make(map[string]string, len(base.Headers))
+			for k, v := range base.Headers {
+				local.Headers[k] = v
+			}
+		}
+	}
+	return local
+}
+
+// Fusion d'un serveur dans la carte globale (en gardant URL et Command mutuellement exclusifs)
 func mergeServer(dest map[string]UnifiedServer, s UnifiedServer, sourceName string) {
 	name := strings.TrimSpace(s.Name)
 	if name == "" || name == "servers" || name == "inputs" {
 		return
 	}
 	s.Name = name
+	if s.URL != "" {
+		s.Command = ""
+		s.Args = nil
+		s.Env = nil
+	} else {
+		s.Headers = nil
+		s.OAuth = nil
+	}
 
 	existing, found := dest[s.Name]
 	if !found {
@@ -474,20 +830,37 @@ func mergeServer(dest map[string]UnifiedServer, s UnifiedServer, sourceName stri
 		return
 	}
 
-	if existing.URL == "" && s.URL != "" {
-		existing.URL = s.URL
-	}
-	if existing.Command == "" && s.Command != "" {
-		existing.Command = s.Command
-	}
-	if len(existing.Args) == 0 && len(s.Args) > 0 {
-		existing.Args = s.Args
-	}
-	if existing.Env == nil && s.Env != nil {
-		existing.Env = s.Env
-	} else if s.Env != nil {
-		for k, v := range s.Env {
-			existing.Env[k] = v
+	// Ne fusionner les champs complémentaires que si les deux entrées sont du même type (remote vs stdio)
+	if (existing.URL != "") == (s.URL != "") {
+		if existing.URL != "" {
+			if existing.OAuth.IsEmpty() && !s.OAuth.IsEmpty() {
+				existing.OAuth = s.OAuth.Clone()
+			}
+			if len(existing.Headers) == 0 && len(s.Headers) > 0 {
+				existing.Headers = s.Headers
+			} else if len(s.Headers) > 0 {
+				for k, v := range s.Headers {
+					if _, ok := existing.Headers[k]; !ok {
+						existing.Headers[k] = v
+					}
+				}
+			}
+		} else {
+			if existing.Command == "" && s.Command != "" {
+				existing.Command = s.Command
+			}
+			if len(existing.Args) == 0 && len(s.Args) > 0 {
+				existing.Args = s.Args
+			}
+			if existing.Env == nil && s.Env != nil {
+				existing.Env = s.Env
+			} else if s.Env != nil {
+				for k, v := range s.Env {
+					if _, ok := existing.Env[k]; !ok {
+						existing.Env[k] = v
+					}
+				}
+			}
 		}
 	}
 
@@ -511,7 +884,7 @@ func readCanonicalServers(path, sourceName string, dest map[string]UnifiedServer
 		return
 	}
 	var cfg CanonicalMCPConfig
-	if err := json.Unmarshal(data, &cfg); err != nil {
+	if err := json.Unmarshal(stripJSONC(data), &cfg); err != nil {
 		return
 	}
 	count := 0
@@ -523,6 +896,8 @@ func readCanonicalServers(path, sourceName string, dest map[string]UnifiedServer
 			Args:    s.Args,
 			Env:     normalizeEnvMap(s.Env),
 			URL:     s.URL,
+			Headers: normalizeEnvMap(s.Headers),
+			OAuth:   normalizeOAuth(s.OAuth),
 		}, sourceName)
 		count++
 	}
@@ -536,7 +911,7 @@ func readStandardServers(path, sourceName string, dest map[string]UnifiedServer)
 		return
 	}
 	var cfg StandardConfig
-	if err := json.Unmarshal(data, &cfg); err != nil {
+	if err := json.Unmarshal(stripJSONC(data), &cfg); err != nil {
 		return
 	}
 	count := 0
@@ -547,6 +922,7 @@ func readStandardServers(path, sourceName string, dest map[string]UnifiedServer)
 			Args:    s.Args,
 			Env:     normalizeEnvMap(s.Env),
 			URL:     s.URL,
+			Headers: normalizeEnvMap(s.Headers),
 		}, sourceName)
 		count++
 	}
@@ -643,15 +1019,35 @@ func readOpenCodeServers(path, sourceName string, dest map[string]UnifiedServer)
 			envMap := make(map[string]string)
 			for k, v := range envRaw {
 				if vStr, ok := v.(string); ok {
-					if strings.HasPrefix(vStr, "{env:") && strings.HasSuffix(vStr, "}") {
-						varName := vStr[5 : len(vStr)-1]
-						envMap[k] = fmt.Sprintf("${%s}", varName)
-					} else {
-						envMap[k] = vStr
-					}
+					envMap[k] = normalizeEnvValue(vStr)
 				}
 			}
 			u.Env = normalizeEnvMap(envMap)
+		}
+
+		if hdrRaw, ok := sMap["headers"].(map[string]interface{}); ok {
+			hdrMap := make(map[string]string)
+			for k, v := range hdrRaw {
+				if vStr, ok := v.(string); ok {
+					hdrMap[k] = normalizeEnvValue(vStr)
+				}
+			}
+			u.Headers = normalizeEnvMap(hdrMap)
+		}
+
+		if oauthRaw, ok := sMap["oauth"].(map[string]interface{}); ok {
+			var oc OAuthConfig
+			if b, err := json.Marshal(oauthRaw); err == nil {
+				_ = json.Unmarshal(b, &oc)
+			}
+			u.OAuth = normalizeOAuth(&oc)
+		}
+
+		// Si un serveur existe déjà dans dest (ex: lu depuis opencode.json avant opencode.jsonc),
+		// on enrichit u avec OAuth/Headers de l'existant avant d'écraser si même type.
+		if prev, exists := dest[name]; exists {
+			u = enrichServerFromBase(u, prev)
+			delete(dest, name)
 		}
 
 		mergeServer(dest, u, sourceName)
@@ -663,7 +1059,7 @@ func readOpenCodeServers(path, sourceName string, dest map[string]UnifiedServer)
 // Écriture Format Canonique (Central et VS Code)
 // asEnvSyntax=true convertit les références "${VAR}" en "${env:VAR}"
 // (syntaxe d'interpolation exigée par mcp.json dans VS Code).
-func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSyntax bool) {
+func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSyntax bool, excludedMCP map[string]bool, excludePatterns []string) {
 	var root map[string]interface{}
 	if data, err := os.ReadFile(path); err == nil {
 		_ = json.Unmarshal(stripJSONC(data), &root)
@@ -673,24 +1069,37 @@ func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSy
 	}
 
 	outServers := make(map[string]CanonicalServer)
-	for name, s := range servers {
-		env := s.Env
-		if asEnvSyntax && len(env) > 0 {
-			env = make(map[string]string, len(env))
-			for k, v := range s.Env {
-				if strings.HasPrefix(v, "${") && strings.HasSuffix(v, "}") {
-					varName := v[2 : len(v)-1]
-					env[k] = fmt.Sprintf("${env:%s}", varName)
-				} else {
-					env[k] = v
+	// Préserver les serveurs exclus déjà présents dans le fichier client
+	if excludedMCP != nil || len(excludePatterns) > 0 {
+		if existingRaw, ok := root["servers"].(map[string]interface{}); ok {
+			for name, rawVal := range existingRaw {
+				if _, inFinal := servers[name]; !inFinal && matchesExclusion(name, excludedMCP, excludePatterns) {
+					var cs CanonicalServer
+					if b, err := json.Marshal(rawVal); err == nil && json.Unmarshal(b, &cs) == nil {
+						outServers[name] = cs
+					}
 				}
 			}
 		}
+	}
+
+	valConv := normalizeEnvValue
+	if asEnvSyntax {
+		valConv = toVSCodeEnvValue
+	}
+
+	for name, s := range servers {
 		if s.URL != "" {
-			outServers[name] = CanonicalServer{
-				Type: "http",
-				URL:  s.URL,
+			cs := CanonicalServer{
+				Type:    "http",
+				URL:     s.URL,
+				Headers: convertEnvMap(s.Headers, valConv),
 			}
+			// Dans mcp.json central (asEnvSyntax=false), on sauvegarde aussi OAuth pour ne pas le perdre
+			if !asEnvSyntax {
+				cs.OAuth = convertOAuth(s.OAuth, valConv)
+			}
+			outServers[name] = cs
 		} else {
 			cmd := s.Command
 			if cmd == "" {
@@ -700,7 +1109,7 @@ func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSy
 				Type:    "stdio",
 				Command: cmd,
 				Args:    s.Args,
-				Env:     env,
+				Env:     convertEnvMap(s.Env, valConv),
 			}
 		}
 	}
@@ -712,12 +1121,26 @@ func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSy
 }
 
 // Écriture Standard (Antigravity & Copilot CLI)
-func writeStandardConfig(path string, servers map[string]UnifiedServer) {
+func writeStandardConfig(path string, servers map[string]UnifiedServer, excludedMCP map[string]bool, excludePatterns []string) {
 	stdServers := make(map[string]StandardServer)
+	if excludedMCP != nil || len(excludePatterns) > 0 {
+		if data, err := os.ReadFile(path); err == nil {
+			var existing StandardConfig
+			if json.Unmarshal(stripJSONC(data), &existing) == nil {
+				for name, srv := range existing.MCPServers {
+					if _, inFinal := servers[name]; !inFinal && matchesExclusion(name, excludedMCP, excludePatterns, srv.URL, srv.Command) {
+						stdServers[name] = srv
+					}
+				}
+			}
+		}
+	}
+
 	for name, s := range servers {
 		if s.URL != "" {
 			stdServers[name] = StandardServer{
-				URL: s.URL,
+				URL:     s.URL,
+				Headers: normalizeEnvMap(s.Headers),
 			}
 		} else {
 			cmd := s.Command
@@ -727,7 +1150,7 @@ func writeStandardConfig(path string, servers map[string]UnifiedServer) {
 			stdServers[name] = StandardServer{
 				Command: cmd,
 				Args:    s.Args,
-				Env:     s.Env,
+				Env:     normalizeEnvMap(s.Env),
 			}
 		}
 	}
@@ -739,7 +1162,7 @@ func writeStandardConfig(path string, servers map[string]UnifiedServer) {
 }
 
 // Écriture OpenCode & Mammouth
-func writeOpenCodeConfig(path string, servers map[string]UnifiedServer) {
+func writeOpenCodeConfig(path string, servers map[string]UnifiedServer, excludedMCP map[string]bool, excludePatterns []string) {
 	var root map[string]interface{}
 	if data, err := os.ReadFile(path); err == nil {
 		_ = json.Unmarshal(stripJSONC(data), &root)
@@ -750,11 +1173,26 @@ func writeOpenCodeConfig(path string, servers map[string]UnifiedServer) {
 	}
 
 	ocServers := make(map[string]OpenCodeServer)
+	if excludedMCP != nil || len(excludePatterns) > 0 {
+		if existingRaw, ok := root["mcp"].(map[string]interface{}); ok {
+			for name, rawVal := range existingRaw {
+				if _, inFinal := servers[name]; !inFinal && matchesExclusion(name, excludedMCP, excludePatterns) {
+					var osrv OpenCodeServer
+					if b, err := json.Marshal(rawVal); err == nil && json.Unmarshal(b, &osrv) == nil {
+						ocServers[name] = osrv
+					}
+				}
+			}
+		}
+	}
+
 	for name, s := range servers {
 		if s.URL != "" {
 			ocServers[name] = OpenCodeServer{
-				Type: "remote",
-				URL:  s.URL,
+				Type:    "remote",
+				URL:     s.URL,
+				Headers: convertEnvMap(s.Headers, toOpenCodeEnvValue),
+				OAuth:   convertOAuth(s.OAuth, toOpenCodeEnvValue),
 			}
 		} else {
 			cmd := s.Command
@@ -763,20 +1201,9 @@ func writeOpenCodeConfig(path string, servers map[string]UnifiedServer) {
 			}
 			fullCmd := append([]string{cmd}, s.Args...)
 			osrv := OpenCodeServer{
-				Type:    "local",
-				Command: fullCmd,
-			}
-			if len(s.Env) > 0 {
-				envMap := make(map[string]string)
-				for k, v := range s.Env {
-					if strings.HasPrefix(v, "${") && strings.HasSuffix(v, "}") {
-						varName := v[2 : len(v)-1]
-						envMap[k] = fmt.Sprintf("{env:%s}", varName)
-					} else {
-						envMap[k] = v
-					}
-				}
-				osrv.Environment = envMap
+				Type:        "local",
+				Command:     fullCmd,
+				Environment: convertEnvMap(s.Env, toOpenCodeEnvValue),
 			}
 			ocServers[name] = osrv
 		}
@@ -810,21 +1237,123 @@ func ensureSymlink(centralPath, targetPath string) {
 	_ = os.Symlink(centralPath, targetPath)
 }
 
+// ---------- Synchronisation des skills avec mécanisme d'exclusion ----------
+
+// syncSkills assure les symlinks des outils vers ~/.local/share/ai-skills et
+// synchronise les répertoires de skills individuels (~/.agents/skills, ~/.claude/skills)
+// en excluant tout skill figurant dans excludedSkills ou correspondant à excludePatterns (ex: adeo, lmfr).
+func syncSkills(centralSkillsDir string, excludedSkills map[string]bool, excludePatterns []string, dryRun bool, homeDir string) {
+	fmt.Printf("\n=== Synchronisation des skills ===\n")
+
+	skillTargets := []string{
+		filepath.Join(homeDir, ".config/opencode/skills"),
+		filepath.Join(homeDir, ".gemini/config/skills"),
+		filepath.Join(homeDir, ".copilot/skills"),
+		filepath.Join(homeDir, ".config/mammouth/skills"),
+	}
+
+	if !dryRun {
+		for _, target := range skillTargets {
+			ensureSymlink(centralSkillsDir, target)
+		}
+	}
+
+	// Scanner les répertoires de skills par entrée (~/.agents/skills, ~/.claude/skills)
+	perSkillDirs := []struct {
+		Name string
+		Path string
+	}{
+		{"Agents (.agents/skills)", filepath.Join(homeDir, ".agents/skills")},
+		{"Claude (.claude/skills)", filepath.Join(homeDir, ".claude/skills")},
+	}
+
+	excludedFound := make(map[string]bool)
+	repairedLinks := 0
+	legacyPrefix := filepath.Join(homeDir, ".local/share/agent-skills-sources") + "/"
+
+	for _, dirInfo := range perSkillDirs {
+		entries, err := os.ReadDir(dirInfo.Path)
+		if err != nil {
+			continue
+		}
+		for _, e := range entries {
+			name := e.Name()
+			if strings.HasPrefix(name, ".") {
+				continue
+			}
+			fullPath := filepath.Join(dirInfo.Path, name)
+			linkTarget, _ := os.Readlink(fullPath)
+			skillMdPath := filepath.Join(fullPath, "SKILL.md")
+			skillContent, _ := os.ReadFile(skillMdPath)
+
+			if matchesExclusion(name, excludedSkills, excludePatterns, linkTarget, string(skillContent)) {
+				excludedFound[name] = true
+				continue
+			}
+
+			// Réparer les anciens symlinks pointant vers ~/.local/share/agent-skills-sources/...
+			if linkTarget != "" && strings.HasPrefix(linkTarget, legacyPrefix) {
+				rel := strings.TrimPrefix(linkTarget, legacyPrefix)
+				newTarget := filepath.Join(centralSkillsDir, rel)
+				if _, err := os.Stat(newTarget); err == nil {
+					if !dryRun {
+						_ = os.Remove(fullPath)
+						_ = os.Symlink(newTarget, fullPath)
+					}
+					repairedLinks++
+				}
+			}
+		}
+	}
+
+	// Vérifier également les skills dans le hub central pour signaler ceux qui seraient exclus
+	if entries, err := os.ReadDir(centralSkillsDir); err == nil {
+		for _, e := range entries {
+			if !e.IsDir() || strings.HasPrefix(e.Name(), ".") {
+				continue
+			}
+			name := e.Name()
+			skillMdPath := filepath.Join(centralSkillsDir, name, "SKILL.md")
+			skillContent, _ := os.ReadFile(skillMdPath)
+			if matchesExclusion(name, excludedSkills, excludePatterns, string(skillContent)) {
+				excludedFound[name] = true
+			}
+		}
+	}
+
+	if len(excludedFound) > 0 {
+		var list []string
+		for k := range excludedFound {
+			list = append(list, k)
+		}
+		sort.Strings(list)
+		fmt.Printf("⏭️  %d skill(s) exclu(s) ignoré(s) (non importés dans le hub) : %s\n", len(list), strings.Join(list, ", "))
+	}
+	if repairedLinks > 0 {
+		if dryRun {
+			fmt.Printf("[DRY-RUN] %d symlink(s) de skills obsolètes seraient réparés vers %s\n", repairedLinks, centralSkillsDir)
+		} else {
+			fmt.Printf("[✓] %d symlink(s) de skills réparés vers %s\n", repairedLinks, centralSkillsDir)
+		}
+	}
+	if !dryRun {
+		fmt.Printf("[✓] Skills unifiés et interconnectés -> %s\n", centralSkillsDir)
+	}
+}
+
 // ---------- Synchronisation des agents personnalisés ----------
+
+// isAgentExcluded vérifie si un agent doit être exclu par son nom, sa description,
+// son corps markdown, ou les motifs globaux (ex: "adeo", "lmfr").
+func isAgentExcluded(a UnifiedAgent, excluded map[string]bool, patterns []string) bool {
+	return matchesExclusion(a.Name, excluded, patterns, a.Description, a.Body)
+}
 
 // syncAgents synchronise les agents entre le hub central (~/.local/share/ai-agents)
 // et les clients : OpenCode, Mammouth, Copilot CLI / VS Code (~/.copilot/agents)
 // et Antigravity CLI (~/.gemini/config/agents).
-func syncAgents(centralDir string, excluded map[string]bool, interactive, dryRun bool, homeDir string, reader *bufio.Reader) {
+func syncAgents(centralDir string, excluded map[string]bool, excludePatterns []string, interactive, dryRun bool, homeDir string, reader *bufio.Reader) {
 	fmt.Printf("\n=== Synchronisation des agents personnalisés ===\n")
-	if len(excluded) > 0 {
-		var list []string
-		for k := range excluded {
-			list = append(list, k)
-		}
-		sort.Strings(list)
-		fmt.Printf("ℹ️  Agent(s) exclu(s) : %s\n", strings.Join(list, ", "))
-	}
 
 	_ = os.MkdirAll(centralDir, 0755)
 
@@ -843,20 +1372,84 @@ func syncAgents(centralDir string, excluded map[string]bool, interactive, dryRun
 	centralAgents := make(map[string]UnifiedAgent)
 	readAgentsDir(centralDir, agentFormatOpenCode, "Hub Central agents", centralAgents)
 
-	// 2. Détecter nouveaux agents et différences côté clients
+	// Lire tous les clients en mémoire
+	clientAgentMaps := make([]map[string]UnifiedAgent, len(clients))
+	for idx, c := range clients {
+		ags := make(map[string]UnifiedAgent)
+		readAgentsDir(c.Path, c.Format, c.Name, ags)
+		clientAgentMaps[idx] = ags
+	}
+
+	// Passe 1 & 2 d'exclusion :
+	// - Passe 1 : tout agent dont le nom, la description ou le contenu correspond à `excluded` ou `excludePatterns` (ex: adeo, lmfr)
+	// - Passe 2 : tout sous-agent déclaré dans le roster `Subagents` d'un agent principal exclu (ex: agent-data-lmfr -> bigquery, dbt, kestra...)
+	effectiveExcluded := make(map[string]bool)
+	for k, v := range excluded {
+		if v {
+			effectiveExcluded[strings.ToLower(k)] = true
+		}
+	}
+	excludedDetected := make(map[string]bool)
+
+	checkAndMark := func(a UnifiedAgent) {
+		if isAgentExcluded(a, effectiveExcluded, excludePatterns) {
+			lower := strings.ToLower(a.Name)
+			effectiveExcluded[lower] = true
+			excludedDetected[a.Name] = true
+			for _, sub := range a.Subagents {
+				if sub != "*" && sub != "" {
+					effectiveExcluded[strings.ToLower(sub)] = true
+					excludedDetected[sub] = true
+				}
+			}
+		}
+	}
+
+	for _, a := range centralAgents {
+		checkAndMark(a)
+	}
+	for _, ags := range clientAgentMaps {
+		for _, a := range ags {
+			checkAndMark(a)
+		}
+	}
+	// Marquer aussi les agents clients qui ont été exclus via le roster d'un agent principal
+	for _, ags := range clientAgentMaps {
+		for name := range ags {
+			if effectiveExcluded[strings.ToLower(name)] {
+				excludedDetected[name] = true
+			}
+		}
+	}
+
+	if len(excludedDetected) > 0 {
+		var list []string
+		for k := range excludedDetected {
+			list = append(list, k)
+		}
+		sort.Strings(list)
+		fmt.Printf("⏭️  %d agent(s) exclu(s) ignoré(s) : %s\n", len(list), strings.Join(list, ", "))
+	}
+
+	// 2. Détecter nouveaux agents et différences côté clients (hors agents exclus)
 	newInClients := make(map[string][]string) // agentName -> []clientName
 	var contentDiffs []AgentDifference
 	finalAgents := make(map[string]UnifiedAgent)
 	hubDirty := make(map[string]bool)   // hub file doit être (ré)écrit
 	needRender := make(map[string]bool) // agent importé d'un format non canonique -> rendu canonique requis
 	for name, a := range centralAgents {
+		if effectiveExcluded[strings.ToLower(name)] {
+			continue
+		}
 		finalAgents[name] = a
 	}
 
-	for _, c := range clients {
-		ags := make(map[string]UnifiedAgent)
-		readAgentsDir(c.Path, c.Format, c.Name, ags)
+	for idx, c := range clients {
+		ags := clientAgentMaps[idx]
 		for name, a := range ags {
+			if effectiveExcluded[strings.ToLower(name)] {
+				continue
+			}
 			centA, inCentral := centralAgents[name]
 			if !inCentral {
 				newInClients[name] = append(newInClients[name], c.Name)
@@ -936,7 +1529,7 @@ func syncAgents(centralDir string, excluded map[string]bool, interactive, dryRun
 	// 4. Filtrer les exclusions
 	plan := make(map[string]UnifiedAgent)
 	for name, a := range finalAgents {
-		if excluded[name] {
+		if effectiveExcluded[strings.ToLower(name)] {
 			continue
 		}
 		plan[name] = a
@@ -948,7 +1541,7 @@ func syncAgents(centralDir string, excluded map[string]bool, interactive, dryRun
 	}
 	sort.Strings(sortedNames)
 
-	if interactive {
+	if interactive && len(sortedNames) > 0 {
 		fmt.Printf("\n📋 %d agent(s) seront synchronisés sur l'ensemble des outils (OpenCode, Mammouth, Copilot CLI / VS Code, Antigravity) :\n", len(sortedNames))
 		for _, name := range sortedNames {
 			a := plan[name]
