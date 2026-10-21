@@ -35,6 +35,52 @@ EOF'
 EOF'
 }
 
+Disable_Heavy_Services() {
+  echo "==> Désactivation des services lourds ou inutiles au démarrage pour optimiser le temps de boot et les I/O SSD..."
+
+  # Services non pertinents ou en échec (matériel absent ou incompatible)
+  sudo systemctl disable --now nvidia-persistenced.service 2>/dev/null
+  sudo systemctl disable --now xfs_healer_start.service xfs_healer@-.service 2>/dev/null
+  sudo systemctl disable vboxdrv.service 2>/dev/null
+  sudo systemctl disable --now luanti-server.service 2>/dev/null
+
+  # Conteneurs et virtualisation (à lancer manuellement au besoin pour éviter la saturation du SSD au boot)
+  sudo systemctl disable docker.service containerd.service 2>/dev/null
+  sudo systemctl disable lxc.service lxc-net.service libvirtd.service 2>/dev/null
+
+  # Démons d'audit / monitoring intensifs
+  sudo systemctl disable --now auditd.service acct.service atop.service 2>/dev/null
+
+  # Réinitialise les états en échec
+  sudo systemctl reset-failed 2>/dev/null
+
+  echo "[✓] Services désactivés."
+}
+
+WIFI_Intel2230_Fix() {
+  echo "==> Configuration de la stabilité Wi-Fi (Intel Centrino Wireless-N 2230)..."
+
+  # 1. Configuration du module iwlwifi (/etc/modprobe.d/iwlwifi.conf)
+  sudo tee /etc/modprobe.d/iwlwifi.conf <<'EOF'
+# Désactive l'agrégation TX instable en 802.11n sur Centrino 2230 tout en conservant le débit
+options iwlwifi 11n_disable=8
+# Chiffrement logiciel pour éviter les blocages de reconnexion/renégociation WPA2
+options iwlwifi swcrypto=1
+# Désactive la mise en veille agressive du chipset Wi-Fi
+options iwlwifi power_save=0
+options iwldvm force_cam=0
+EOF
+
+  # 2. Désactivation de l'économie d'énergie Wi-Fi dans NetworkManager
+  sudo mkdir -p /etc/NetworkManager/conf.d
+  sudo tee /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf <<'EOF'
+[connection]
+wifi.powersave = 2
+EOF
+
+  echo "[✓] Fichiers /etc/modprobe.d/iwlwifi.conf et /etc/NetworkManager/conf.d/default-wifi-powersave-on.conf créés."
+}
+
 WIFI() {
   # Wifi do not refresh after suspend
   # power on wifi card
@@ -124,6 +170,14 @@ PPA() {
 }
 
 Packages() {
+  # Firmware et microcode matériel
+  sudo apt install -y \
+    firmware-amd-graphics \
+    firmware-linux-free \
+    firmware-linux-nonfree \
+    firmware-iwlwifi \
+    intel-microcode
+
   # Install some packages
   sudo apt install -y \
     acct alot asciidoc aide aide-common alien apt-file apt-cacher aria2 ardour asciidoctor aspell-fr atop awscli auditd \
@@ -477,13 +531,6 @@ Chrome() {
 chromeIPass() {
   # chromeIPass : https://github.com/pfn/passifox/
   sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
-}
-
-claude() {
-  # claude : https://github.com/joemckenney/wake
-  # brew install --cask claude-code
-  curl -sSf https://raw.githubusercontent.com/joemckenney/wake/main/install.sh | sh
-  # claude mcp add --transport stdio --scope user wake-mcp -- wake-mcp
 }
 
 CLOUD() {
@@ -1764,7 +1811,6 @@ Main() {
   #  Children
   #  Chrome
   #  chromeIPass
-  #  claude
   #  CLOUD
   #  coolretroterm
   #  CozyDrive
@@ -1886,7 +1932,6 @@ SetupAISkillsMCP() {
     (cd "$HOME/bin/src/sync-ai-tools" && make install)
   fi
 }
-
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
 # Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
