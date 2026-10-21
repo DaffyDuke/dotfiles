@@ -146,9 +146,13 @@ export SHELLCHECK_OPTS="-e SC2086 -e SC2043"
 export GPG_TTY=$(tty)
 
 ssh() {
-        tmux rename-window "$(echo $@ | awk '{print $NF}' | cut -d . -f 1)"
-            command ssh "$@"
-                tmux set-window-option automatic-rename "on" 1>/dev/null
+    if [ -n "$TMUX" ]; then
+        tmux rename-window "$(echo "$@" | awk '{print $NF}' | cut -d . -f 1)" 2>/dev/null
+        command ssh "$@"
+        tmux set-window-option automatic-rename "on" 2>/dev/null
+    else
+        command ssh "$@"
+    fi
 }
 
 export PS1='${ret_status}%{$fg_bold[green]%}%m %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
