@@ -22,7 +22,7 @@ Cet agent est spécialisé dans la documentation et le support de l'architecture
 - Génération des configurations de pools PHP-FPM
 
 **Scripts clés** :
-- `/usr/lib/alternc/php7-fpm` (ou php82-fpm) : Génération et synchronisation des pools PHP-FPM via NFS vers les serveurs web frontaux
+- `/usr/lib/alternc/php7-fpm` (script unique, gère les pools `php56-fpm` à `php85-fpm`) : Génération et synchronisation des pools PHP-FPM via NFS vers les serveurs web frontaux
 - `/usr/lib/alternc/sqlbackup.sh` : Sauvegarde automatique des bases de données MySQL (quotidienne et hebdomadaire)
 - `/usr/lib/alternc/fixperms.sh` : Correction automatique des permissions des dossiers utilisateurs
 - `/usr/lib/alternc/update_mailman.sh` : Gestion des listes Mailman
@@ -39,7 +39,9 @@ Cet agent est spécialisé dans la documentation et le support de l'architecture
 - `mail_human_submission` : Serveur de submission (ex: `submission.lautre.net`)
 
 **Configuration par défaut** :
-- Type de PHP par défaut : `php82-fpm` (remplace l'ancien `VHOST`/`mod_php`)
+- Type de PHP par défaut : `php85-fpm` — migration PHP 8.5 du 2026-10-21 (auparavant `php82-fpm`, qui remplaçait lui-même l'ancien `VHOST`/`mod_php`). Appliqué aux nouveaux domaines via la table `default_subdomains` (entrée `www`/`MAIN`)
+- Types PHP restreints (table `domaines_type`, colonne `enable`) : `php81-fpm` et `php82-fpm` sont en `ADMIN` (réservés au staff), `php85-fpm` et `php74-fpm` en `ALL`. Un type dont `enable != 'ALL'` n'est ni proposé aux comptes non-admin (`admin/dom_edit.inc.php`) ni éditable par eux (`admin/dom_subedit.php`, message « This page is restricted to authorized staff »)
+- ⚠️ Depuis le 2026-10-22, les types `php70-fpm`, `php72-fpm`, `php73-fpm`, `php81-fpm` et `php82-fpm` **ne correspondent plus à aucun paquet installé** sur les frontaux : ils ont été passés en `enable='NONE'` pour empêcher toute sélection (staff inclus) d'un type cassé (cf. « Nettoyage des versions PHP obsolètes »)
 - Création automatique des répertoires racine des sites et dossiers temporaires
 - Gestion du TLD via variable système pour éviter les collisions de fichiers
 
@@ -88,9 +90,108 @@ Cet agent est spécialisé dans la documentation et le support de l'architecture
 - NFS pour le partage du code source
 
 **Gestion des pools PHP-FPM** :
-- Le script AlternC génère les fichiers `/etc/php/*/fpm/pool.d/<user>.alternc.conf`
-- Synchronisation via NFS vers `/etc/alternc/sharedconf/php/`
-- Support de multiples versions PHP (5.6, 7.x, 8.2)
+- Le script AlternC `/usr/lib/alternc/php7-fpm` (cron `alternc-php-fpm`, toutes les 5 min sur `elisa`) génère les fichiers `/etc/php/*/fpm/pool.d/<user>.alternc.conf` depuis `sub_domaines.type`, puis synchronise via `rsync /etc/php /etc/alternc/sharedconf/ -a --delete` (montage NFS `10.0.0.30:/var/alternc/sharedconf/override_php`)
+- Les frontaux récupèrent les pools via `/usr/local/sbin/reload-fpm.sh` (cron `alternc-lautrenet`, toutes les 15 min) : `rsync /etc/alternc/sharedconf/php/ /etc/php/ -a --delete`, puis `restart` des services `phpX.Y-fpm` disposant de pools
+- Les vhosts Apache sont régénérés sur le backend par `/usr/lib/alternc/update_domains.sh` (cron `alternc`, toutes les 5 min, pour `web_action != 'OK'`) puis propagés aux frontaux par `/usr/local/sbin/reload-apache.sh` (cron `alternc-lautrenet`, toutes les minutes) qui copie `/etc/alternc/sharedconf/vhosts_all.conf` vers `/var/lib/alternc/apache-vhost/vhosts_all.conf`
+- Un fichier vhost individuel est stocké dans `/var/lib/alternc/apache-vhost/<dernier chiffre de l'UID>/<UID>/<fqdn>.conf` (`host_conffile` dans `functions_hosting.sh`)
+- **Versions PHP actives** : `5.6` (mod_php — sert les types `vhost`, **1 484 sous-domaines**, et `php53`, 7), `7.4` (`php74-fpm`), `8.5` (`php85-fpm`, **257 sous-domaines / 96 comptes**). Les versions 7.0/7.1/7.2/7.3/8.1/8.2 ont été retirées des frontaux (voir « Nettoyage des versions PHP obsolètes »). `7.4` reste utilisé par **373 sous-domaines / 140 comptes** : migration vers 8.5 planifiée (voir « Migration des domaines restant en PHP 7.4 »)
+
+### Nettoyage des versions PHP obsolètes (2026-10-22)
+
+Après la migration PHP 8.5, les paquets des versions obsolètes ont été désinstallés **sur les frontaux uniquement** (`emma`, `web2`) : versions 7.0, 7.1, 7.2, 7.3, 8.1 et 8.2, soit **148 paquets par hôte** (purge complète de `phpX.Y-*` + métapaquet `php8.2`). Aucun paquet non-PHP n'a été supprimé et aucune réinstallation n'a été induite (le métapaquet `php8.2` a été retiré pour éviter l'installation automatique de `libapache2-mod-php8.2`).
+
+**Sur `elisa` : aucun paquet retiré.** `alternc-php-fpm` (3.3.1, seule version disponible) dépend de `php7.0-fpm`, `php7.1-fpm`, `php7.2-fpm` et `php7.3-fpm` : les retirer supprimerait le script `/usr/lib/alternc/php7-fpm` et le cron `alternc-php-fpm` (donc la génération des pools). `php8.1-fpm`/`php8.2-fpm` n'y sont pas installés.
+
+**Pools manuels** : `/etc/php/7.1/fpm/pool.d/www.manual.conf` et `/etc/php/8.1/fpm/pool.d/www.manual.conf` (pools de statut `pm.status_path`) ont été retirés de la source (`elisa`) et de `/etc/alternc/sharedconf/` afin que les frontaux ne les recréent pas (sinon `reload-fpm.sh` tentait un `restart` de services inexistants toutes les 15 min).
+
+**Migration d'un compte vers une autre version** : modifier `sub_domaines.type` puis passer `web_action='UPDATE'`, exécuter `/usr/lib/alternc/update_domains.sh` (vhosts) et `/usr/lib/alternc/php7-fpm` (pools), puis propager aux frontaux (`reload-fpm.sh`, `reload-apache.sh`). Les pools étant nommés par utilisateur (`phpX.Y-<login>.sock`), le pool de l'ancienne version est supprimé et recréé dans la nouvelle version.
+
+**Points d'attention** :
+- Les types `php70-fpm`, `php72-fpm`, `php73-fpm`, `php81-fpm` et `php82-fpm` ont été passés en `enable='NONE'` dans `domaines_type` (sauvegarde `/root/domaines_type-avant-NONE-*.sql` sur `elisa`) ; `php74-fpm` et `php85-fpm` restent en `ALL`, `php56-fpm` en `NONE`.
+- Les scripts gérés par Ansible `/usr/local/sbin/reload-fpm.sh` et `check_php_fpm` listent encore les versions 7.0/7.2/7.3/8.1/8.2 : inoffensif (répertoires `pool.d` vides → versions ignorées).
+- `check_php_fpm` renvoie `rc=1` de façon **bénigne** lorsqu'aucun pool n'est en échec (c'est le `rm` d'un fichier de cache absent) ; un pool réellement DOWN est tracé via `logger -t check_php_fpm` et un échec répété déclenche un `restart` de la version.
+- `update_domains.sh` régénère `vhosts_all.conf` en concaténant les fichiers individuels : un sous-domaine supprimé via le panel (`dom - del_sub_domain`) disparaît du vhost et retombe sur le vhost par défaut (301 vers `www.lautre.net`). Vérifier `/var/log/alternc/bureau.log` (actions `dom - del_sub_domain`) avant de conclure à une régression.
+
+### Mise à jour de sécurité des paquets PHP 5.6 (2026-10-22)
+
+Mise à jour des paquets **PHP 5.6** sur les **deux frontaux uniquement** (`emma`, `web2`) — `elisa` n'a **rien** reçu (Debian 8 jessie : dépôt Sury **commenté**, `archive.debian.org` aux clés GPG expirées → **0 paquet upgradable** ; PHP y est figé à `5.6.40-27` / `7.4.5`, avril 2020). Suivi Forgejo : **#175** (commentaire 2137, faille et preuves) et **#180** (commentaire 2135, chiffres + paquets).
+
+- **23 paquets par hôte** : `php5.6-*` (22) + `libapache2-mod-php5.6`, de `5.6.40-104+0~20261021.134+debian12~1.gbp7401dd` → **`5.6.40-105+0~20261022.135+debian12~1.gbp37a17e`**. Sur `web2` uniquement, `libgd3` a aussi été mis à jour (`2.3.3-9+0~20230207.13+debian10` → `2.3.3-14+0~20260731.21+debian12`).
+- **Méthode** : liste explicite de paquets + `apt-get install --only-upgrade` avec `-o Dpkg::Options::="--force-confold"` → **0 suppression** (`Remv = 0`), **aucun paquet `alternc*`** concerné (il n'y en a aucun sur `emma`/`web2`). `php7.4` (`1:7.4.33-31`) et `php8.5` (`8.5.12`) étaient **déjà à jour**.
+- **Correctif apporté** : changelog Debian du paquet — `Backported from 8.0.28` + `[CVE-2023-0662]: DOS vulnerability when parsing multipart request body`. C'est le hunk `max_multipart_body_parts` qui **manquait** sur la branche 5.6 (cf. `oerdnj/deb.sury.org#146`).
+- **Preuve avant/après** (modules extraits des `.deb` conservés dans `/var/cache/apt/archives/` sur les deux frontaux) : `libphp5.6.so` en `5.6.40-104` → **0 occurrence** de `max_multipart_body_parts` ; en `5.6.40-105` → **2 occurrences** + la chaîne de garde `Multipart body parts limit exceeded %d. To increase the limit change max_multipart_body_parts in php.ini.` (md5 différents, 11 chaînes en plus, taille identique).
+- **Correctif réellement actif** : le module chargé en mémoire par Apache (`/proc/<pid>/maps`) est celui présent sur disque (inode identique, aucun `(deleted)`) sur les deux frontaux — `apache2ctl graceful` ré-exécute le parent Apache et recharge donc le DSO. `ini_get('max_multipart_body_parts') = '-1'` → repli sur `max_input_vars` (`1000`).
+- **Périmètre** : `5.6` sert les types `vhost` (1 484 sous-domaines) et `php53` (7), soit ~1 490 sous-domaines en `mod_php`.
+- **Snapshots / rollback** : `/root/php-maj/{emma,web2}-avant-<horodatage>.txt` ; retour possible via `5.6.40-104+0~20261021.134+debian12~1.gbp7401dd` (conservé dans le cache APT des deux hôtes) puis `apache2ctl graceful`.
+- **Points d'attention** : `unattended-upgrades` est actif sur les frontaux mais limité aux origines **Debian** → les paquets Sury (dont `php*`) ne sont **jamais** mis à jour automatiquement ; `elisa` reste non patchable **par les paquets** (contourné depuis le 2026-10-23 par un module recompilé localement — voir « Module Apache PHP 5.6 durci sur `elisa` ») ; PHP 5.6 est **EOL** (backports Sury « au mieux »).
+- **Incident mineur d'exécution** : sur `web2`, la transaction a été longue (`ucf` réécrit un `ini` par paquet, ~5 s/paquet) et la session SSH a expiré pendant le `dpkg --configure --pending` ; la transaction a poursuivi jusqu'au bout (~175 s de plus), **sans impact** (tous les paquets en `ii`).
+
+### Module Apache PHP 5.6 durci sur `elisa` (CVE-2023-0662, 2026-10-23)
+
+`elisa` (Debian 8 jessie) ne peut pas recevoir les paquets Sury `5.6.40-105` qui corrigent CVE-2023-0662 : dépôt Sury commenté, `archive.debian.org` aux clés GPG expirées, et le pool Sury ne conserve **aucun** artefact `debian8`. Le SAPI Apache y a donc été **recompilé localement** depuis la source Debian jessie (`5.6.40+dfsg-0+deb8u12`) avec le backport du correctif. Suivi Forgejo : **#182** (commentaires 2142, 2146, 2147).
+
+**Principe — module parallèle, sans remplacement** : le `.so` fourni par `libapache2-mod-php5.6` (Sury) n'est **pas** écrasé. Le module durci est installé sous un nom distinct et activé par `a2enmod`, ce qui rend le retour arrière réversible en une commande. **Aucun paquet n'est supprimé ni remplacé.**
+
+**Paquet** : `libapache2-mod-php5.6-lautre`, version `5.6.40+dfsg-0+deb8u12+lautre1` (amd64, ~2,2 Mo, md5 `6cf86628e8a5706c7855329752e2df8e`), conservé dans `~/php5-cve-2023-0662/artifacts/` sur le poste de build. Contenu :
+
+- `/usr/lib/apache2/modules/libphp5.6-lautre.so` — strippé (9 926 664 octets), exporte `php5_module`, même `ZEND_MODULE_API_NO` (`20131226`) que Sury, donc les extensions Sury restent chargeables ;
+- `/etc/apache2/mods-available/php5.6-lautre.load` — `# Conflicts: php5 php5.6` (**séparateur espace**, pas virgule) + `# Depends: mpm_prefork` ;
+- `/etc/apache2/mods-available/php5.6-lautre.conf` — `SetHandler application/x-httpd-php` (réplique du `.conf` Sury, refus des `.phps` inclus) ;
+- `postinst` : `a2dismod php5.6` puis `a2enmod php5.6-lautre`, puis `apache2ctl -t` ; en cas d'échec **rollback automatique** (`a2dismod php5.6-lautre` + `a2enmod php5.6`) et sortie en erreur. **Aucun rechargement automatique** d'Apache ;
+- `prerm` : `a2dismod php5.6-lautre` puis `a2enmod php5.6`.
+
+**Paramètres de compilation alignés sur Sury** (seul le bloc `configure-apache2-stamp` de `debian/rules` diffère, les autres SAPIs ne sont pas reconstruits) :
+
+- `--with-config-file-path=/etc/php/5.6/apache2`
+- `--with-config-file-scan-dir=/etc/php/5.6/apache2/conf.d`
+- `EXTENSION_DIR=/usr/lib/php/20131226`
+
+`extension_dir` **doit** être aligné : les `.ini` de `conf.d` référencent les extensions en chemin **relatif** (`extension=mysql.so`) et `/etc/php/5.6/apache2/php.ini` ne définit pas `extension_dir`. Sans cet alignement, le module ne charge **aucune** extension.
+
+**Piège de recompilation** : `dpkg-source --after-build` (appelé en fin de `dpkg-buildpackage`) **retire les patches** de l'arbre source. Toute recompilation ultérieure repart donc d'un source **non patché**. Toujours exécuter `dpkg-source --before-build .` avant de relancer le build, puis contrôler le correctif : `strings <module> | grep -c max_multipart_body_parts` doit renvoyer **2**, plus le message de garde `Multipart body parts limit exceeded`.
+
+**Mise en service (testée le 2026-10-23)** :
+
+```bash
+dpkg -i libapache2-mod-php5.6-lautre_5.6.40+dfsg-0+deb8u12+lautre1_amd64.deb
+apache2ctl -t
+service apache2 reload        # rechargement gracieux, sans coupure
+```
+
+État constaté : modules actifs `php5.6-lautre.load` + `php5.6-lautre.conf` (`php5.6` désactivé), `Syntax OK`, panneau HTTP 200 en 10–112 ms, HTML servi, `X-Powered-By` absent. Le module lit bien `/etc/php/5.6/apache2/php.ini` (`extension_dir=/usr/lib/php/20131226`), **65 extensions** actives (`mysql`, `mysqli`, `gd`, `imap`, `curl`, `mbstring`, `xml`, `zip`, `pdo_mysql`, `json`), `Zend OPcache` **actif**. Garde-fou vérifié avec `php_value max_multipart_body_parts 10` : 3 parties → 3 champs ; **25 parties → 10 champs** + `PHP Warning: Multipart body parts limit exceeded 10`.
+
+**Retour arrière** :
+
+```bash
+a2dismod php5.6-lautre
+a2enmod php5.6
+apache2ctl -t && service apache2 reload
+dpkg -r libapache2-mod-php5.6-lautre   # facultatif
+```
+
+⚠️ **Ne jamais utiliser `a2enmod php5`** pour revenir en arrière : cela active le module **Debian** (`libphp5.so`, chemins `/etc/php5/apache2`), pas le module Sury.
+
+**Pièges rencontrés** :
+
+- `apache2 -t` échoue sur `elisa` (`Invalid Mutex directory ... ${APACHE_LOCK_DIR}`) : utiliser **`apache2ctl -t`**, qui charge `/etc/apache2/envvars`.
+- `a2enmod` Debian **ne désactive pas** les modules en conflit : il exige une désactivation préalable (`a2dismod php5.6` avant `a2enmod php5.6-lautre`).
+- Un paquet fournissant le `.load` **sans** le `.conf` fait servir le PHP **en clair** (aucun `SetHandler`) : vérifier systématiquement que le panneau renvoie du HTML et non du code source.
+- `extension_loaded('opcache')` renvoie `false` : OPcache est une **Zend extension**, à tester via `get_loaded_extensions(true)` ou `opcache_get_status()`.
+- Avertissements cosmétiques au démarrage : `xmlreader`, `xmlwriter` et `zip` sont compilées **en statique** dans la source Debian (Sury les fournit en partagé) → `Module '...' already loaded` ; la version statique (même `5.6.40`) est conservée, sans impact fonctionnel. Les supprimer exigerait de recompiler ces trois extensions en `shared`.
+
+**Périmètre** : ce correctif ne traite **que** CVE-2023-0662 ; PHP 5.6 reste **EOL** (dernière version 5.6.40, décembre 2018) et Sury backporte « au mieux ». Ne concerne que le panneau AlternC d'`elisa` — les frontaux `emma`/`web2` ont reçu les paquets Sury `5.6.40-105` (voir la section précédente).
+
+### Migration des domaines restant en PHP 7.4 (planifiée — état 2026-10-22)
+
+La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-domaines** sur **140 comptes** (204 domaines distincts) restent en `php74-fpm` — 29 de ces comptes ont aussi des sites en `php85-fpm`, 111 sont exclusivement en 7.4. *Chiffres relevés le 2026-10-22 après la mise à jour des paquets ; ils décroissent au fil des migrations faites par les membres depuis le panel (395 sous-domaines / 145 comptes le matin même).* Suivi Forgejo : **#180** (ticket dédié, liste des comptes telle qu'établie à sa création), #175 (rapport d'analyse + plan détaillé), #178 (correctifs post-migration), #149 (inventaire CMS/SPIP).
+
+**État de la CVE-2026-109618/109619 en PHP 7.4 : corrigée.** Les paquets `php7.4-*` sont en `1:7.4.33-31+0~20261021.121+debian12~1.gbpe9c428` sur `emma` **et** `web2`, le binaire réellement en service est `PHP 7.4.33 (built: Oct 21 2026)` et le changelog Debian mentionne `Backported from 8.2.35` + `[CVE-2026-109618, CVE-2026-109619]: Avoid state corruption via bailout`. **Points d'attention** : il s'agit d'une **mitigation minimale** propre aux branches EOL (elle **désactive complètement `session.upload_progress`**) ; elle introduit `memory_hard_limit_percent` (un worker peut sortir en **code 137**) ; Sury backporte « au mieux », sans garantie pour la prochaine faille ; `php5.6` (encore installé en `mod_php` sur les frontaux) a **reçu** le hunk `max_multipart_body_parts` le **2026-10-22** (paquets `5.6.40-105` — voir « Mise à jour de sécurité des paquets PHP 5.6 »).
+
+**Recensement des applications** (racines en 7.4) : SPIP 4.4.x (34, compatible 8.5 via `_PHP_MAX 8.5.99`), SPIP 4.0–4.3 (8), **SPIP 3.x (5, incompatibles)**, WordPress 6.x/7.x (45), WordPress 5.6–5.9 (7, non testés en 8.5), **WordPress < 5.6 (6, incompatibles)**, **ownCloud 10.x / Nextcloud 16 et 25 (5, incompatibles — NC 25 = max PHP 8.1)**, **MediaWiki 1.28.3 (1)**, **Galette 0.8.3.3 / 0.9.4.2 (5)**, DokuWiki (2 récents compatibles, **5 anciens incompatibles**), LimeSurvey (6.16.9 compatible, **3.13.2 non**), Dotclear (2.23.1 compatible, **2.18 ×2 non**), Piwigo 11.3.0 (1, PHP 8.0 seulement), YOURLS 1.9.2 (1) et **~171 racines sans CMS identifiable** (statique, redirections, PHP maison) à tester au cas par cas. Le patch du plugin SPIP `majplugins` déjà appliqué (voir #178) confirme que **les plugins SPIP nécessitent une mise à jour** pour PHP 8.
+
+**Plan de migration** (détail dans #180) : par lots de ~20 comptes — A sauvegardes, B pilote sur un compte déjà mixte, C bascule des CMS compatibles, D mise à jour des applications incompatibles, E test au cas par cas des racines inconnues, F décommissionnement de 7.4 (quand plus aucun `sub_domaines.type='php74-fpm'`). `php74-fpm` reste en `enable='ALL'` : un membre peut rebasculer lui-même un site en 7.4 depuis le panel en cas de régression. Aucun palier intermédiaire (8.0/8.1/8.2) n'est disponible, ces versions ayant été désinstallées.
+
+**Point de sécurité annexe** : la racine du compte `ffii` contient de nombreux fichiers PHP à nom aléatoire (`nKtcGHtJ.php`, `orang.php`, `nox-universal_v3.php`, `poc-admin.php`, …) — traces d'exploits (famille Nox) à auditer/nettoyer avant bascule de ce compte.
 
 ### Système de Sauvegarde
 
