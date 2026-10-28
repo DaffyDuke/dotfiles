@@ -62,6 +62,7 @@ type UnifiedServer struct {
 	URL         string            `json:"url,omitempty"`
 	Headers     map[string]string `json:"headers,omitempty"`
 	OAuth       *OAuthConfig      `json:"oauth,omitempty"`
+	CodeMode    *bool             `json:"codemode,omitempty"`
 	SourceTools []string          `json:"source_tools,omitempty"`
 }
 
@@ -230,13 +231,14 @@ type CanonicalMCPConfig struct {
 }
 
 type CanonicalServer struct {
-	Type    string            `json:"type,omitempty"`
-	Command string            `json:"command,omitempty"`
-	Args    []string          `json:"args,omitempty"`
-	Env     map[string]string `json:"env,omitempty"`
-	URL     string            `json:"url,omitempty"`
-	Headers map[string]string `json:"headers,omitempty"`
-	OAuth   *OAuthConfig      `json:"oauth,omitempty"`
+	Type     string            `json:"type,omitempty"`
+	Command  string            `json:"command,omitempty"`
+	Args     []string          `json:"args,omitempty"`
+	Env      map[string]string `json:"env,omitempty"`
+	URL      string            `json:"url,omitempty"`
+	Headers  map[string]string `json:"headers,omitempty"`
+	OAuth    *OAuthConfig      `json:"oauth,omitempty"`
+	CodeMode *bool             `json:"codemode,omitempty"`
 }
 
 // 2. Format Standard MCP (Antigravity & Copilot CLI)
@@ -260,6 +262,7 @@ type OpenCodeServer struct {
 	Environment map[string]string `json:"environment,omitempty"`
 	Headers     map[string]string `json:"headers,omitempty"`
 	OAuth       *OAuthConfig      `json:"oauth,omitempty"`
+	CodeMode    *bool             `json:"codemode,omitempty"`
 	Enabled     *bool             `json:"enabled,omitempty"`
 }
 
@@ -440,10 +443,15 @@ func main() {
 	workExcludeCfg := loadExcludeConfig(workFilePathForExclude)
 
 	excludedMCPSet := map[string]bool{
-		"bigquery":            true,
-		"servicenow":          true,
-		"servicenow-mcp-prod": true,
-		"github-mcp":          true,
+		"bigquery":                    true,
+		"servicenow":                  true,
+		"servicenow-mcp-prod":         true,
+		"com.adeo/servicenow-mcp-prod": true,
+		"eu.datadoghq/datadog-v1":     true,
+		"com.context7/context7":       true,
+		"com.microsoft/markitdown":    true,
+		"io.github/github-mcp-server": true,
+		"github-mcp":                  true,
 	}
 	addSliceToSet(excludeCfg.MCP, excludedMCPSet)
 	addSliceToSet(workExcludeCfg.MCP, excludedMCPSet)
@@ -793,6 +801,10 @@ func enrichServerFromBase(local, base UnifiedServer) UnifiedServer {
 	if (local.URL != "") != (base.URL != "") {
 		return local
 	}
+	if local.CodeMode == nil && base.CodeMode != nil {
+		cp := *base.CodeMode
+		local.CodeMode = &cp
+	}
 	if local.URL != "" {
 		if local.OAuth.IsEmpty() && !base.OAuth.IsEmpty() {
 			local.OAuth = base.OAuth.Clone()
@@ -832,6 +844,10 @@ func mergeServer(dest map[string]UnifiedServer, s UnifiedServer, sourceName stri
 
 	// Ne fusionner les champs complémentaires que si les deux entrées sont du même type (remote vs stdio)
 	if (existing.URL != "") == (s.URL != "") {
+		if existing.CodeMode == nil && s.CodeMode != nil {
+			cp := *s.CodeMode
+			existing.CodeMode = &cp
+		}
 		if existing.URL != "" {
 			if existing.OAuth.IsEmpty() && !s.OAuth.IsEmpty() {
 				existing.OAuth = s.OAuth.Clone()
@@ -890,14 +906,15 @@ func readCanonicalServers(path, sourceName string, dest map[string]UnifiedServer
 	count := 0
 	for name, s := range cfg.Servers {
 		mergeServer(dest, UnifiedServer{
-			Name:    name,
-			Type:    s.Type,
-			Command: s.Command,
-			Args:    s.Args,
-			Env:     normalizeEnvMap(s.Env),
-			URL:     s.URL,
-			Headers: normalizeEnvMap(s.Headers),
-			OAuth:   normalizeOAuth(s.OAuth),
+			Name:     name,
+			Type:     s.Type,
+			Command:  s.Command,
+			Args:     s.Args,
+			Env:      normalizeEnvMap(s.Env),
+			URL:      s.URL,
+			Headers:  normalizeEnvMap(s.Headers),
+			OAuth:    normalizeOAuth(s.OAuth),
+			CodeMode: s.CodeMode,
 		}, sourceName)
 		count++
 	}
@@ -1042,6 +1059,10 @@ func readOpenCodeServers(path, sourceName string, dest map[string]UnifiedServer)
 			}
 			u.OAuth = normalizeOAuth(&oc)
 		}
+		if cmVal, ok := sMap["codemode"].(bool); ok {
+			cmCopy := cmVal
+			u.CodeMode = &cmCopy
+		}
 
 		// Si un serveur existe déjà dans dest (ex: lu depuis opencode.json avant opencode.jsonc),
 		// on enrichit u avec OAuth/Headers de l'existant avant d'écraser si même type.
@@ -1095,9 +1116,10 @@ func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSy
 				URL:     s.URL,
 				Headers: convertEnvMap(s.Headers, valConv),
 			}
-			// Dans mcp.json central (asEnvSyntax=false), on sauvegarde aussi OAuth pour ne pas le perdre
+			// Dans mcp.json central (asEnvSyntax=false), on sauvegarde aussi OAuth et CodeMode pour ne pas les perdre
 			if !asEnvSyntax {
 				cs.OAuth = convertOAuth(s.OAuth, valConv)
+				cs.CodeMode = s.CodeMode
 			}
 			outServers[name] = cs
 		} else {
@@ -1105,12 +1127,16 @@ func writeCanonicalConfig(path string, servers map[string]UnifiedServer, asEnvSy
 			if cmd == "" {
 				cmd = "npx"
 			}
-			outServers[name] = CanonicalServer{
+			cs := CanonicalServer{
 				Type:    "stdio",
 				Command: cmd,
 				Args:    s.Args,
 				Env:     convertEnvMap(s.Env, valConv),
 			}
+			if !asEnvSyntax {
+				cs.CodeMode = s.CodeMode
+			}
+			outServers[name] = cs
 		}
 	}
 
@@ -1189,10 +1215,11 @@ func writeOpenCodeConfig(path string, servers map[string]UnifiedServer, excluded
 	for name, s := range servers {
 		if s.URL != "" {
 			ocServers[name] = OpenCodeServer{
-				Type:    "remote",
-				URL:     s.URL,
-				Headers: convertEnvMap(s.Headers, toOpenCodeEnvValue),
-				OAuth:   convertOAuth(s.OAuth, toOpenCodeEnvValue),
+				Type:     "remote",
+				URL:      s.URL,
+				Headers:  convertEnvMap(s.Headers, toOpenCodeEnvValue),
+				OAuth:    convertOAuth(s.OAuth, toOpenCodeEnvValue),
+				CodeMode: s.CodeMode,
 			}
 		} else {
 			cmd := s.Command
@@ -1204,6 +1231,7 @@ func writeOpenCodeConfig(path string, servers map[string]UnifiedServer, excluded
 				Type:        "local",
 				Command:     fullCmd,
 				Environment: convertEnvMap(s.Env, toOpenCodeEnvValue),
+				CodeMode:    s.CodeMode,
 			}
 			ocServers[name] = osrv
 		}
