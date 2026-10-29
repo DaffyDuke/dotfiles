@@ -191,3 +191,7 @@ alias ghbackup='GITUSER="DaffyDuke"; curl "https://api.github.com/users/${GITUSE
 
 # bmad-method
 alias codex='CODEX_HOME="$PWD/.codex"'
+
+# antigravity
+alias agy-list="sqlite3 -header -column ~/.gemini/antigravity-cli/conversation_summaries.db 'SELECT conversation_id, title, datetime(last_modified_time) as date FROM conversation_summaries ORDER BY last_modified_time DESC LIMIT 20;'"
+
