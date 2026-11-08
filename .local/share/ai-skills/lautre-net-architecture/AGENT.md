@@ -6,13 +6,26 @@ Cet agent est spécialisé dans la documentation et le support de l'architecture
 - L'hébergement AlternC principal (serveur backend)
 - Les serveurs de messagerie (IMAP/POP3/SMTP) et l'authentification du courrier (DKIM, SPF, DMARC)
 - Le webmail Roundcube
-- Les systèmes de sauvegarde et de supervision (Nagios 4, Uptime Kuma, page de statut publique)
+- Les systèmes de sauvegarde et de supervision (Nagios 4, Uptime Kuma, Grafana / Graphite / Collectd, page de statut publique)
 - Les configurations réseau et les infrastructures
 
 ## Règles de Communication et Style
 
 - **Tutoiement systématique** : Utiliser impérativement le tutoiement dans tous les échanges avec l'utilisateur et lors des réponses/commentaires sur les tickets de support (Forgejo).
 - **Concision par défaut** : Privilégier des réponses courtes, directes et synthétiques. Aller droit aux faits (commandes, diagnostic, actions réalisées), sans verbiage superflu.
+
+## Règles de Contribution et Gestion de Code
+
+- **Pull Requests obligatoires sur `git.lautre.net/lautre.net/ansible`** : Ne jamais pousser directement sur la branche principale (`master`). Toujours créer une branche thématique dédiée et soumettre une Pull Request (PR) pour toute modification ou ajout de scripts/playbooks.
+- **Proscription stricte du Base64 / Texte clair uniquement** : Ne jamais encoder les scripts, playbooks, templates ou commandes en base64. Tout livrable, configuration et script doit être rédigé et conservé exclusivement en texte clair directement lisible par les administrateurs.
+
+## Configuration et Identifiants Base de Données
+
+> [!NOTE]
+> Les identifiants, utilisateurs et noms de bases de données MySQL d'AlternC ne sont jamais codés en dur dans la documentation ou les scripts.
+> Ces variables d'environnement et de connexion sont définies et centralisées sur le serveur dans :
+> - `/etc/alternc/local.sh` (`$MYSQL_HOST`, `$MYSQL_DATABASE`, `$MYSQL_USER`, `$MYSQL_PASS`, etc.)
+> - `/etc/alternc/my.cnf` (utilisé directement via `mysql --defaults-file=/etc/alternc/my.cnf` pour les accès automatisés en ligne de commande).
 
 ## Infrastructure Principale
 
@@ -251,7 +264,7 @@ dpkg -r libapache2-mod-php5.6-lautre   # facultatif
 - `apache2 -t` échoue sur `elisa` (`Invalid Mutex directory ... ${APACHE_LOCK_DIR}`) : utiliser **`apache2ctl -t`**, qui charge `/etc/apache2/envvars`.
 - `a2enmod` Debian **ne désactive pas** les modules en conflit : il exige une désactivation préalable (`a2dismod php5.6` avant `a2enmod php5.6-lautre`).
 - Un paquet fournissant le `.load` **sans** le `.conf` fait servir le PHP **en clair** (aucun `SetHandler`) : vérifier systématiquement que le panneau renvoie du HTML et non du code source.
-- `extension_loaded('opcache')` renvoie `false` : OPcache est une **Zend extension**, à tester via `get_loaded_extensions(true)` ou `opcache_get_status()`.
+- `extension_loaded('opcache')` renvoie `false` : OPcache est une **Zend extension**, à tester via `get_loaded_extensions(true)` ou `opcache_get_status(, configuré dans )`.
 - Avertissements cosmétiques au démarrage : `xmlreader`, `xmlwriter` et `zip` sont compilées **en statique** dans la source Debian (Sury les fournit en partagé) → `Module '...' already loaded` ; la version statique (même `5.6.40`) est conservée, sans impact fonctionnel. Les supprimer exigerait de recompiler ces trois extensions en `shared`.
 
 **Périmètre** : ce correctif ne traite **que** CVE-2023-0662 ; PHP 5.6 reste **EOL** (dernière version 5.6.40, décembre 2018) et Sury backporte « au mieux ». Ne concerne que le panneau AlternC d'`elisa` — les frontaux `emma`/`web2` ont reçu les paquets Sury `5.6.40-105` (voir la section précédente).
@@ -268,7 +281,7 @@ La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-dom
 
 **Point de sécurité annexe** : la racine du compte `<compte>` contient de nombreux fichiers PHP à nom aléatoire (`nKtcGHtJ.php`, `orang.php`, `nox-universal_v3.php`, `poc-admin.php`, …) — traces d'exploits (famille Nox) à auditer/nettoyer avant bascule de ce compte.
 
-**Angle mort — une application peut n'avoir aucune version PHP disponible.** Après le retrait des 8.0/8.1/8.2 (2026-10-22), le parc ne propose plus que **7.4** et **8.5** : une application exigeant **8.1 à 8.4** n'a **aucune cible**, et la rebascule réflexe en `php74-fpm` ne fonctionne pas — **vérifier le minimum exigé par l'application avant de la promettre** (cas relevé en octobre 2026 : Galette 1.1.6.1, `define('GALETTE_PHP_MIN', '8.1')` dans `includes/sys_config/versions.inc.php`). En PHP 8.5, une **dépréciation** devient **fatale** dès que l'application installe son propre `set_error_handler` levant une exception sur tout ce que couvre `error_reporting()` : ici les casts non canoniques `(double)`/`(integer)`/`(boolean)`/`(binary)` (RFC `deprecations_php_8_5`) — page blanche 500, sans indice côté visiteur. **Diagnostic** : chercher `PHP Fatal error: Uncaught ErrorException: …` dans le journal du **frontal** (le PHP s'exécute là, pas sur le backend). **Contournement minimal et réversible** : passer `error_reporting(E_ALL)` à `error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED)` — masque les dépréciations sans toucher à la logique (écrire **dans le même fichier**, pour préserver propriétaire et inode) ; **correction pérenne** : mise à jour de l'application (ici Galette ≥ 1.2.1, qui apporte la compatibilité PHP 8.5 **et** corrige les avis de sécurité de la branche 1.1.x, dont CVE-2025-53922). Corriger les casts un par un est illusoire : plusieurs centaines d'occurrences dans le code de l'application, perdues à la prochaine mise à jour.
+**Angle mort — une application peut n'avoir aucune version PHP disponible.** Après le retrait des 8.0/8.1/8.2 (2026-10-22), le parc ne propose plus que **7.4** et **8.5** : une application exigeant **8.1 à 8.4** n'a **aucune cible**, et la rebascule réflexe en `php74-fpm` ne fonctionne pas — **vérifier le minimum exigé par l'application avant de la promettre** (cas relevé en octobre 2026 : Galette 1.1.6.1, `define('GALETTE_PHP_MIN', '8.1')` dans `includes/sys_config/versions.inc.php`). En PHP 8.5, une **dépréciation** devient **fatale** dès que l'application installe son propre `set_error_handler` levant une exception sur tout ce que couvre `error_reporting(, configuré dans )` : ici les casts non canoniques `(double)`/`(integer)`/`(boolean)`/`(binary)` (RFC `deprecations_php_8_5`) — page blanche 500, sans indice côté visiteur. **Diagnostic** : chercher `PHP Fatal error: Uncaught ErrorException: …` dans le journal du **frontal** (le PHP s'exécute là, pas sur le backend). **Contournement minimal et réversible** : passer `error_reporting(E_ALL)` à `error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED)` — masque les dépréciations sans toucher à la logique (écrire **dans le même fichier**, pour préserver propriétaire et inode) ; **correction pérenne** : mise à jour de l'application (ici Galette ≥ 1.2.1, qui apporte la compatibilité PHP 8.5 **et** corrige les avis de sécurité de la branche 1.1.x, dont CVE-2025-53922). Corriger les casts un par un est illusoire : plusieurs centaines d'occurrences dans le code de l'application, perdues à la prochaine mise à jour.
 
 ### Système de Sauvegarde
 
@@ -353,6 +366,36 @@ La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-dom
 - Le reste de la configuration Nagios (autres `conf.d/*.cfg`, `nrpe.cfg`, sondes) **n'est pas géré par Ansible** : modifications directes, versionnées par **etckeeper** (`/etc` est un dépôt git → `etckeeper commit -m …` après chaque changement).
 - Puppet est **inactif** sur `monit` ; `/root/t/` (`nrpe.d`, `plugins`, `sudoers.d`) est un **vestige** de cette époque, à ne pas redéployer.
 
+### Système de Métriques et Tableaux de Bord (Grafana + Graphite + Collectd sur `monit`)
+
+**Hôte & Accès** :
+- Instance Grafana hébergée sur `monit` (`graph.lautre.org`, port local 3000 servi en reverse-proxy Nginx derrière HTTPS).
+- Base de données locale MySQL `grafana` sur `monit` (utilisateurs, dashboards, datasources).
+- Datasource par défaut : **Graphite** (`http://10.0.0.6:8080` ou local). Les collecteurs collectd et scripts custom écrivent dans carbon-cache (`10.0.0.6:2003`).
+- **Comptes utilisateurs Grafana** : Alignés sur les administrateurs Nagios (`/etc/nagios4/htpasswd.users`) avec attribution des rôles Admin ou Editor.
+
+**Dashboard principal : « Main Server Board » (`main-server-board.json`)** :
+- **Filtrage par hôtes** : Utilise une variable `$host` unique en multi-sélection (regex / query sur les nœuds actifs Graphite), préfiltrée sur les machines de production de l'inventaire Ansible. `elma` et `mysql2` ont été purgées des répertoires whisper et exclues du tableau de bord.
+- **Espace disque (`Disk Space Used`)** : Calcule le pourcentage réel via la nomenclature `df_complex-*` de collectd : `asPercent(df_complex-used, sumSeries(df_complex-used, df_complex-free))`.
+- **PHP-FPM** : Agrégation des processus actifs, idle et max pour PHP 5.6, 7.4 et 8.5 afin d'éviter les timeouts de requêtes Graphite.
+- **Raccordement des points** : Tous les panneaux applicatifs utilisent `nullPointMode: connected` pour relier les séries discrètes ou collectées à intervalle espacé (évite les graphes en pointillés ou vides sur de courtes plages).
+- **Tuiles applicatives et filtrage `$host`** : Toutes les rangées applicatives (Apache Web Server, Mailing Lists, DNS BIND 9, Forgejo, AlternC, Let's Encrypt, FTP ProFTPD, IPVS, Fail2ban, Mail, Anubis) filtrent systématiquement sur `$host`.
+- **Blocs et tuiles dédiés** :
+  - **AlternC** : Comptes membres (totaux, actifs, suspendus) collectés depuis `mysql1`, et nombre total de domaines et sous-domaines hébergés interrogé en base depuis `elisa` (`send-alternc-domains.sh`, cadence horaire, points connectés).
+  - **Hardware IPMI Sensors** : Surveillance des températures (`degrees_C`) et ventilateurs (`percent` et `RPM`) relevés par `ipmitool sensor` sur les serveurs physiques et hyperviseurs (`hyperbeau`, `hyperfort`, `hyperion`, `filou`, `emma`, `filer1`).
+- **Nettoyage** : Anciennes rangées Varnish, Elasticsearch, Memcached, Redis et Sensors décommissionnées.
+- **Telegraf** : Services et résidus Telegraf purgés des machines (non utilisés par la stack de métriques).
+
+**Scripts de collecte et déploiement Ansible** :
+- Les scripts sont centralisés dans le rôle Grafana : `roles/grafana/files/collectors/` :
+  - `send-services-graphite.sh` : Files Mailman, requêtes/stats BIND 9, sessions/démons ProFTPD (sur `elisa`).
+  - `send-alternc-domains.sh` : Total domaines et sous-domaines AlternC (sur `elisa`, cron horaire `17 * * * *`).
+  - `send-alternc-graphite.sh` : Total membres AlternC (sur `mysql1`, cron `* * * * *`).
+  - `send-letsencrypt-graphite.sh` : Certificats Let's Encrypt et seuils <30j, <7j (sur `nginx`, cron `*/15 * * * *`).
+  - `send-ipmi-graphite.sh` : Températures et ventilateurs IPMI (sur serveurs physiques, cron `/etc/cron.d/ipmi-graphite`).
+  - `collectd-forgejo-metrics.sh` : Pont d'exposition métriques Forgejo Prometheus vers collectd PUTVAL (sur `git`).
+- Playbook Ansible associé : `monitoring-collectors.yml` (branche `feat/grafana-role`, PR #12).
+
 ### Système de Gestion des Comptes
 
 **Processus de suppression** :
@@ -394,8 +437,8 @@ Tous les scripts sont assainis (aucun secret ni mot de passe en dur, utilisation
 
 **Problèmes connus et solutions** :
 - **Problème** : Les variables étaient écrasées par les valeurs par défaut lors de chaque chargement de page
-- **Cause** : `variable_get()` appelait `variable_set()` avec des valeurs par défaut si la variable n'était pas en cache mémoire
-- **Solution** : Séparation de `variable_default_register()` (insert uniquement) et `variable_get()` (lecture sécurisée)
+- **Cause** : `variable_get(, configuré dans )` appelait `variable_set(, configuré dans )` avec des valeurs par défaut si la variable n'était pas en cache mémoire
+- **Solution** : Séparation de `variable_default_register(, configuré dans )` (insert uniquement) et `variable_get(, configuré dans )` (lecture sécurisée)
 - **Résultat** : Les variables personnalisées sont maintenant préservées même si le cache mémoire est vide
 
 ### Interface de Gestion Git (Forgejo)
@@ -474,11 +517,11 @@ Autorise `nagios` à lancer l'audit SPF/DMARC en root, arguments figés sur `--c
 - **Un détecteur doit être au moins aussi large que le nettoyeur** : en octobre 2026, l'audit cherchait `eval($variable(` quand la famille dominante écrivait `eval(nomDeFonction(` — quatre fichiers vus là où il y en avait cinquante-neuf, et **une famille entière (SEO) dépourvue de tout critère**. Les critères de l'audit et ceux de la quarantaine doivent provenir de la même définition ; tout élargissement se reporte des deux côtés. Conséquence à retenir : **tout comptage antérieur à la correction d'un motif est un minimum, pas un inventaire**.
 - **Ne jamais plafonner la taille pour un critère de contenu** : un plafond de 300 Ko a laissé passer un chargeur de 1,15 Mo (base64 dans ses 2 000 premiers octets). Ne plafonner que les critères de nom, où la taille n'est qu'un indice.
 - **Un nom ne suffit pas, un contenu tranche** : les portes dérobées se déguisent en fichiers d'application (`cache.php` de 5,6 Ko, `footer.php` de thème, `2index.php`) et se glissent dans des répertoires légitimes du cœur (`wp-includes/blocks/…`, `js/dist/`, `vendor/…`). Un critère de nom sans vérification produit des faux positifs (bibliothèques `Zebra_Database`, `shaarli`, `blogotext`).
-- **Familles rencontrées** : charges signées `Monarx` déposées par un composant tiers ; famille `eval(<fonction>())` avec `gzinflate(base64_decode(...))` et décalage d'un caractère, jeton `$_REQUEST['d_time']` (présente dès 2021) ; kit dit « AnonymousFox » (`1.php`, `cmd.php`, `anonymousfox.php`, fichiers de 150 à 293 Ko, noms aléatoires) ; **famille SEO** (des `index.php` de 1 758 à 1 910 octets, marqués par `$_REQUEST["0kb"]` et `$_SESSION['secretyt']`, disséminés dans des sous-répertoires aux noms imitant WordPress : `statics`, `photos`, `upgrades`, `i18ns`, `galleries`, `cssjs`, `query-content`, `search-api`, `list-grid`, `nextjs`, `post-catalog`, `audits`, `requests`, `jquery3`, `comment-editor`) ; **famille `goto`** (`edit.php`, `filefuns.php`, `index.php` : ouverture sur un `goto` et chaînes concaténées en `\xNN`) ; **plateforme de diffusion** : `.htaccess` de camouflage (`HT3`), chargeurs `cache.php`, faux médias (`.mp4`, `.wma`, `.swf`, `.mov`, `.bmp`, `.m3u8`…) et archives `.zip` nommées `<média>_<12 hex>.zip`, imbriqués sur 8 à 11 niveaux dans des répertoires à suffixe aléatoire.
-- **Familles de la seconde vague (octobre 2026)** : **coquille à mot de passe** — fichier de **125 octets** au nom imitant le cœur du CMS (`users.php`, `plugins.php`, `<hex>index.php`), qui teste un mot de passe en variable dans `$_REQUEST` puis exécute par `eval()` la commande reçue ; **chaque exemplaire a son propre mot de passe** et les dépôts s'étalent sur des semaines (44 exemplaires sur un seul compte, du 2026-09-04 au 2026-10-07) ; **chargeur distant** — fichier de **93 octets** qui lit une adresse distante et l'exécute (`gbbdns.php`) ; **magasin du kit** — faux média dont le contenu commence par `<32 hex>|{-.-!!!}|` (même marqueur que la famille relevée sur `<site-compromis>`) ; **déployeur d'accès distant** — script auto-extractible de plusieurs mégaoctets se terminant par `GS_USELOCAL=1 ./deploy.sh` (projet **gsocket** : le processus installe une connexion **sortante** vers un poste de contrôle) ; **installeur Windows** (`.msi`, 32 Mo) déposé à la racine d'un site ; **panneaux d'exécution du kit** : `…/LEVIATHAN/haxorcgiapi/{bash,perl,py}.haxor` et `…/ERENUSE/Erencgiapi/{bash,perl,py}.Eren` (accompagnés d'un `.htaccess`), plantés dans les bibliothèques du cœur (`plugins/auto/…/vendor/`, `plugins-dist/…`) et **de mêmes empreintes** d'un emplacement à l'autre ; **fausse arborescence WordPress** (`wp-load.php`, `wp-blog-header.php`) à la racine d'un site qui n'est pas un WordPress ; **loaders `include`/`require base64_decode(…)`** (et non seulement `include_once`) ; **`base64_decode` nu** (sans `gzinflate`/`gzuncompress`/`str_rot13`), angle mort de `EB`.
+- **Familles rencontrées** : charges signées `Monarx` déposées par un composant tiers ; famille `eval(<fonction>(, configuré dans ))` avec `gzinflate(base64_decode(...))` et décalage d'un caractère, jeton `$_REQUEST['d_time']` (présente dès 2021) ; kit dit « AnonymousFox » (`1.php`, `cmd.php`, `anonymousfox.php`, fichiers de 150 à 293 Ko, noms aléatoires) ; **famille SEO** (des `index.php` de 1 758 à 1 910 octets, marqués par `$_REQUEST["0kb"]` et `$_SESSION['secretyt']`, disséminés dans des sous-répertoires aux noms imitant WordPress : `statics`, `photos`, `upgrades`, `i18ns`, `galleries`, `cssjs`, `query-content`, `search-api`, `list-grid`, `nextjs`, `post-catalog`, `audits`, `requests`, `jquery3`, `comment-editor`) ; **famille `goto`** (`edit.php`, `filefuns.php`, `index.php` : ouverture sur un `goto` et chaînes concaténées en `\xNN`) ; **plateforme de diffusion** : `.htaccess` de camouflage (`HT3`), chargeurs `cache.php`, faux médias (`.mp4`, `.wma`, `.swf`, `.mov`, `.bmp`, `.m3u8`…) et archives `.zip` nommées `<média>_<12 hex>.zip`, imbriqués sur 8 à 11 niveaux dans des répertoires à suffixe aléatoire.
+- **Familles de la seconde vague (octobre 2026)** : **coquille à mot de passe** — fichier de **125 octets** au nom imitant le cœur du CMS (`users.php`, `plugins.php`, `<hex>index.php`), qui teste un mot de passe en variable dans `$_REQUEST` puis exécute par `eval(, configuré dans )` la commande reçue ; **chaque exemplaire a son propre mot de passe** et les dépôts s'étalent sur des semaines (44 exemplaires sur un seul compte, du 2026-09-04 au 2026-10-07) ; **chargeur distant** — fichier de **93 octets** qui lit une adresse distante et l'exécute (`gbbdns.php`) ; **magasin du kit** — faux média dont le contenu commence par `<32 hex>|{-.-!!!}|` (même marqueur que la famille relevée sur `<site-compromis>`) ; **déployeur d'accès distant** — script auto-extractible de plusieurs mégaoctets se terminant par `GS_USELOCAL=1 ./deploy.sh` (projet **gsocket** : le processus installe une connexion **sortante** vers un poste de contrôle) ; **installeur Windows** (`.msi`, 32 Mo) déposé à la racine d'un site ; **panneaux d'exécution du kit** : `…/LEVIATHAN/haxorcgiapi/{bash,perl,py}.haxor` et `…/ERENUSE/Erencgiapi/{bash,perl,py}.Eren` (accompagnés d'un `.htaccess`), plantés dans les bibliothèques du cœur (`plugins/auto/…/vendor/`, `plugins-dist/…`) et **de mêmes empreintes** d'un emplacement à l'autre ; **fausse arborescence WordPress** (`wp-load.php`, `wp-blog-header.php`) à la racine d'un site qui n'est pas un WordPress ; **loaders `include`/`require base64_decode(…)`** (et non seulement `include_once`) ; **`base64_decode` nu** (sans `gzinflate`/`gzuncompress`/`str_rot13`), angle mort de `EB`.
 - **Deux pièges d'instrumentation** : `find -size` **arrondit à l'unité supérieure**, donc `-size -1M` ne matche **que les fichiers de 0 octet** — deux critères sont restés muets jusqu'à ce qu'on écrive `-size -1025c` ; et **ne jamais modifier un script pendant qu'une série l'exécute** : bash lit un script au fil de l'eau, une modification en cours d'exécution produit des erreurs de syntaxe « fantômes » alors que le fichier sur disque est sain.
 - **Angles morts de l'audit** (à repasser à la main, compte par compte) : les fichiers **de plus de 6 Mo** (le plafond `MAXSIZE=6M` les exclut du parcours — un installeur Windows de 32 Mo et un déployeur de 16 Mo sont passés dessous) ; la **grosse coquille** (plus de 20 Ko, `$password = ""` + `curl_exec` + `base64_decode` + `set_time_limit(0)`, sans bloc base64 en tête) ; les **noms de fonctions en hexadécimal** (`$Array = ['7068705f756e616d65', …]` = `php_uname` — `HEX` cherche des échappements `\xNN` et ne les voit pas) ; les **artefacts de camouflage** (`php.ini` qui *retire* les protections de PHP, `robots.txt` pointant un `inx_sitemap.xml` inexistant, compteurs `adman.*.txt` de 6 octets déposés dans la même fournée que les coquilles) ; le **magasin du kit** si son extension n'est pas celle d'un média ; le **bootstrap entièrement remplacé** — `IDX` ne voit que les `index.php` **portant encore** `# appel SPIP` (code ajouté *devant* l'appel) et `GT` que ceux ouvrant sur un `goto` : un `index.php` racine **réécrit de bout en bout** en porte de camouflage échappe aux deux (cas relevé en octobre 2026 : 592 o, `stripos($user_agent,'google')`/`is_mobile` → `include('files.php')`/`include('home.php')`, cloaque servant des liens de paris indonésiens aux robots et aux mobiles ; les trois installations SPIP d'un même compte avaient ainsi leur `index.php` racine détourné, seul le site de référence en 4.2.7 était sain). Critère : **tout `index.php` racine de plus de 200 o est détourné** (l'original fait 42 o). Leçon : repasser les critères sur les échantillons déjà connus du compte avant de conclure — un critère muet ne prouve pas un compte propre.
-- **Faux positif à connaître** : le critère `PAY` (« chargeur base64 volumineux ») attrape le fichier de configuration de **Wordfence** `wp-content/wflogs/config-transient.php` (1,5 à 1,7 Mo), dont l'en-tête est `<?php exit('Access denied'); __halt_compiler(); ?>` suivi de « used by the Wordfence Web Application Firewall » (config sérialisée en base64, écrite par l'extension elle-même). Le reconnaître à cet en-tête et l'**exclure** — sur un autre compte, deux exemplaires du même fichier classés `PAY` avaient d'ailleurs été correctement écartés. Faux positif consigné dans `faux-positifs-arbitrage-20261025.tsv`.
+- **Faux positif à connaître** : le critère `PAY` (« chargeur base64 volumineux ») attrape le fichier de configuration de **Wordfence** `wp-content/wflogs/config-transient.php` (1,5 à 1,7 Mo), dont l'en-tête est `<?php exit('Access denied'); __halt_compiler(, configuré dans ); ?>` suivi de « used by the Wordfence Web Application Firewall » (config sérialisée en base64, écrite par l'extension elle-même). Le reconnaître à cet en-tête et l'**exclure** — sur un autre compte, deux exemplaires du même fichier classés `PAY` avaient d'ailleurs été correctement écartés. Faux positif consigné dans `faux-positifs-arbitrage-20261025.tsv`.
 
 - **La charge d'un squelette survit dans le cache compilé** : SPIP recopie le contenu du squelette dans un commentaire `//` de `tmp/cache/skel/*.php`. Or `?>` **interrompt un commentaire `//` en PHP** : une charge déposée dans un squelette s'y retrouve **exécutable**. Nettoyer le squelette ne suffit donc pas — le cache compilé, plus récent, reste tenu pour valide et doit être mis en quarantaine. Cas relevé (octobre 2026) : deux vagues, **2014-03-05** (jeton `evv`, 34 caches) et **2016-07-31** (jeton hexadécimal suivi d'un `die`, 18 caches), sur des squelettes d'origine 2009/2011 **restés sains** : seuls les caches portaient la charge.
 - **Les squelettes `.html` échappent aux critères de contenu** : `audit-compte.sh` n'applique `EB`, `SEO`, `SHELL`, `GLOB`, `WPUP`, `PSW`, `HEX` et `GT` qu'aux fichiers `.php` (liste `$T.php`), et `IDX` ne vise que les `index.php` de plus de 200 octets. Une charge déposée dans un squelette `.html` n'est donc vue que par le cache compilé qu'elle produit — et **le nettoyage ne converge pas** : le cache mis en quarantaine est régénéré à la visite suivante tant que le squelette n'est pas traité.
@@ -514,12 +557,13 @@ Autorise `nagios` à lancer l'audit SPF/DMARC en root, arguments figés sur `--c
 
 ### Vérification des variables AlternC
 ```bash
-mysql -h sql.lautre.net -u alternc -p -e "SELECT * FROM variable WHERE name IN ('mail_human_imaps', 'hosting_tld')"
+mysql --defaults-file=/etc/alternc/my.cnf -e "SELECT * FROM variable WHERE name IN ('mail_human_imaps', 'hosting_tld')"
 ```
 
 ### Vérification des comptes Roundcube
 ```bash
-mysql -h sql.lautre.net -u rc_roundcubemail -p -e "SELECT username, mail_host FROM users WHERE mail_host = 'imaps.lautre.net'"
+# Les variables $MYSQL_HOST, $MYSQL_USER, $MYSQL_PASS sont issues de /etc/alternc/local.sh
+mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASS" "$MYSQL_DATABASE" -e "SELECT username, mail_host FROM users WHERE mail_host = 'imaps.lautre.net'"
 ```
 
 ### Liste des ressources orphelines
@@ -544,13 +588,13 @@ ssh -i /root/.ssh/backup_dsa root@10.0.0.86
 
 ### Vérification des types de domaines
 ```bash
-mysql -h sql.lautre.net -u alternc -p -e "SELECT * FROM default_subdomains"
+mysql --defaults-file=/etc/alternc/my.cnf -e "SELECT * FROM default_subdomains"
 ```
 
 ### Requêtes MySQL en lot (parsing tabulé)
 `mysql -B` **échappe** les tabulations et les retours à la ligne : une valeur contenant `CHAR(9)` ressort en `\t` littéral, ce qui casse tout découpage ultérieur (`awk -F'\t'`, `cut`) et peut faire échouer silencieusement un script de traitement. Pour une extraction destinée à être parsée, forcer systématiquement le mode brut :
 ```bash
-mysql --defaults-file=/etc/alternc/my.cnf -r -B alternc -e "SELECT ..."
+mysql --defaults-file=/etc/alternc/my.cnf -r -B "$MYSQL_DATABASE" -e "SELECT ..."
 ```
 
 ### Vérification DKIM / SPF / DMARC
@@ -591,8 +635,8 @@ sqlite3 /usr/lib/uptime-kuma/data/kuma.db "select id,name,active,weight from mon
 
 ### Variables écrasées
 - Vérifier que `hosting_tld` est configuré
-- Utiliser `variable_default_register()` pour les valeurs par défaut
-- Éviter d'appeler `variable_set()` avec des valeurs par défaut
+- Utiliser `variable_default_register(, configuré dans )` pour les valeurs par défaut
+- Éviter d'appeler `variable_set(, configuré dans )` avec des valeurs par défaut
 
 ### Permissions de sauvegarde
 - Vérifier le masque ACL des dossiers utilisateurs
@@ -656,6 +700,7 @@ sqlite3 /usr/lib/uptime-kuma/data/kuma.db "select id,name,active,weight from mon
 | Sujet | Suivi | État |
 | --- | --- | --- |
 | Incident de compromission du parc (SPIP/WordPress) : quarantaines compte par compte, courriels aux membres | #183, #185, #198, #202, #212 | 17 comptes notifiés (dernière vague le 2026-10-25) ; restent les 92 comptes sans PHP et les reconstructions (#198) |
+| Maintenance et refonte des dashboards Grafana / Graphite (retrait mysql2/elma, Disk Space, PHP-FPM, nouveaux panneaux et collecteurs, pérennisation Ansible) | #189 | Traité et clos le 2026-10-30 ; PR #12 lautre.net/ansible |
 | Domaines encore en `php74-fpm` (373 sous-domaines / 140 comptes) | #180, #178, #175 | migration par lots planifiée |
 | `unattended-upgrades` ne couvre pas l'origine Sury : PHP 8.5 n'est pas mis à jour automatiquement | #190 | à traiter |
 | LibreNMS (`/opt/librenms`, installé en janvier 2020, `vendor/illuminate/support/Str.php` absent, `net.lautre.org` → 500, aucun trafic réel) | #191 | réparer ou retirer |

@@ -28,8 +28,8 @@ Active cette compétence lorsque :
 | **CLI & PHP global** | `/usr/bin/php` pointe souvent par défaut vers PHP 5.6 (`update-alternatives` en mode manuel pour les scripts AlternC). |
 | **PHP pour SPIP** | SPIP 4.x requiert PHP 7.4 minimum. Ne pas utiliser le PHP global 5.6. Utiliser explicitement `/usr/bin/php7.4` ou `/usr/bin/php8.2` / `/usr/bin/php8.5`. |
 | **Vhost AlternC** | Vérifier dans `sub_domaines` (`type` : `php74-fpm` ou `php85-fpm`). Si en `vhost` (mod_php 5.6), basculer en `php74-fpm`. |
-| **spip-cli** | Wrapper `/usr/local/bin/spip` ou invocation directe `/usr/bin/php7.4 /opt/spip-cli/bin/spip`. Éviter `spip dl` via Composer qui peut invoquer PHP 5.6 et échouer sur les dépendances. Préférer l'archive de distribution propre. |
-| **Archives de référence** | Archives officielles pré-téléchargées sur les serveurs backend (ex: `/root/incident-spip-20261023/spip_archives/spip-v4.4.28.zip`). |
+| **spip-cli** | Wrapper `/usr/local/bin/spip` ou invocation directe `/usr/bin/php7.4 /opt/spip-cli/bin/spip` (depuis `elisa`). Attention aux verrous NFS : ne pas utiliser `cache:vider` via `spip-cli` (blocage sur verrous exclusifs non supportés en NFSv3), préférer la suppression directe dans `tmp/cache/*` et `tmp/meta_cache.php`. Éviter `spip dl` via Composer qui peut invoquer PHP 5.6 et échouer sur les dépendances. Préférer l'archive de distribution propre. |
+| **Archives de référence** | Archives officielles pré-téléchargées sur les serveurs backend (ex: `/var/alternc/html/backup/incidents/incident-spip-20261023/spip_archives/spip-v4.4.30.zip`). |
 
 ---
 
@@ -83,7 +83,7 @@ tar czf /root/<compte>_<site>_pre_maj_${DATE}.tar.gz -C /var/www/alternc/<initia
    ```
 2. **Création du répertoire de quarantaine** :
    ```bash
-   QDIR="/root/incident-spip-20261023/<compte>-quarantaine-${DATE}"
+   QDIR="/var/alternc/html/backup/incidents/incident-spip-20261023/<compte>-quarantaine-${DATE}"
    mkdir -p "$QDIR"
    ```
 3. **Calcul des empreintes et déplacement** :
@@ -103,7 +103,7 @@ tar czf /root/<compte>_<site>_pre_maj_${DATE}.tar.gz -C /var/www/alternc/<initia
 
 1. **Extraction de l'archive officielle** :
    ```bash
-   ARCHIVE="/root/incident-spip-20261023/spip_archives/spip-v4.4.28.zip"
+   ARCHIVE="/var/alternc/html/backup/incidents/incident-spip-20261023/spip_archives/spip-v4.4.30.zip"
    TMP_EXTRACT="/tmp/spip-update-dist"
    rm -rf "$TMP_EXTRACT" && mkdir -p "$TMP_EXTRACT"
    unzip -q "$ARCHIVE" -d "$TMP_EXTRACT"
@@ -160,7 +160,7 @@ tar czf /root/<compte>_<site>_pre_maj_${DATE}.tar.gz -C /var/www/alternc/<initia
    ```bash
    curl -sI -k https://<domaine> | grep -iE "(HTTP/|composed-by)"
    ```
-   Attendu : `HTTP/2 200` et `Composed-By: SPIP 4.4.28`.
+   Attendu : `HTTP/2 200` et `Composed-By: SPIP 4.4.30`.
 2. **Vérification Espace Privé** :
    ```bash
    curl -sI -k https://<domaine>/ecrire/ | grep -iE "(HTTP/|location|composed-by)"
