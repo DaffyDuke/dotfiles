@@ -192,7 +192,7 @@ Packages() {
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kid3 kid3-cli kigo klavaro kodi krita krita-l10n \
     lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
-    mc mediawiki2latexguipyqt meld mgitstatus miller mono-complete mosh mp3splt mp3splt-gtk multitail mumble mutt \
+    mc mediawiki2latexguipyqt meld mgitstatus miller molly-guard mono-complete mosh mp3splt mp3splt-gtk multitail mumble mutt \
     nautilus-image-converter ncal ncdu needrestart nemo-gtkhash netcat-openbsd neomutt neovim nethogs network-manager-openvpn-gnome nextcloud-desktop nmap nmon notmuch numatop npm \
     ocrfeeder offlineimap ooo-thumbnailer openboard openconnect openshot-qt openssh-client openssh-server openvpn \
     p7zip pandoc parallel parted pass patch pavucontrol pcp pdfgrep perf-tools-unstable perl-doc pgtop photocollage pinentry-curses pinentry-tty pitivi pm-utils pre-commit postgresql-client power-profiles-daemon pre-commit progress psensor pssh putty-tools python3 python3-dev python3-pycurl python3-virtualenv pwgen pydf python3-gpg python-is-python3 \
@@ -1896,6 +1896,7 @@ Main() {
   youtube
   #  YunoHost
   SetupAISkillsMCP
+  SetupRTK
 }
 
 SetupAISkillsMCP() {
@@ -1931,6 +1932,56 @@ SetupAISkillsMCP() {
     echo "Compilation de sync-ai-tools..."
     (cd "$HOME/bin/src/sync-ai-tools" && make install)
   fi
+}
+
+SetupRTK() {
+  echo "=== Installation et configuration de RTK (Token Compressor) ==="
+
+  # 1. Vérification et installation du binaire rtk
+  if ! command -v rtk >/dev/null 2>&1; then
+    if [ -x "/home/linuxbrew/.linuxbrew/bin/rtk" ]; then
+      export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    elif command -v brew >/dev/null 2>&1; then
+      echo "Installation de rtk via Homebrew..."
+      brew install rtk
+    else
+      echo "Installation de rtk via script officiel..."
+      curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/main/install.sh | bash 2>/dev/null || true
+    fi
+  fi
+
+  if ! command -v rtk >/dev/null 2>&1 && [ ! -x "/home/linuxbrew/.linuxbrew/bin/rtk" ]; then
+    echo "[!] Attention : Le binaire rtk est introuvable. Veuillez l'installer au préalable."
+    return 1
+  fi
+
+  local rtk_bin
+  rtk_bin="$(command -v rtk 2>/dev/null || echo "/home/linuxbrew/.linuxbrew/bin/rtk")"
+
+  # 2. Configuration pour Google Antigravity
+  echo "-> Configuration de RTK pour Antigravity..."
+  "$rtk_bin" init -g --agent antigravity --auto-patch </dev/null 2>/dev/null || true
+
+  # 3. Configuration pour OpenCode
+  echo "-> Configuration de RTK pour OpenCode..."
+  "$rtk_bin" init -g --opencode --auto-patch </dev/null 2>/dev/null || true
+
+  # 4. Configuration pour GitHub Copilot CLI / VS Code Copilot
+  echo "-> Configuration de RTK pour GitHub Copilot..."
+  "$rtk_bin" init -g --copilot --auto-patch </dev/null 2>/dev/null || true
+
+  # 5. Configuration pour Mammouth Code (partage du plugin OpenCode)
+  echo "-> Configuration de RTK pour Mammouth Code..."
+  local opencode_plugin="$HOME/.config/opencode/plugins/rtk.ts"
+  local mammouth_plugins_dir="$HOME/.config/mammouth/plugins"
+  mkdir -p "$mammouth_plugins_dir"
+
+  if [ -f "$opencode_plugin" ]; then
+    ln -sf "$opencode_plugin" "$mammouth_plugins_dir/rtk.ts"
+    echo "[✓] Lien symbolique créé : $mammouth_plugins_dir/rtk.ts -> $opencode_plugin"
+  fi
+
+  echo "[✓] Configuration de RTK terminée avec succès."
 }
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
