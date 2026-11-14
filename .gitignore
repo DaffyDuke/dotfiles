@@ -304,6 +304,7 @@ bin/
 bookmarks.xml
 dlang
 dotfiles/
+dotfiles-tmp/
 examples.desktop
 mypass/
 node_modules/

@@ -300,3 +300,6 @@ export RCLONE_BUFFER_SIZE="0M"
 export RCLONE_TRANSFERS="2"
 export RCLONE_CHECKERS="2"
 export RCLONE_DRIVE_CHUNK_SIZE="32M"
+
+complete -o nospace -C /tmp/gandi.cli/vault vault
+

@@ -86,7 +86,7 @@ bootstrap: ## 🚀 Configure un nouvel ordinateur (clone dotfiles, installe conf
 	@echo "  3. Vérifiez la syntaxe: $(YELLOW)make check-syntax$(NC)"
 	@echo ""
 
-install: check-syntax ## 📦 Exécute le script d'installation (setup.sh Main)
+install: check-syntax ## 📦 Exécute le script d'installation (setup.sh [TARGET=Main])
 	@echo "$(BLUE)═══════════════════════════════════════════════════════════$(NC)"
 	@echo "$(BLUE)   Installation des logiciels et configurations$(NC)"
 	@echo "$(BLUE)═══════════════════════════════════════════════════════════$(NC)"
@@ -95,8 +95,16 @@ install: check-syntax ## 📦 Exécute le script d'installation (setup.sh Main)
 		echo "$(RED)✗ setup.sh introuvable$(NC)"; \
 		exit 1; \
 	fi
-	@echo "$(YELLOW)Exécution de setup.sh...$(NC)"
-	@bash $(SETUP_SCRIPT)
+	@if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then \
+		eval "$$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"; \
+	fi; \
+	if [ -n "$(TARGET)" ]; then \
+		echo "$(YELLOW)Exécution de setup.sh $(TARGET)...$(NC)"; \
+		bash $(SETUP_SCRIPT) $(TARGET); \
+	else \
+		echo "$(YELLOW)Exécution de setup.sh (Main)...$(NC)"; \
+		bash $(SETUP_SCRIPT); \
+	fi
 	@echo ""
 	@echo "$(GREEN)✓ Installation terminée$(NC)"
 

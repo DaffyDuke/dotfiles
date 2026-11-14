@@ -107,36 +107,6 @@ Le champ `enable` est un `enum('ENABLED','ENABLE','DISABLED','DISABLE')` mais **
 - Le changement de hostname dans Roundcube nécessite une migration en base de données (colonne `mail_host` dans la table `users`)
 - Roundcube et Dovecot sont découplés : Roundcube gère les contacts/préférences, Dovecot gère uniquement les boîtes mail
 
-### Stockage et serveurs de fichiers (état 2026-11-01)
-
-Le stockage est réparti sur plusieurs hôtes ; **`filer1` n'est plus un serveur NFS de production**.
-
-| Hôte | Rôle | Détail |
-|---|---|---|
-| `filou` (Debian 11) | **serveur de fichiers principal** | NFS : `/var/alternc/html` (monté `/var/www/alternc` par `elisa`, `emma`, `web2`), `/var/alternc/sharedconf/{dns,letsencrypt,override_php}`, `/backup/mysql/elea`, `/mnt/divers`. Pousse aussi les sauvegardes (`daily-backup.sh`, clé `backup_dsa`) |
-| `filer4` (Debian 13, ZFS) | **stockage de la messagerie** | `/data/mail` → `/var/mail/alternc`, `/data/misc` → `/etc/opendkim`, `/data/html` ; clients `elisa`, `edna`, `erza`, `mail1` |
-| `filer3` (Debian 11, ZFS) | **serveur de sauvegardes** | `octobackup.sh` par hôte (`/etc/cron.d/octobackup` : web2, elma, elsa, mysql1, mysql2, monit, erza, edna, estelle, router2, nginx), datasets `/backup/<hôte>` |
-| `filer1` (Debian 9, init sysv) | **cible de sauvegarde html uniquement** | voir ci-dessous |
-| `elisa` | sert `/var/www/certbot` à `nginx` | — |
-
-Les hyperviseurs (`hyperespace`, `hypnotique`, `hyppocampe`, `hyperion`, `hyperbeau`, `hyperfort`) sont sous **XEN + DRBD** avec disques locaux : **aucun montage NFS**.
-
-**`filer1` — état constaté le 2026-11-01 (cf. #258)**
-
-- **Le service NFS est mort** : `nfs-kernel-server` toujours installé et `/etc/exports` renseigné (`/var/alternc/{mail,opendkim,mailman,news,squirrelmail,awstats,sni}`, `/exports/*`), mais **aucun processus `nfsd`/`rpc.mountd`**, `/var/lib/nfs/rmtab` **vide depuis le 2020-06-24**, et `/var/alternc` **vide** (les chemins exportés n'existent pas). Aucun hôte du parc ne le monte.
-- **Seul usage restant** : `/etc/cron.d/backup-html` → `rsync` quotidien à 01:00 de `filou:/var/alternc/html` vers `/backup/html/last/`, puis `rotator.sh` à 03:00 (`daily.*`, `weekly.*`, `monthly.*`). Volume = LV `alternc-html--backup` (1,2 To, ~830 Go utilisés) posé sur **`md2`**.
-- ⚠️ **C'est le seul exemplaire frais de la sauvegarde html du parc** : sur `filer3`, le dataset `backup/filou-html` ne contient plus aucun fichier modifié depuis le **2026-08-24**.
-- Vestige : `filou` tire encore `root@filer1:/var/alternc/mailman` chaque nuit (`/etc/daily-backup/mailman.conf`) — source vide (`total size is 0`).
-- **Non supervisé** : le bloc `host filer1` est **commenté** dans `/etc/nagios4/conf.d/hosts.cfg` (`monit`) ; hôte absent de l'inventaire Ansible.
-- Traces de migration déjà faites : `/etc/fstab` d'`edna` porte `# old filer1` / `# new filer4` ; `mysql1` `/etc/hosts` garde une entrée obsolète `10.0.0.85 → filer1.admin` (cette adresse est celle de `filer3`, appelée `filer2` dans le `/etc/hosts` d'`elisa`) ; `emma` conserve un montage résiduel de `filou:/var/alternc/html` sur `/mnt/nfs-test` (hors `fstab`).
-
-**RAID de `filer1` (dégradé, cf. #258)** — 3 disques de 1 To (un HDD, deux SSD, SMART `PASSED`) :
-
-- `md0` RAID1 = `/` : `[4/3]`, slot 2 `removed` ;
-- `md2` RAID10 `near=2` : `[4/2]`, slots 1 et 3 `removed` → **aucune redondance** ; porte le PV du VG `alternc` (LV `html-backup` = `/backup/html`, LV `news`) ;
-- `md1` : ancien **raid0** sur `sda2`+`sdb2`, `inactive` ; `mdadm.conf` le déclare à tort `raid10 num-devices=4` ;
-- `md3` (metadata 1.2) déclaré dans `mdadm.conf` mais **absent** : c'est le PV de 1,82 To manquant du VG `alternc`, d'où les LV `backup`, `data`, `meta`, `testdrbd` en `-wi-----p-` (inactifs). `sdb3` (914 Go) n'est plus utilisée.
-
 ### Serveur Webmail (Roundcube)
 
 **Architecture** :
@@ -313,47 +283,6 @@ La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-dom
 
 **Angle mort — une application peut n'avoir aucune version PHP disponible.** Après le retrait des 8.0/8.1/8.2 (2026-10-22), le parc ne propose plus que **7.4** et **8.5** : une application exigeant **8.1 à 8.4** n'a **aucune cible**, et la rebascule réflexe en `php74-fpm` ne fonctionne pas — **vérifier le minimum exigé par l'application avant de la promettre** (cas relevé en octobre 2026 : Galette 1.1.6.1, `define('GALETTE_PHP_MIN', '8.1')` dans `includes/sys_config/versions.inc.php`). En PHP 8.5, une **dépréciation** devient **fatale** dès que l'application installe son propre `set_error_handler` levant une exception sur tout ce que couvre `error_reporting(, configuré dans )` : ici les casts non canoniques `(double)`/`(integer)`/`(boolean)`/`(binary)` (RFC `deprecations_php_8_5`) — page blanche 500, sans indice côté visiteur. **Diagnostic** : chercher `PHP Fatal error: Uncaught ErrorException: …` dans le journal du **frontal** (le PHP s'exécute là, pas sur le backend). **Contournement minimal et réversible** : passer `error_reporting(E_ALL)` à `error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED)` — masque les dépréciations sans toucher à la logique (écrire **dans le même fichier**, pour préserver propriétaire et inode) ; **correction pérenne** : mise à jour de l'application (ici Galette ≥ 1.2.1, qui apporte la compatibilité PHP 8.5 **et** corrige les avis de sécurité de la branche 1.1.x, dont CVE-2025-53922). Corriger les casts un par un est illusoire : plusieurs centaines d'occurrences dans le code de l'application, perdues à la prochaine mise à jour.
 
-### Applications WordPress (WP-CLI, restauration) — 2026-11-01
-
-L'infrastructure héberge de nombreux WordPress (recensés par lots lors de la migration PHP 7.4 → 8.5). Le savoir-faire de mise à jour / remédiation est formalisé dans la **skill `update-wordpress`** ; points structurants à retenir :
-
-- **WP-CLI global sur `elisa`** : `/usr/local/bin/wp` est un wrapper `exec /usr/bin/php7.4 /usr/local/bin/wp-cli.phar "$@"` (version **2.12.0**, phar officiel, empreinte **SHA-512 vérifiée**). L'ancien paquet (2.7.1, avril 2023) tournait sur **PHP 5.6** — incompatible WordPress 6.x. L'installation du phar doit toujours être précédée du contrôle de l'empreinte SHA-512.
-- **Contrôle d'intégrité du cœur** : `sudo -u <login> wp --path=<install> core verify-checksums --locale=fr_FR` → `Success` attendu. C'est la seule méthode exhaustive (un fichier malveillant occupant un emplacement du cœur est indiscernable par son nom). Le rapport distingue fichiers **modifiés** (`doesn't verify against checksum:`), **manquants** (`doesn't exist:`) et **illégitimes** (`should not exist:`).
-- ⚠️ **`$wp_version` peut être trafiqué** (ex. `7.0`, inexistant) : `verify-checksums` compare alors à une version qui n'existe pas et produit des **faux positifs** (« should not exist » sur des fichiers normaux). Recouper avec `$wp_db_version` (`wp-includes/version.php`) et **inspecter le contenu** avant toute quarantaine.
-- **Restauration du cœur** : télécharger le cœur propre (`wp core download --version=X.Y.Z --locale=fr_FR`), puis `rsync -a --exclude='wp-content/' --exclude='wp-config.php'` vers l'install (préserve données et config), puis `/usr/lib/alternc/fixperms.sh -d <install>`.
-- **Rotation des salts** : les 8 constantes `*_KEY`/`*_SALT` d'un `wp-config.php` restées à `put your unique phrase here` sont à régénérer (script `rotate-salts.php` à base de `random_bytes(48)`), réécriture **en place** pour préserver propriétaire/inode.
-- **Erreur 500** : distinguer le 500 « corps vide » (cœur amputé — ex. `wp-includes/functions.php` manquant) du 500 « **Erreur de la base de données** » (page WordPress de ~2,4 ko : le cœur sain signale une base injoignable). Le second n'est **pas** une erreur code.
-- **Un compte peut héberger plusieurs installations WordPress** (voire des reliquats non servis sans `wp-config.php` ni `wp-admin/`) : les recenser par `find -L <compte> -maxdepth 6 -name wp-config.php`, et scanner les reliquats à part.
-
-### Base de données : retrouver / restaurer une base (dumps plateforme `filou`)
-
-**Le mécanisme de sauvegarde MySQL de la plateforme est indépendant de `alternc.db.bck_mode`** : il couvre **toutes** les bases du serveur `elea`, sauf liste `exclues`.
-
-- Script : `/infra/mysql/dump/backup-mysql.sh` (sur `filou`), cron `/etc/cron.d/backup-mysql` (`0 1 * * * root … | logger -t backup-mysql.sh`).
-- Le propriétaire de chaque base est résolu via `alternc.membres`/`alternc.db` ; l'élagage se fait à **300 jours**.
-- **Arborescence des dumps** (sur `filou`) : `/backup/mysql/elea/<initiale>/<login>/{day_YYYY-MM-DD,week_<n>,month_YYYY-MM}/<base>.sql.gz`.
-- **Conséquence pratique** : le retour de la ligne `alternc.db` suffit à **rétablir automatiquement** les sauvegardes du compte dès le prochain passage du cron. Une base peut donc n'exister **que** dans ces dumps (compte sans ligne `alternc.db` ni compte MySQL) et être restaurée depuis là.
-
-**Recherche d'une base « perdue »** (cas vécu le 2026-11-01, site `lestontonscueilleurs.fr`) — contrôler dans cet ordre :
-1. `alternc.db` (ligne du compte) ; 2. `SHOW DATABASES` ; 3. `mysql.user` / droits `mysql.db` ;
-4. **les dumps de `filou`** ; 5. en dernier recours, balayer les bases WordPress (`SELECT option_value FROM <db>.wp_options WHERE option_name='siteurl'`) et les tables `*_options` (tous préfixes) à la recherche du domaine.
-
-**Structure de `alternc.db`** (à respecter pour réinsérer une ligne) :
-
-| Colonne | Type | Remarque |
-|---|---|---|
-| `id` | `bigint unsigned AUTO_INCREMENT` | PK |
-| `uid` | `int unsigned` | uid du membre (`alternc.membres.uid`) |
-| `login` | `varchar(16)` | login du compte |
-| `pass` | `varchar(16)` | **en clair** |
-| `db` | `varchar(64)` | nom de la base |
-| `bck_mode` | `tinyint unsigned` | 0 = pas de sauvegarde AlternC (sans effet sur les dumps plateforme) |
-| `bck_history` | `tinyint unsigned` | — |
-| `bck_gzip` | `tinyint unsigned` | — |
-| `bck_dir` | `varchar(255)` | — |
-
-Les **comptes MySQL AlternC sont créés en double** : `<login>`@`localhost` **et** `<login>`@`%` (même mot de passe, `GRANT ALL` sur `<base>`.*).
-
 ### Système de Sauvegarde
 
 **Scripts de sauvegarde** :
@@ -365,12 +294,6 @@ Les **comptes MySQL AlternC sont créés en double** : `<login>`@`localhost` **e
 - Modes daily et weekly
 - Gestion des permissions ACL automatique
 - Protection contre les échecs en cascade (un dossier orphelin ne bloque pas les autres sauvegardes)
-
-**Chaîne de sauvegarde du parc** (détail des hôtes dans « Stockage et serveurs de fichiers ») :
-- **html** : `filer1` **tire** `filou:/var/alternc/html` par `rsync` chaque nuit à 01:00 dans `/backup/html/last/`, puis `rotator.sh` à 03:00 effectue la rotation quotidienne/hebdomadaire/mensuelle (`/etc/cron.d/backup-html`). **Seul exemplaire frais** de cette sauvegarde, et il est posé sur `md2` sans redondance (cf. #258).
-- **hôtes** : `filer3` sauvegarde chaque machine par `octobackup.sh` (datasets ZFS `/backup/<hôte>`).
-- **MySQL** : `sqlbackup.sh` sur `elisa`, dépôt sur `filou:/backup/mysql/elea` (monté `/var/backups/mysql`).
-- **mail** : `filou` tire `filer4:/var/alternc/mail` (`/etc/cron.d/backup-mail`) ; l'appel résiduel à `filer1:/var/alternc/mailman` (`/etc/daily-backup/mailman.conf`) ne remonte plus rien depuis que `/var/alternc` de `filer1` est vide.
 
 ### Système de Supervision (Nagios 4 + Uptime Kuma + Ntfy sur `monit`)
 
@@ -668,18 +591,6 @@ ssh -i /root/.ssh/backup_dsa root@10.0.0.86
 mysql --defaults-file=/etc/alternc/my.cnf -e "SELECT * FROM default_subdomains"
 ```
 
-### WordPress (WP-CLI, sur `elisa`)
-```bash
-wp --info                                              # doit afficher PHP ≥ 7.4, WP-CLI 2.12.0
-sudo -u <login> wp --path=<install> core version
-sudo -u <login> wp --path=<install> core verify-checksums --locale=fr_FR   # Success attendu
-sudo -u <login> wp --path=<install> plugin list
-sudo -u <login> wp --path=<install> option get siteurl
-sudo -u <login> wp core download --version=<X.Y.Z> --locale=fr_FR --path=/tmp/clean-wp-<X.Y.Z> --allow-root
-# Dumps de base plateforme (sur filou) :
-ls /backup/mysql/elea/<initiale>/<login>/
-```
-
 ### Requêtes MySQL en lot (parsing tabulé)
 `mysql -B` **échappe** les tabulations et les retours à la ligne : une valeur contenant `CHAR(9)` ressort en `\t` littéral, ce qui casse tout découpage ultérieur (`awk -F'\t'`, `cut`) et peut faire échouer silencieusement un script de traitement. Pour une extraction destinée à être parsée, forcer systématiquement le mode brut :
 ```bash
@@ -703,10 +614,6 @@ nagios4 -v /etc/nagios4/nagios.cfg                       # 0 erreur attendue
 su -s /bin/bash nagios -c "/usr/local/lib/nagios/kuma-aggregate HTTPS"   # poussée manuelle d'un service
 curl -s --resolve status.lautre.org:443:127.0.0.1 https://status.lautre.org/api/status-page/lautrenet
 sqlite3 /usr/lib/uptime-kuma/data/kuma.db "select id,name,active,weight from monitor order by id;"
-# Grafana / Graphite
-curl -s http://127.0.0.1:3000/api/health                    # {"database":"ok","version":"13.2.4",…}
-curl -s "http://127.0.0.1:8080/render?target=filou.nfs-v3server.*&from=-15min&format=json"
-ls -l /var/lib/grafana/dashboards/system/                   # JSON provisionnés
 ```
 
 ## Résolution de Problèmes Courants
@@ -735,20 +642,6 @@ ls -l /var/lib/grafana/dashboards/system/                   # JSON provisionnés
 - Vérifier le masque ACL des dossiers utilisateurs
 - Exécuter `fixperms.sh` si nécessaire
 - Créer les dossiers de sauvegarde avec les droits appropriés
-
-### Un site WordPress répond 500 (ou « Erreur de la base de données »)
-- **Distinguer deux 500** : un **corps vide** trahit un **cœur amputé** (souvent `wp-includes/functions.php` manquant → fatal dans `wp-settings.php` avant toute sortie) ; une **page WordPress « Erreur de la base de données »** (~2,4 ko) est au contraire le cœur **sain** signalant une base injoignable. Le second n'est pas une erreur code.
-- **Diagnostiquer le cœur** : `sudo -u <login> wp --path=<install> core verify-checksums --locale=fr_FR`. Corriger par restauration du cœur propre (voir section « Applications WordPress »). ⚠️ Un `$wp_version` trafiqué fausse le rapport.
-- **Base injoignable** : vérifier `alternc.db` (ligne du compte), le compte MySQL (`<login>`@`localhost` et `<login>`@`%`) et les constantes du `wp-config.php`. Un **compte MySQL au hash ancien format** (16 car.) est refusé par mysqlnd → `SET PASSWORD FOR '<user>'@'%' = PASSWORD('<même mot de passe>');`.
-- **Base absente** : la chercher dans les **dumps plateforme de `filou`** (`/backup/mysql/elea/<initiale>/<login>/`) — ils couvrent toutes les bases indépendamment de `bck_mode`. Restaurer puis réinsérer la ligne `alternc.db` (voir section dédiée) rétablit aussi les sauvegardes automatiques.
-- **Après restauration** : `/usr/lib/alternc/fixperms.sh -d <install>`, puis contrôle HTTP (`curl -sD - -o /dev/null https://<domaine>/`, l'en-tête `X-Backend-Server` désigne le frontal).
-
-### Mails `mdadm` « DegradedArray » quotidiens sur `filer1`
-- **Origine** : `/etc/cron.daily/mdadm` exécute `mdadm --monitor --scan --oneshot` (défaut du paquet Debian) et envoie un mail par grappe dégradée à l'adresse `MAILADDR` de `/etc/mdadm/mdadm.conf` (`root`) ; `filer1` relaie vers 06:38. Le daemon `mdadm --monitor --daemonise --syslog` double les événements dans `syslog` (`RebuildStarted`/`RebuildFinished`).
-- **Deux mails par jour = deux grappes dégradées** (`md0`, `md2`) : ce n'est pas un défaut du reporting. Ne pas filtrer le mail (cf. #54) — corriger la grappe (procédure dans #258) ou retirer l'`ARRAY` de `mdadm.conf` si elle est abandonnée.
-- **Diagnostic** : `mdadm --detail /dev/mdX`, `/proc/mdstat`, `lsblk`, `pvs`/`vgs`/`lvs` (un VG amputé d'un PV fait passer ses LV en `-wi-----p-`), `cat /etc/mdadm/mdadm.conf`.
-- ⚠️ `mdadm.conf` peut décrire des grappes disparues ou de mauvais niveau (`md1` déclaré `raid10` alors que c'est un `raid0`, `md3` absente) : **toujours recouper avec `--detail` et `/proc/mdstat`** avant de conclure, et ne jamais se fier à la seule liste `ARRAY`.
-- Après correction : `mdadm --detail --scan` → `mdadm.conf`, `update-initramfs -u`, puis `mdadm --monitor --scan --test --oneshot` pour valider le chemin de notification.
 
 ### Un moniteur de la page de statut est `down` alors que le service répond
 - L'agrégateur retient l'état **le plus dégradé** de toutes les instances : inspecter chaque hôte du groupe concerné (`grep -A16 "service_description=<Service>" /var/lib/nagios4/status.dat`) avant de conclure.

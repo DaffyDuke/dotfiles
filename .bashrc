@@ -143,3 +143,5 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # Added by Antigravity CLI installer
 export PATH="$HOME/.local/bin:$PATH"
+
+complete -C /tmp/gandi.cli/vault vault

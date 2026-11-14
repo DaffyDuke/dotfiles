@@ -22,7 +22,7 @@ EOF'
   # Redshift Geoloc
   test -f ~/.config/systemd/user/geoclue-agent.service && systemctl --user enable --now geoclue-agent.service
   # Add CDROM Roles
-  sudo usermod -a -G cdrom daffy
+  sudo usermod -a -G cdrom "${SUDO_USER:-$USER}"
   sudo bash -c 'cat << EOF > /etc/stubby/stubby.yml
   - address_data: 80.67.169.12
     tls_auth_name: "ns0.fdn.fr"
@@ -128,7 +128,7 @@ wifi-resume.service
   echo "SUSPEND_MODULES=\"\$SUSPEND_MODULES iwldvm iwlwifi\"" | sudo tee -a /etc/pm/config.d/unload_modules
 
   # Discover
-  sudo apt install bettercap build-essential ruby-dev libpcap-dev
+  sudo apt install -y bettercap build-essential ruby-dev libpcap-dev
   sudo gem install bettercap
   sudo bettercap
 }
@@ -188,7 +188,7 @@ Packages() {
     fail2ban fastboot fastfetch fdupes ffmpegthumbnailer filezilla fonts-powerline fortunes fonts-radisnoir fpart ftp \
     gajim geary geogebra-gnome gimp git-extras gnome-screenshot gnome-tweaks gnome-usage gnupg2 gnupg-agent googler gparted graphviz gromit-mpx gron gthumb guake guake-indicator \
     handbrake hashcat heimdall-flash-frontend hey htop httpcode httperf httpie httping httrack httraqt hugin hugo hunspell-fr hunspell-fr-comprehensive hurl hwloc libhwloc-contrib-plugins \
-    i2c-tools: iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate isync \
+    i2c-tools iftop inkscape innoextract ioping iotop ipcalc iproute2 iptraf-ng iputils-arping iptstate isync \
     josm josm-l10n jq jxplorer \
     kdenlive kdocker keepassxc keychain kid3 kid3-cli kigo klavaro kodi krita krita-l10n \
     lazygit ldap-utils lftp libeatmydata1 libimage-exiftool-perl libpam-tmpdir libpam-yubico libreoffice-calc libreoffice-draw libreoffice-help-fr libreoffice-impress libreoffice-math libreoffice-nlpsolver libreoffice-voikko libreoffice-writer libreoffice-writer2latex libreoffice-gnome libva-glx2 lm-sensors libsecret-tools lmms lnav lolcat lsof ltrace lxc python3-lxc lynx \
@@ -214,7 +214,9 @@ Packages() {
   # sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
   # sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 2
   # sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.14 3
-  sudo update-alternatives --set python /usr/bin/python3.14
+  if update-alternatives --list python >/dev/null 2>&1; then
+    sudo update-alternatives --set python /usr/bin/python3.14 2>/dev/null || true
+  fi
 
 }
 
@@ -239,9 +241,11 @@ Python() {
   # python run_demo.py
 
   # Install some other pip cool stuff
-  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-github-jira-conventional cz-emoji cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim pypandoc search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
+  for pkg in aranet4 bcc brotab bpytop betago commitizen configobj cookiecutter cz-conventional-gitmoji deface docopt git-pull-request gradio grip howdoi icdiff jsonnet kapitan litecli mycli pynvim pypandoc search-that-hash sentencepiece shodan spotdl spotify-cli-linux tenserflow terminaltables topgrade transformers uv virtualenv yt-dlp; do
     pip install "${pkg}" --upgrade --break-system-packages
   done
+  # Nettoyage d'anciens plugins cz incompatibles (qui bloquent le chargement global de commitizen)
+  pip uninstall -y cz-github-jira-conventional cz-emoji --break-system-packages 2>/dev/null || true
   # uv An extremely fast Python package and project manager, written in Rust.
   curl -LsSf https://astral.sh/uv/install.sh | sh
 }
@@ -276,19 +280,15 @@ GO() {
 
   # tips cross compilation
   # CGO_ENABLED=yes go build
-  go get github.com/claudiodangelis/qrcp
-  cd /tmp || exit
-  git clone https://github.com/rs/curlie.git
-  cd curlie || exit
-  go build .
-  go install .
+  go install github.com/claudiodangelis/qrcp@latest 2>/dev/null || true
+  go install github.com/rs/curlie@latest 2>/dev/null || true
 }
 
 Crontab() {
   # Install Usefull local crontabs
   cd /tmp || exit
-  cat >crontab <<\EOF
-16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
+  cat >crontab <<EOF
+16 02 * * * ${HOME}/bin/get_screensavers.py ${HOME}/Dropbox/Screensavers
 EOF
   crontab crontab && rm crontab
 }
@@ -359,7 +359,7 @@ Albert() {
   # MacOS Launcher
   curl https://build.opensuse.org/projects/home:manuelschneid3r/public_key | sudo apt-key add -
   echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/Debian_12/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
-  sudo wget -nv https://download.opensuse.org/repositories/home:manuelschneid3r/Debian_12/Release.key -O "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
+  sudo wget -c -nv https://download.opensuse.org/repositories/home:manuelschneid3r/Debian_12/Release.key -O "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
   sudo apt update
   sudo apt install -y albert
 }
@@ -392,7 +392,7 @@ Ansible() {
 Argbash() {
   # Argbash : https://github.com/matejak/argbash/
   cd /tmp || exit 1
-  wget https://github.com/matejak/argbash/archive/2.8.0.zip
+  wget -c https://github.com/matejak/argbash/archive/2.8.0.zip
   unzip 2.8.0.zip
   cd argbash-2.8.0 || exit 1
   cd resources || exit 1
@@ -436,22 +436,23 @@ Bat() {
   # Bat
   # https://twitter.com/fdevillamil/status/1095785002791550977?s=09
   cd /tmp || exit 1
-  wget https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
+  wget -c https://github.com/sharkdp/bat/releases/download/v0.10.0/bat_0.10.0_amd64.deb
   sudo dpkg -i bat_0.10.0_amd64.deb
 }
 
 BootRepair() {
   # BootRepair
   # https://wiki.debian.org/Boot-Repair
-  sudo apt install -y wget
-  wget -O- https://sourceforge.net/projects/boot-repair/files/key.gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/boot-repair.gpg
-  echo 'deb [signed-by=/etc/apt/keyrings/boot-repair.gpg] https://ppa.launchpadcontent.net/yannubuntu/boot-repair/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/boot-repair.list
+  sudo install -m 0755 -d /etc/apt/keyrings
+  # Récupération de la clé RSA 4096 moderne du PPA (la vieille clé RSA 1024 de SourceForge est rejetée par Ubuntu 24+)
+  curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x308901CC3AD15B3AB64CC0EF3E687364D2EDDB5F" 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /etc/apt/keyrings/boot-repair.gpg >/dev/null || true
+  echo 'deb [signed-by=/etc/apt/keyrings/boot-repair.gpg] https://ppa.launchpadcontent.net/yannubuntu/boot-repair/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/boot-repair.list >/dev/null
   sudo apt update && sudo apt install -y boot-repair
 }
 
 Delta() {
   cd /tmp || exit 1
-  wget https://github.com/barnumbirr/delta-debian/releases/download/v0.1.1-1/delta_0.1.1-1_amd64_debian_buster.deb
+  wget -c https://github.com/barnumbirr/delta-debian/releases/download/v0.1.1-1/delta_0.1.1-1_amd64_debian_buster.deb
   sudo dpkg -i delta_0.1.1-1_amd64_debian_buster.deb
   sudo apt-mark hold delta
 }
@@ -467,18 +468,36 @@ bcctools() {
 bluegriffon() {
   #- FIXME bluegriffon
   cd /tmp || exit
-  wget http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
+  wget -c http://bluegriffon.org/freshmeat/3.0.1/bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
   sudo dpkg -i bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb && rm bluegriffon-3.0.1.Ubuntu16.04-x86_64.deb
 }
 
 Brew() {
-  if [ -f /etc/debian_version ]; then
-    # Try Brw on Linux
+  if [ -f /etc/debian_version ] || [ -f /etc/lsb-release ]; then
+    # Try Brew on Linux
     sudo apt-get -y install build-essential procps curl file git
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if ! command -v brew >/dev/null 2>&1 && [ ! -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+
+    # Load brew environment for current session
+    if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+
+    # Run brew bundle if Brewfile-debian exists
+    if [ -f "Brewfile-debian" ]; then
+      echo "Installation du bundle Homebrew Debian..."
+      brew bundle --file Brewfile-debian
+    elif [ -f "$HOME/Brewfile-debian" ]; then
+      echo "Installation du bundle Homebrew Debian..."
+      brew bundle --file "$HOME/Brewfile-debian"
+    fi
   else
-    # Use brew to install softwares on MacOs
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # Use brew to install softwares on macOS
+    if ! command -v brew >/dev/null 2>&1; then
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
     brew bundle
   fi
 }
@@ -487,7 +506,7 @@ browsh() {
   # browsh Text Web browser
   # Needs Firefox
   cd /tmp || exit
-  wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
+  wget -c https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
   sudo dpkg -i browsh_1.6.4_linux_amd64.deb
 }
 
@@ -530,7 +549,7 @@ Chrome() {
 
 chromeIPass() {
   # chromeIPass : https://github.com/pfn/passifox/
-  sudo wget https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
+  sudo wget -c https://raw.github.com/pfn/keepasshttp/master/KeePassHttp.plgx -O /usr/lib/keepass2/KeePassHttp.plgx
 }
 
 CLOUD() {
@@ -538,17 +557,17 @@ CLOUD() {
   # Packer
   # https://www.packer.io/downloads.html
   cd ~/bin || exit
-  wget https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
+  wget -c https://releases.hashicorp.com/packer/1.1.1/packer_1.1.1_linux_amd64.zip
   unzip -f packer_1.1.1_linux_amd64.zip
   rm packer_1.1.1_linux_amd64.zip
 
   # terraform
   # https://www.terraform.io/downloads.html
   cd ~/bin || exit
-  wget https://releases.hashicorp.com/terraform/1.2.9/terraform_1.2.9_linux_amd64.zip
+  wget -c https://releases.hashicorp.com/terraform/1.2.9/terraform_1.2.9_linux_amd64.zip
   unzip -f terraform_1.2.9_linux_amd64.zip
   rm -f terraform_1.2.9_linux_amd64.zip getTerraformProviders.sh
-  wget https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
+  wget -c https://gist.githubusercontent.com/jnahelou/63947831a8154daf6bc3573cc27ed373/raw/e7c685d8ae80e3c6b17238703a870cab00edc7b0/getTerraformProviders.sh
   sudo mkdir -p /usr/local/terraform/toolbox/providers/
   sudo bash ~/bin/getTerraformProviders.sh
   cd "$HOME" || exit
@@ -558,12 +577,12 @@ CLOUD() {
   # rancher
   # https://github.com/rancher/cli/release
   cd ~/bin || exit
-  wget https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
+  wget -c https://github.com/rancher/cli/releases/download/v0.6.5-rc4/rancher-linux-amd64-v0.6.5-rc4.tar.gz
   tar xvfz rancher-linux-amd64-v0.6.5-rc4.tar.gz
   rm rancher-linux-amd64-v0.6.5-rc4.tar.gz
   # https://github.com/rancher/rancher-compose/releases
   cd ~/bin || exit
-  wget https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
+  wget -c https://github.com/rancher/rancher-compose/releases/download/v0.12.5/rancher-compose-linux-amd64-v0.12.5.tar.gz
   tar xvfz rancher-compose-linux-amd64-v0.12.5.tar.gz
   rm rancher-compose-linux-amd64-v0.12.5.tar.gz
 
@@ -583,7 +602,7 @@ CLOUD() {
   ln -sf packages/debian debian && debuild -us -uc -b && sudo dpkg -i ../python-gandicli_1.0_all.deb
 
   # Vault
-  wget https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/vault_0.9.3_linux_amd64.zip
+  wget -c https://releases.hashicorp.com/vault/0.9.3/vault_0.9.3_linux_amd64.zip -O ~/bin/vault_0.9.3_linux_amd64.zip
   unzip ~/bin/vault_0.9.3_linux_amd64.zip && rm ~/bin/vault_0.9.3_linux_amd64.zip
   vault -autocomplete-install
   export VAULT_ADDR='http://127.0.0.1:8200'
@@ -614,10 +633,10 @@ CLOUD() {
     --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
   # Install the CLI:
   sudo apt-get update
-  sudo apt-get install azure-cli
+  sudo apt-get install -y azure-cli
   # Install Azure Functions Core Tools
   cd /tmp || exit
-  wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+  wget -c -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
   sudo dpkg -i packages-microsoft-prod.deb
   sudo apt-get update
   sudo apt-get install -y azure-functions-core-tools
@@ -651,7 +670,7 @@ coolretroterm() {
 CozyDrive() {
   # CozyDrive
   mkdir -p ~/Applications
-  wget -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
+  wget -c -O ~/Applications/CozyDrive-3.6.0-x86_64.AppImage https://nuts.cozycloud.cc/download/channel/stable/64
   chmod +x ~/Applications/CozyDrive-3.6.0-x86_64.AppImage
   GnomeExtensions
   gnomeshell-extension-manage --install --extension-id 1031
@@ -668,46 +687,55 @@ CrowdSec() {
 
 Ctop() {
   # Top-like interface for container metrics https://ctop.sh
-  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
+  sudo wget -c https://github.com/bcicen/ctop/releases/download/v0.7/ctop-0.7-linux-amd64 -O /usr/local/bin/ctop
   sudo chmod +x /usr/local/bin/ctop
 }
 
 Docker() {
-  # FIXME Docker
-  # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
-  sudo apt-get install linux-image-extra-"$(uname -r)" linux-image-extra-virtual
-  sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  # Docker CE
+  # https://docs.docker.com/engine/install/ubuntu/
+  sudo apt-get install -y ca-certificates curl
+
+  local codename
+  codename="$(lsb_release -cs 2>/dev/null || echo "resolute")"
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg 2>/dev/null | sudo tee /etc/apt/keyrings/docker.asc >/dev/null || true
+  sudo chmod a+r /etc/apt/keyrings/docker.asc 2>/dev/null || true
+
+  local docker_list="/etc/apt/sources.list.d/archive_uri-https_download_docker_com_linux_ubuntu-${codename}.list"
+  echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${codename} stable" | sudo tee "$docker_list" >/dev/null
+
   sudo apt-get update
-  sudo apt-get install docker-ce docker-compose
-  cd /tmp || exit
-  wget https://github.com/DockStation/dockstation/releases/download/v1.3.0/dockstation_1.3.0_amd64.deb
-  sudo dpkg -i /tmp/dockstation_1.3.0_amd64.deb && rm /tmp/dockstation_1.3.0_amd64.deb
-  sudo gpasswd -a $USER docker
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+  sudo usermod -aG docker "$USER"
   # https://github.com/jesseduffield/lazydocker#installation
-  go get github.com/jesseduffield/lazydocker
+  if command -v go >/dev/null 2>&1; then
+    go install github.com/jesseduffield/lazydocker@latest 2>/dev/null || true
+  fi
   # Dive https://github.com/wagoodman/dive
   cd /tmp || exit
-  DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-  curl -OL https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.deb
-  sudo apt install ./dive_${DIVE_VERSION}_linux_amd64.deb
+  DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" 2>/dev/null | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+  if [ -n "$DIVE_VERSION" ]; then
+    wget -c "https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.deb"
+    sudo apt install -y "./dive_${DIVE_VERSION}_linux_amd64.deb"
+    rm -f "./dive_${DIVE_VERSION}_linux_amd64.deb"
+  fi
 }
 
 Douane() {
   # Douane Firewal
   # Following doc : https://github.com/Douane/Douane
-  sudo apt install liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
+  sudo apt install -y liblog4cxx-dev libdbus-c++-dev libboost-filesystem-dev libboost-regex-dev libboost-signals-dev libgtkmm-3.0-dev
 }
 
 DroidCAM() {
   # DroiCAM : use smartphone as webcam on computer
   # https://www.dev47apps.com/droidcam/linux/
   cd /tmp/ || exit 1
-  wget https://files.dev47apps.net/linux/droidcam_latest.zip
+  wget -c https://files.dev47apps.net/linux/droidcam_latest.zip
   unzip droidcam_latest.zip -d droidcam
   cd droidcam && sudo ./install-client
-  sudo apt install linux-headers-$(uname -r) gcc make
+  sudo apt install -y linux-headers-$(uname -r) gcc make
   sudo ./install-video
   sudo ./install-sound
 }
@@ -730,7 +758,7 @@ DVD() {
 Element() {
   # Element : a Matrix client
   sudo apt install -y wget apt-transport-https
-  sudo wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
+  sudo wget -c -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
   echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main" | sudo tee /etc/apt/sources.list.d/element-io.list
   sudo apt update
   sudo apt install -y element-desktop
@@ -756,16 +784,23 @@ FlatPack() {
 
 Fuzzy() {
   # fzf: Fuzzy Finder
-  cd /tmp || exit
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install
+  if [ ! -d "$HOME/.fzf" ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  else
+    (cd "$HOME/.fzf" && git pull 2>/dev/null || true)
+  fi
+  # Installation automatisée non interactive (répond oui à tout)
+  "$HOME/.fzf/install" --all --no-fish --no-nushell
+  # Remplacement des chemins absolus générés par $HOME pour la portabilité
+  sed -i "s|$HOME|\$HOME|g" "$HOME/.fzf.bash" 2>/dev/null || true
+  sed -i "s|$HOME|\$HOME|g" "$HOME/.fzf.zsh" 2>/dev/null || true
 }
 
 GCStar() {
   # gcstar : collection software
   sudo apt install -y libogg-vorbis-header-pureperl-perl libnet-freedb-perl libmp3-tag-perl libgd-graph3d-perl libdatetime-format-strptime-perl libtest-mocktime-datecalc-perl libgtk3-simplelist-perl libxml-simple-perl
   cd /tmp || exit
-  wget https://gitlab.com/GCstar/GCstar/-/archive/v1.7.3/GCstar-v1.7.3.tar.gz
+  wget -c https://gitlab.com/GCstar/GCstar/-/archive/v1.7.3/GCstar-v1.7.3.tar.gz
   tar xvfz GCstar-v1.7.3.tar.gz
   cd /tmp/GCstar-v1.7.3/gcstar && sudo ./install
   rm /tmp/GCstar-v1.7.3.tar.gz*
@@ -779,51 +814,47 @@ Github() {
 
 GnomeExtensions() {
   # Install Gnome-extensions
-  # https://wiki.gnome.org/Projects/GnomeShell/Extensions#Enabling_extensions
-  # https://github.com/cyberalex4life/gnome-shell-extension-cl/blob/master/gnome-shell-extension-cl
-  # sound-output-device-chooser@kgshank.net                           - enabled
-  gnomeshell-extension-manage --install --extension-id 906
-  # alternate-tab@gnome-shell-extensions.gcampax.github.com           - enabled
-  gnomeshell-extension-manage --install --extension-id 15
-  # drive-menu@gnome-shell-extensions.gcampax.github.com              - enabled
-  gnomeshell-extension-manage --install --extension-id 7
-  # windowsNavigator@gnome-shell-extensions.gcampax.github.com        - enabled
-  gnomeshell-extension-manage --install --extension-id 10
-  # refresh-wifi@kgshank.net                                          - enabled
-  gnomeshell-extension-manage --install --extension-id 905
-  # extensions@abteil.org                                             - enabled
-  gnomeshell-extension-manage --install --extension-id 1036
-  # auto-move-windows@gnome-shell-extensions.gcampax.github.com       - enabled
-  gnomeshell-extension-manage --install --extension-id 16
-  # workspace-switch-wraparound@theychx.org                           - enabled
-  gnomeshell-extension-manage --install --extension-id 1116
-  # panel-osd@berend.de.schouwer.gmail.com
-  gnomeshell-extension-manage --install --extension-id 708
-  # cast-to-tv@rafostar.github.com                                    - enabled
-  gnomeshell-extension-manage --install --extension-id 1544
-  # todolist@tomMoral.org                                             - enabled
-  gnomeshell-extension-manage --install --extension-id 1104
-  # CoverflowAltTab@palatis.blogspot.com                              - enabled
-  gnomeshell-extension-manage --install --extension-id 97
-  # Burn My Windows
-  gnomeshell-extension-manage --install --extension-id 4679
-  # Emoji Selector
-  gnomeshell-extension-manage --install --extension-id 1162
-  # Vitals
-  gnomeshell-extension-manage --install --extension-id 1460
-  # Frippery Move Clock
-  gnomeshell-extension-manage --install --extension-id 2
-  # Dynamic Panel Transparency
-  gnomeshell-extension-manage --install --extension-id 1011
-  # Compiz windows effect
-  gnomeshell-extension-manage --install --extension-id 3210
-  cd ~/.local/share/gnome-shell/extensions/cast-to-tv@rafostar.github.com || exit
-  npm install
+  # Vérification de l'outil d'installation
+  if ! command -v gnomeshell-extension-manage >/dev/null 2>&1 && [ ! -x "$HOME/bin/gnomeshell-extension-manage" ]; then
+    echo "gnomeshell-extension-manage introuvable, étape ignorée."
+    return 0
+  fi
 
-  # other params
-  dconf write /org/gnome/shell/extensions/panel-osd/y-pos 5.0
-  dconf write /org/gnome/shell/extensions/panel-osd/x-pos 90.0
-  dconf write /org/gnome/desktop/wm/preferences/button-layout 'close:appmenu'
+  local gmanage
+  gmanage="$(command -v gnomeshell-extension-manage 2>/dev/null || echo "$HOME/bin/gnomeshell-extension-manage")"
+
+  # Extensions actives et compatibles avec les versions récentes de GNOME Shell :
+  # Removable Drive Menu (GNOME 50+)
+  "$gmanage" --install --extension-id 7 || true
+  # Window Navigator (GNOME 50+)
+  "$gmanage" --install --extension-id 10 || true
+  # Auto Move Windows (GNOME 50+)
+  "$gmanage" --install --extension-id 16 || true
+  # Coverflow Alt-Tab (GNOME 50+)
+  "$gmanage" --install --extension-id 97 || true
+  # Burn My Windows (GNOME 50+)
+  "$gmanage" --install --extension-id 4679 || true
+  # Vitals (GNOME 50+)
+  "$gmanage" --install --extension-id 1460 || true
+  # Frippery Move Clock (GNOME 50+)
+  "$gmanage" --install --extension-id 2 || true
+  # Compiz windows effect (GNOME 50+)
+  "$gmanage" --install --extension-id 3210 || true
+
+  # Extensions obsolètes / incompatibles avec GNOME 45+ désactivées :
+  # - 906 (Sound Device Chooser - intégré nativement dans GNOME Shell)
+  # - 15 (AlternateTab - intégré nativement)
+  # - 905 (Refresh Wifi - max GNOME 42)
+  # - 1036 (Extensions - max GNOME 3.34, remplacé par l'app Extensions native)
+  # - 1116 (Workspace Switch Wraparound - max GNOME 45)
+  # - 708 (Panel OSD - max GNOME 40)
+  # - 1544 (Cast to TV - max GNOME 3.36)
+  # - 1104 (Section Todo List - max GNOME 43)
+  # - 1162 (Emoji Selector - max GNOME 43)
+  # - 1011 (Dynamic Panel Transparency - max GNOME 43)
+
+  # Configuration dconf
+  dconf write /org/gnome/desktop/wm/preferences/button-layout 'close:appmenu' 2>/dev/null || true
 }
 
 GnomeConfigurations() {
@@ -867,8 +898,8 @@ MimeType=video/flv;video/webm;video/mkv;video/mp4;video/mpeg;video/avi;video/ogg
 EOF'
   gsettings set org.gnome.settings-daemon.plugins.power power-button-action 'suspend'
   gsettings set org.gnome.mutter check-alive-timeout 30000
-  #  Newelle - Your Ultimate Virtual Assistant
-  /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
+  #  Newelle - Your Ultimate Virtual Assistant (commenté pour éviter le blocage d'exécution)
+  # /bin/bash -c 'flatpak run --command=gsettings io.github.qwersyk.Newelle set io.github.qwersyk.Newelle startup-mode "mini" && flatpak run io.github.qwersyk.Newelle'
   gsettings set org.gnome.mutter center-new-windows true
   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 binding 'Print'
   gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0 command '/bin/gnome-screenshot --interactive'
@@ -898,9 +929,11 @@ Infrakit() {
 
 IssueHelper() {
   # Issue-helper
-  sudo apt remove cargo rustc
-  curl https://sh.rustup.rs -sSf | sh
-  source "${HOME}"/.cargo/env
+  sudo apt remove -y cargo rustc
+  if ! command -v rustup >/dev/null 2>&1 && [ ! -x "$HOME/.cargo/bin/rustup" ]; then
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+  fi
+  [ -f "${HOME}/.cargo/env" ] && source "${HOME}/.cargo/env"
   cargo install gli
 }
 
@@ -918,7 +951,7 @@ Keybase() {
   # https://keybase.io/docs/the_app/install_linux
   curl -o /tmp/keybase_amd64.deb -O https://prerelease.keybase.io/keybase_amd64.deb
   sudo dpkg -i /tmp/keybase_amd64.deb
-  sudo apt-get install -f
+  sudo apt-get install -y -f
 }
 
 K3S() {
@@ -937,7 +970,15 @@ K3S() {
 
 Kubernetes() {
   # Kubernetes
-  sudo apt install -y k9s
+  sudo apt install -y k9s qemu-system libvirt-daemon-system virt-manager ovmf
+  # Liens pour le pilote qemu2 de minikube
+  if [ -f /usr/share/OVMF/OVMF_CODE_4M.fd ] && [ ! -f /usr/share/OVMF/OVMF_CODE.fd ]; then
+    sudo ln -s /usr/share/OVMF/OVMF_CODE_4M.fd /usr/share/OVMF/OVMF_CODE.fd 2>/dev/null || true
+  fi
+
+  # Ajout de l'utilisateur aux groupes nécessaires
+  sudo usermod -aG docker,kvm,libvirt "${SUDO_USER:-$USER}"
+
   # https://github.com/kubernetes/minikube
   cd ~/bin/ || exit
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
@@ -947,10 +988,16 @@ Kubernetes() {
   export MINIKUBE_WANTREPORTERRORPROMPT=false
   export MINIKUBE_HOME=$HOME
   export CHANGE_MINIKUBE_NONE_USER=true
-  mkdir "$HOME"/.kube || true
+  mkdir -p "$HOME"/.kube
   touch "$HOME"/.kube/config
   export KUBECONFIG="$HOME"/.kube/config
-  minikube start
+
+  # Lancer minikube avec le contexte de groupe actif (docker) pour éviter DRV_NOT_HEALTHY
+  if groups | grep -q "\bdocker\b"; then
+    minikube start --driver=docker
+  else
+    sg docker -c "minikube start --driver=docker"
+  fi
   # this for loop waits until kubectl can access the api server that Minikube has created
   for i in {1..150}; do # timeout for 5 minutes
     echo "$i\c"
@@ -977,7 +1024,7 @@ Kubernetes() {
 
   # kubeval : Validate your Kubernetes configuration files, supports multiple Kubernetes versions
   cd /tmp || exit
-  wget https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
+  wget -c https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz
   tar xvfz kubeval-linux-amd64.tar.gz
   mv kubeval ~/bin/
   rm kubeval-linux-amd64.tar.gz
@@ -1019,7 +1066,7 @@ Kubernetes() {
 Lightworks() {
   # FIXME Lightworks
   cd /tmp || exit
-  wget -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
+  wget -c -O lightworks.deb "https://www.lwks.com/index.php?option=com_docman&task=doc_download&gid=194"
   sudo dpkg -i lightworks.deb && rm lightworks.deb
   sudo apt --fix-broken install -y
 }
@@ -1067,7 +1114,7 @@ lynishardening() {
     echo "MaxSessions=2" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
   grep -q "TCPKeepAlive=no" /etc/ssh/sshd_config.d/lynis.conf ||
     echo "TCPKeepAlive=no" | sudo tee -a /etc/ssh/sshd_config.d/lynis.conf
-  sudo apt install acct sysstat
+  sudo apt install -y acct sysstat
   sudo sed -i -e 's+ENABLED="false"+ENABLED="true"+g+' /etc/default/sysstat
   sudo systemctl enable sysstat
   sudo systemctl restart sysstat
@@ -1085,7 +1132,7 @@ Minishift() {
   # Minishift
   # https://github.com/MiniShift/minishift#getting-started
   cd /tmp || exit
-  wget https://github.com/minishift/minishift/releases/download/v1.25.0/minishift-1.25.0-linux-amd64.tgz
+  wget -c https://github.com/minishift/minishift/releases/download/v1.25.0/minishift-1.25.0-linux-amd64.tgz
   tar xvfz minishift-1.25.0-linux-amd64.tgz
   mv minishift-1.25.0-linux-amd64/minishift ~/bin
   minishift config set vm-driver virtualbox
@@ -1101,7 +1148,7 @@ Minishift() {
 
 mkcert() {
   # mkcert : create a valid local CA & certs
-  sudo apt install libnss3-tools
+  sudo apt install -y libnss3-tools
   curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
   chmod +x mkcert-v*-linux-amd64
   sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
@@ -1109,7 +1156,7 @@ mkcert() {
 
 MultiOSUSB() {
   # MultiOSUSB : multisystem alternative
-  cd /tmp/ && wget -O MultiBootUSB.tar.gz https://github.com/Mexit/MultiOS-USB/releases/download/v0.9.9/MultiOS-USB_linux_v0.9.9.tar.gz
+  cd /tmp/ && wget -c -O MultiBootUSB.tar.gz https://github.com/Mexit/MultiOS-USB/releases/download/v0.9.9/MultiOS-USB_linux_v0.9.9.tar.gz
   cd ~/bin && tar xvfz /tmp/MultiBootUSB.tar.gz
 }
 
@@ -1142,21 +1189,49 @@ Music() {
 
 NeoVim() {
   # NeoVim
-  sudo apt install neovim
-  # required
-  mv ~/.config/nvim{,.bak}
-  # optional but recommended
-  mv ~/.local/share/nvim{,.bak}
-  mv ~/.local/state/nvim{,.bak}
-  mv ~/.cache/nvim{,.bak}
-  git clone https://github.com/LazyVim/starter ~/.config/nvim
-  rm -rf ~/.config/nvim/.git
+  sudo apt install -y neovim
+
+  # Configuration LazyVim uniquement si non existante
+  if [ ! -d "$HOME/.config/nvim" ] || [ ! -f "$HOME/.config/nvim/init.lua" ]; then
+    echo "Initialisation de la configuration LazyVim..."
+    [ -d "$HOME/.config/nvim" ] && mv "$HOME/.config/nvim"{,.bak}
+    [ -d "$HOME/.local/share/nvim" ] && mv "$HOME/.local/share/nvim"{,.bak}
+    [ -d "$HOME/.local/state/nvim" ] && mv "$HOME/.local/state/nvim"{,.bak}
+    [ -d "$HOME/.cache/nvim" ] && mv "$HOME/.cache/nvim"{,.bak}
+    git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
+    rm -rf "$HOME/.config/nvim/.git"
+  else
+    echo "Configuration NeoVim existante détectée, conservation."
+  fi
+
+  # Synchronisation et installation automatique des plugins et extras LazyVim en mode non-interactif
+  if command -v nvim >/dev/null 2>&1; then
+    echo "Synchronisation et installation des plugins LazyVim..."
+    nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
+  fi
+
+  # Configuration des alternatives système (vi, vim, view, ex, vimdiff -> nvim)
+  local nvim_bin
+  nvim_bin="$(command -v nvim 2>/dev/null || echo "/usr/bin/nvim")"
+  if [ -x "$nvim_bin" ]; then
+    echo "Configuration des alternatives système pour NeoVim ($nvim_bin)..."
+    sudo update-alternatives --install /usr/bin/ex ex "$nvim_bin" 110 2>/dev/null || true
+    sudo update-alternatives --install /usr/bin/vi vi "$nvim_bin" 110 2>/dev/null || true
+    sudo update-alternatives --install /usr/bin/view view "$nvim_bin" 110 2>/dev/null || true
+    sudo update-alternatives --install /usr/bin/vim vim "$nvim_bin" 110 2>/dev/null || true
+    sudo update-alternatives --install /usr/bin/vimdiff vimdiff "$nvim_bin" 110 2>/dev/null || true
+    sudo update-alternatives --set ex "$nvim_bin" 2>/dev/null || true
+    sudo update-alternatives --set vi "$nvim_bin" 2>/dev/null || true
+    sudo update-alternatives --set view "$nvim_bin" 2>/dev/null || true
+    sudo update-alternatives --set vim "$nvim_bin" 2>/dev/null || true
+    sudo update-alternatives --set vimdiff "$nvim_bin" 2>/dev/null || true
+  fi
 }
 
 nicotine() {
   # Nicotine+ is a graphical client for the Soulseek peer-to-peer network.
-  sudo apt install software-properties-common
-  sudo add-apt-repository ppa:nicotine-team/stable
+  sudo apt install -y software-properties-common
+  sudo add-apt-repository -y ppa:nicotine-team/stable
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6CEB6050A30E5769
   sudo apt update
   sudo apt install -y nicotine
@@ -1166,7 +1241,7 @@ nix() {
   # Nix https://nix.dev/manual/nix/2.32/installation/multi-user.html?highlight=%22nix-users%22#restricting-access
   sudo chgrp nix-users /nix/var/nix/daemon-socket
   sudo chmod ug=rwx,o= /nix/var/nix/daemon-socket
-  sudo usermod -aG nix-users daffy
+  sudo usermod -aG nix-users "${SUDO_USER:-$USER}"
 }
 
 npmfx() {
@@ -1186,9 +1261,9 @@ OfflineImap() {
 
 OneDrive() {
   # OneDrive : https://github.com/abraunegg/onedrive
-  sudo apt install -i build-essential
-  sudo apt install -i libcurl4-openssl-dev
-  sudo apt install -i libsqlite3-dev
+  sudo apt install -y -i build-essential
+  sudo apt install -y -i libcurl4-openssl-dev
+  sudo apt install -y -i libsqlite3-dev
   curl -fsS https://dlang.org/install.sh | bash -s dmd
   source "${HOME}/dlang/dmd-2.081.2/activate"
   cd /tmp || exit
@@ -1211,15 +1286,15 @@ OSQuery() {
   # OSQuery : https://itnext.io/auditing-containers-with-osquery-389636f8c420
   export OSQUERY_KEY=1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $OSQUERY_KEY
-  sudo add-apt-repository 'deb [arch=amd64] https://pkg.osquery.io/deb deb main'
+  sudo add-apt-repository -y 'deb [arch=amd64] https://pkg.osquery.io/deb deb main'
   sudo apt-get update
-  sudo apt-get install osquery
+  sudo apt-get install -y osquery
 }
 
 PlayOnLinux() {
   # PlayOnLinux
   wget -q "http://deb.playonlinux.com/public.gpg" -O- | sudo apt-key add -
-  sudo add-apt-repository http://deb.playonlinux.com/
+  sudo add-apt-repository -y http://deb.playonlinux.com/
   sudo apt -V install playonlinux wine
 }
 
@@ -1236,14 +1311,14 @@ Powershell() {
   sudo apt-get install -y powershell
   # as repo is not available for the moment ....
   cd /tmp || exit
-  wget -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
+  wget -c -O https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
   sudo dpkg -i powershell_6.0.0-beta.9-1.ubuntu.17.04_amd64.deb
 }
 
 Puppet() {
   # Puppet
   # https://docs.puppet.com/puppet/4.5/install_linux.html#installing-release-packages-on-apt-based-systems
-  wget http://apt.puppetlabs.com/puppet-release-xenial.deb
+  wget -c http://apt.puppetlabs.com/puppet-release-xenial.deb
   sudo dpkg -i puppet-release-xenial.deb && rm -f puppet-release-xenial.deb
 }
 
@@ -1251,7 +1326,7 @@ ProtonBridge() {
   # ProtonBridge to download mails and use it from mutt
   cd /tmp || exit
   version=3.8.2
-  wget https://proton.me/download/bridge/protonmail-bridge_${version}-1_amd64.deb
+  wget -c https://proton.me/download/bridge/protonmail-bridge_${version}-1_amd64.deb
   sudo dpkg -i protonmail-bridge_${version}-1_amd64.deb
   rm protonmail-bridge_${version}-1_amd64.deb
 }
@@ -1260,7 +1335,7 @@ ProtonVPN() {
   # ProtonVPN : https://protonvpn.com/support/linux-ubuntu-vpn-setup/
   version=1.0.8
   cd /tmp || exit
-  wget https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
+  wget -c https://repo.protonvpn.com/debian/dists/stable/main/binary-all/protonvpn-stable-release_${version}_all.deb
   echo "0b14e71586b22e498eb20926c48c7b434b751149b1f2af9902ef1cfe6b03e180 protonvpn-stable-release_${version}_all.deb" | sha256sum --check -
   sudo apt-get update
   sudo dpkg -i protonvpn-stable-release_${version}_all.deb
@@ -1271,13 +1346,13 @@ ProtonVPN() {
 rapidphotodownloader() {
   # rapid-photo-downloader : http://www.damonlynch.net/rapid/downloads.html
   cd /tmp || exit
-  wget https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
+  wget -c https://launchpad.net/rapid/pyqt/0.9.9/+download/install.py
   python3 install.py
 }
 
 RocketChat() {
   # RocketChat
-  sudo apt-get install libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev
+  sudo apt-get install -y libpurple-dev libjson-glib-dev libglib2.0-dev mercurial make libmarkdown2-dev
   cd /tmp || exit
   hg clone https://bitbucket.org/EionRobb/purple-rocketchat/ && cd purple-rocketchat || exit
   make && sudo make install
@@ -1286,15 +1361,20 @@ RocketChat() {
 Rust() {
   # Install rust and other cargo tools
   # First remove debian packages
-  sudo apt remove cargo rustc
-  curl https://sh.rustup.rs -sSf | sh
+  sudo apt remove -y cargo rustc
+  if ! command -v rustup >/dev/null 2>&1 && [ ! -x "$HOME/.cargo/bin/rustup" ]; then
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+  fi
+  [ -f "${HOME}/.cargo/env" ] && source "${HOME}/.cargo/env"
 
   # Initiate Cargo cache
-  rustup install stable
-  rustup default stable
+  if command -v rustup >/dev/null 2>&1; then
+    rustup install stable
+    rustup default stable
+  fi
 
-  for rustpkg in bat delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat multigit navi ripgrep spotify-tui trippy viu; do
-    cargo install "${rustpkg}"
+  for rustpkg in bat cargo-update delta-git dog dust dutree erdtree fd-find gping just himalaya htmlq kubie lurk-cli mdcat multigit navi ripgrep spotify-tui trippy viu; do
+    cargo install "${rustpkg}" || true
   done
 }
 
@@ -1321,12 +1401,12 @@ scrcpy() {
 
 Screensavers() {
   # Screensavers
-  sudo apt remove gnome-screensaver
-  sudo add-apt-repository ppa:mc3man/mpv-tests
+  sudo apt remove -y gnome-screensaver
+  sudo add-apt-repository -y ppa:mc3man/mpv-tests
   sudo apt install -y mpv
   cat >/tmp/crons <<EOF
-16 02 * * * /home/daffy/bin/get_screensavers.py /home/daffy/Dropbox/Screensavers
-@reboot cd /home/daffy/ownCloudPerso/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
+16 02 * * * ${HOME}/bin/get_screensavers.py ${HOME}/Dropbox/Screensavers
+@reboot cd ${HOME}/ownCloudPerso/Code/git/github/noisy && /usr/bin/docker run -it noisy --config config.json
 EOF
   crontab /tmp/crons
   mkdir -p ~/.config/systemd/user/
@@ -1348,7 +1428,7 @@ Signal() {
 
   # 3. Update your package database and install signal
   # sudo apt update && sudo apt install signal-desktop
-  sudo apt install apt-transport-https && sudo apt update && sudo apt install signal-desktop
+  sudo apt install -y apt-transport-https && sudo apt update && sudo apt install -y signal-desktop
 
   # 4. Send icon to systray
   sudo sed -i '/^Exec/ {/--use-tray-icon/ !s/$/ --use-tray-icon/}' /usr/share/applications/signal-desktop.desktop
@@ -1382,7 +1462,7 @@ Spotify() {
   # https://doc.ubuntu-fr.org/spotify
   curl -sS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
   echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-  sudo apt-get update && sudo apt-get install spotify-client
+  sudo apt-get update && sudo apt-get install -y spotify-client
   # sudo snap install spotify
   # sudo ln -s /var/lib/snapd/desktop/applications/spotify_spotify.desktop /usr/share/applications/spotify.desktop
   pip install spotify-cli-linux
@@ -1392,7 +1472,7 @@ Spotify() {
 Stacer() {
   # Stacer : Ubuntu System Cleaner Stacer Scores a Spring Update
   cd /tmp || exit
-  wget https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
+  wget -c https://github.com/oguzhaninan/Stacer/releases/download/v1.0.9/stacer_1.0.9_amd64.deb
   sudo dpkg -i stacer_1.0.9_amd64.deb
 }
 
@@ -1423,7 +1503,7 @@ Teams() {
   # Teams for Linux: Unofficial Microsoft Teams for Linux client
   # https://github.com/IsmaelMartinez/teams-for-linux
   sudo mkdir -p /etc/apt/keyrings
-  sudo wget -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
+  sudo wget -c -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
   echo "deb [signed-by=/etc/apt/keyrings/teams-for-linux.asc arch=$(dpkg --print-architecture)] https://repo.teamsforlinux.de/debian/ stable main" | sudo tee /etc/apt/sources.list.d/teams-for-linux-packages.list
   sudo apt update
   sudo apt install -y teams-for-linux
@@ -1432,7 +1512,7 @@ Teams() {
 Terminal() {
   # Install Tilix Theme
   mkdir -p ~/.config/tilix/schemes/
-  wget -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
+  wget -c -qO "${HOME}"/.config/tilix/schemes/desert.json https://raw.githubusercontent.com/storm119/Tilix-Themes/master/Themes/desert.json
   gsettings set org.gnome.desktop.default-applications.terminal exec 'terminal'
   default=$(gsettings get com.gexperts.Tilix.ProfilesList default | tr -d \')
   dconf write /com/gexperts/Tilix/profiles/${default}/login-shell true
@@ -1487,12 +1567,12 @@ ttfmscorefontsinstaller() {
   # http://www.asso-linux.org/forum/viewtopic.php?f=4&t=196
   # wget -o /tmp/ttf-mscorefonts-installer_3.6_all.deb -O http://ftp.fr.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.6_all.deb
   # sudo dpkg -i /tmp/ttf-mscorefonts-installer_3.6_all.deb
-  sudo apt install -f
+  sudo apt install -y -f
 }
 
 urbackup() {
   # urbackup
-  TF=$(mktemp) && wget "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF
+  TF=$(mktemp) && wget -c "https://hndl.urbackup.org/Client/2.2.5/UrBackup%20Client%20Linux%202.2.5.sh" -O $TF && sudo sh $TF
   rm $TF
 }
 
@@ -1514,7 +1594,7 @@ VIM() {
   # vim-instant-markdown
   sudo npm -g install instant-markdown-d
   cd /tmp || exit
-  git clone git@github.com:suan/vim-instant-markdown.git
+  git clone https://github.com/instant-markdown/vim-instant-markdown.git
   mkdir -p ~/.vim/after/ftplugin/markdown/
   cd vim-instant-markdown || exit
   cp after/ftplugin/markdown/instant-markdown.vim ~/.vim/after/ftplugin/markdown/
@@ -1555,18 +1635,26 @@ VirtualBox() {
 Vivaldi() {
   # Vivaldi web browser
   cd /tmp || exit
-  wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.5.3206.48-1_amd64.deb
+  wget -c https://downloads.vivaldi.com/stable/vivaldi-stable_6.5.3206.48-1_amd64.deb
   sudo dpkg -i vivaldi-stable_6.5.3206.48-1_amd64.deb
   rm vivaldi-stable_6.5.3206.48-1_amd64.deb
 }
 
 VSCodium() {
-  # VSCodium : libre version of Microsoft VSCode
-  # SNAP
-  cd /tmp || exit
-  wget https://github.com/VSCodium/vscodium/releases/download/1.85.1.23348/codium_1.85.1.23348_amd64.deb
-  sudo dpkg -i codium_1.85.1.23348_amd64.deb
-  rm codium_1.85.1.23348_amd64.deb
+  # VSCodium / VSCode
+  local editor_bin
+  if command -v codium >/dev/null 2>&1; then
+    editor_bin="codium"
+  elif command -v code >/dev/null 2>&1; then
+    editor_bin="code"
+  else
+    cd /tmp || exit
+    wget -c https://github.com/VSCodium/vscodium/releases/download/1.85.1.23348/codium_1.85.1.23348_amd64.deb
+    sudo dpkg -i codium_1.85.1.23348_amd64.deb
+    rm -f codium_1.85.1.23348_amd64.deb
+    editor_bin="codium"
+  fi
+
   # Extensions
   for extension in \
     abusaidm.html-snippets \
@@ -1576,7 +1664,6 @@ VSCodium() {
     bierner.markdown-preview-github-styles \
     bung87.vscode-gemfile \
     bmarkovic.haproxy \
-    CoenraadS.bracket-pair-colorizer-2 \
     coolbear.systemd-unit-file \
     CraigMaslowski.erb \
     DavidAnson.vscode-markdownlint \
@@ -1595,7 +1682,6 @@ VSCodium() {
     Gruntfuggly.todo-tree \
     hangxingliu.vscode-nginx-conf-hint \
     heptio.jsonnet \
-    HookyQR.beautify \
     joaompinto.asciidoctor-vscode \
     jpogran.puppet-vscode \
     kenhowardpdx.vscode-gist \
@@ -1635,11 +1721,17 @@ VSCodium() {
     wholroyd.jinja \
     xlab-steampunk.steampunk-spotter \
     zkirkland.vscode-firstupper; do
-    codium --install-extension ${extension}
+    "$editor_bin" --install-extension "${extension}" --force 2>/dev/null || true
   done
 }
 
 AntigravityIDE() {
+  # Antigravity CLI installation if missing
+  if ! command -v agy >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/agy" ]; then
+    echo "Installation du CLI Google Antigravity (agy)..."
+    curl -fsSL https://antigravity.google/cli/install.sh | bash 2>/dev/null || true
+  fi
+
   # Antigravity IDE shortcut creation
   local desktop_dir="$HOME/.local/share/applications"
   local icons_dir="$HOME/.local/share/icons"
@@ -1709,7 +1801,7 @@ WakeMeOps() {
   # WakeMeOps : WakeMeOps est un référentiel Debian pour les applications portables.
   curl -sSL https://raw.githubusercontent.com/upciti/wakemeops/main/assets/install_repository | sudo bash
   sudo apt-get update
-  sudo apt install bottom choose gping himalaya hugo k9s openlens procs rclone ripgrep trivy xh yq
+  sudo apt install -y bottom choose gping himalaya hugo k9s openlens procs rclone ripgrep trivy xh yq
 }
 
 WSS() {
@@ -1720,10 +1812,9 @@ WSS() {
 
 WTF() {
   # WTF
-  GO
-  go get -u github.com/senorprogrammer/wtf
-  cd $GOPATH/src/github.com/senorprogrammer/wtf || exit
-  make install
+  if ! command -v wtfutil >/dev/null 2>&1; then
+    go install github.com/wtfutil/wtf@latest 2>/dev/null || true
+  fi
 }
 
 XAuth() {
@@ -1746,11 +1837,10 @@ YakYak() {
 }
 
 youtube() {
-  # youtube-dlg
-  sudo add-apt-repository -n -y ppa:nilarimogard/webupd8
-  sudo sed -i -e "s+bionic+xenial+g" /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8-bionic.list
-  sudo apt update
-  sudo apt install -y youtube-dlg
+  # youtube-dlg / yt-dlp
+  # Le PPA WebUpd8 est obsolète et n'a pas de release pour Ubuntu 24/26.
+  # yt-dlp est déjà installé via pip / pipx / uv dans ~/.local/bin/yt-dlp
+  echo "yt-dlp est le remplaçant moderne de youtube-dl."
 }
 
 YunoHost() {
@@ -1765,21 +1855,56 @@ zquests() {
 }
 
 ZSH() {
-  # Install oh-my-szh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-  cd ~/.oh-my-zsh && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  cd /tmp || exit
-  git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git
-  cd nerd-fonts || exit
-  ./install.sh "FiraCode"
-  snap install starship --edge
-  curl https://fx.wtf/install.sh | sudo sh
-  # Install ugit
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/Bhupesh-V/ugit/master/install)"
-  # Install ugit zsh plugin
-  git clone https://github.com/Bhupesh-V/ugit.git $ZSH_CUSTOM/plugins/ugit
+  local zsh_custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  mkdir -p "$zsh_custom/plugins" "$zsh_custom/themes"
+
+  # Install oh-my-zsh if missing
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended || true
+  fi
+
+  # Themes
+  if [ ! -d "$zsh_custom/themes/powerlevel10k" ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$zsh_custom/themes/powerlevel10k" 2>/dev/null || true
+  fi
+
+  # Plugins custom
+  # 1. zsh-syntax-highlighting (installé dans custom/plugins)
+  if [ ! -d "$zsh_custom/plugins/zsh-syntax-highlighting" ]; then
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$zsh_custom/plugins/zsh-syntax-highlighting" 2>/dev/null || true
+  fi
+
+  # 2. zsh-autosuggestions
+  if [ ! -d "$zsh_custom/plugins/zsh-autosuggestions" ]; then
+    git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_custom/plugins/zsh-autosuggestions" 2>/dev/null || true
+  fi
+
+  # 3. ugit
+  if ! command -v ugit >/dev/null 2>&1 && [ ! -x "/home/linuxbrew/.linuxbrew/bin/ugit" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Bhupesh-V/ugit/master/install)" || true
+  fi
+  if [ ! -d "$zsh_custom/plugins/ugit" ]; then
+    git clone https://github.com/Bhupesh-V/ugit.git "$zsh_custom/plugins/ugit" 2>/dev/null || true
+  fi
+
+  # 4. zsh-wakatime
+  if [ ! -d "$zsh_custom/plugins/zsh-wakatime" ]; then
+    git clone https://github.com/sobolevn/wakatime-zsh-plugin.git "$zsh_custom/plugins/zsh-wakatime" 2>/dev/null || true
+    if [ -f "$zsh_custom/plugins/zsh-wakatime/wakatime.plugin.zsh" ]; then
+      cp "$zsh_custom/plugins/zsh-wakatime/wakatime.plugin.zsh" "$zsh_custom/plugins/zsh-wakatime/zsh-wakatime.plugin.zsh"
+    fi
+  fi
+
+  # CLI & Fonts
+  if [ ! -d "$HOME/.local/share/fonts/NerdFonts" ]; then
+    cd /tmp || exit
+    git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git 2>/dev/null || true
+    if [ -d "nerd-fonts" ]; then
+      cd nerd-fonts && ./install.sh "FiraCode" 2>/dev/null || true
+    fi
+  fi
+  snap install starship --edge 2>/dev/null || true
+  curl -fsSL https://fx.wtf/install.sh | sudo sh 2>/dev/null || true
 }
 
 Annexes() {
@@ -1787,14 +1912,92 @@ Annexes() {
   echo https://github.com/seanyeh/vibreoffice
 }
 
+FixAptRepositories() {
+  echo "=== Réparation et modernisation des dépôts et clés APT ==="
+
+  # Assurer la présence des répertoires de keyrings
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo install -m 0755 -d /usr/share/keyrings
+
+  local codename
+  codename="$(lsb_release -cs 2>/dev/null || echo "resolute")"
+
+  # 1. Signal Desktop : téléchargement propre de la clé et configuration du dépôt unique signed-by
+  echo "-> Modernisation du dépôt Signal Desktop..."
+  curl -fsSL https://updates.signal.org/desktop/apt/keys.asc 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg >/dev/null || true
+  if [ -f /usr/share/keyrings/signal-desktop-keyring.gpg ]; then
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main" | sudo tee /etc/apt/sources.list.d/signal-xenial.list >/dev/null
+  fi
+
+  # 2. Google Cloud SDK : suite générique cloud-sdk (résolution de l'erreur 404 sur resolute) + clé
+  echo "-> Modernisation du dépôt Google Cloud SDK..."
+  curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /usr/share/keyrings/cloud.google.gpg >/dev/null || true
+  if [ -f /usr/share/keyrings/cloud.google.gpg ]; then
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list >/dev/null
+  fi
+
+  # 3. Docker CE : clé moderne dans /etc/apt/keyrings et configuration du repo
+  echo "-> Modernisation du dépôt Docker CE ($codename)..."
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg 2>/dev/null | sudo tee /etc/apt/keyrings/docker.asc >/dev/null || true
+  sudo chmod a+r /etc/apt/keyrings/docker.asc 2>/dev/null || true
+  if [ -f /etc/apt/keyrings/docker.asc ]; then
+    local docker_list="/etc/apt/sources.list.d/archive_uri-https_download_docker_com_linux_ubuntu-${codename}.list"
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu ${codename} stable" | sudo tee "$docker_list" >/dev/null
+  fi
+
+  # 4. Azure CLI : installation de la clé Microsoft officielle dans /etc/apt/keyrings et signed-by
+  echo "-> Modernisation du dépôt Azure CLI..."
+  curl -fsSL https://packages.microsoft.com/keys/microsoft.asc 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /etc/apt/keyrings/microsoft.gpg >/dev/null || true
+  if [ -f /etc/apt/keyrings/microsoft.gpg ]; then
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ ${codename} main" | sudo tee /etc/apt/sources.list.d/azure-cli.list >/dev/null
+  fi
+
+  # 5. Nettoyage des anciens dépôts obsolètes ou doublons
+  if [ -f /etc/apt/sources.list.d/microsoft-prod.list ]; then
+    echo "-> Suppression de l'ancien dépôt obsolète microsoft-prod.list..."
+    sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
+  fi
+  # PPA webupd8 (incompatible / 404 sur resolute)
+  if ls /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8* >/dev/null 2>&1; then
+    echo "-> Suppression du PPA webupd8 obsolète (404 sur resolute)..."
+    sudo rm -f /etc/apt/sources.list.d/nilarimogard-ubuntu-webupd8*
+  fi
+
+  # 6. Lynis (Cisofy) : migration vers /etc/apt/keyrings/cisofy.gpg avec signed-by
+  echo "-> Modernisation du dépôt Lynis (Cisofy)..."
+  curl -fsSL https://packages.cisofy.com/keys/cisofy-software-public.key 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /etc/apt/keyrings/cisofy.gpg >/dev/null || true
+  if [ -f /etc/apt/keyrings/cisofy.gpg ]; then
+    echo "deb [signed-by=/etc/apt/keyrings/cisofy.gpg] https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list >/dev/null
+  fi
+
+  # 7. Lutris : utilisation de la clé moderne si le dépôt tierce est maintenu
+  if [ -f /etc/apt/sources.list.d/lutris.list ]; then
+    echo "-> Modernisation de la clé Lutris..."
+    curl -fsSL https://download.opensuse.org/repositories/home:/strycore/Debian_12/Release.key 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /etc/apt/keyrings/lutris.gpg >/dev/null || true
+  fi
+
+  # 8. Boot-Repair : mise à niveau de la clé PPA vers RSA 4096 (rejet RSA 1024)
+  if [ -f /etc/apt/sources.list.d/boot-repair.list ]; then
+    echo "-> Modernisation de la clé Boot-Repair (RSA 4096)..."
+    curl -fsSL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x308901CC3AD15B3AB64CC0EF3E687364D2EDDB5F" 2>/dev/null | gpg --dearmor 2>/dev/null | sudo tee /etc/apt/keyrings/boot-repair.gpg >/dev/null || true
+  fi
+
+  # 9. Mise à jour de la base APT
+  echo "-> Rafraîchissement des dépôts APT..."
+  sudo apt-get update || true
+  echo "[✓] Configuration des dépôts et clés APT corrigée et modernisée."
+}
+
 Main() {
+  FixAptRepositories
   Setup
+  ZSH
   #  WIFI
   #  PPA
   Packages
   Python
   GO
-  install_appimages
+  # install_appimages
   #  Albert
   #  Android
   #  Ansible
@@ -1804,7 +2007,7 @@ Main() {
   BootRepair
   #  bcctools
   #  bluegriffon
-  #  Brew
+  Brew
   #  browsh
   #  Chaos
   #  ChatGPT
@@ -1817,10 +2020,10 @@ Main() {
   #  Crontab
   #  Crowdsec
   #  Ctop
-  Delta
+  #  Delta
   Docker
   #  Douane
-  Dropbox
+  # Dropbox
   #  DroidCAM
   DVD
   #  Element
@@ -1836,7 +2039,7 @@ Main() {
   #  Infrakit
   #  IssueHelper
   Hurl
-  Keybase
+  #  Keybase
   K3S
   Kubernetes
   #  Lightworks
@@ -1846,57 +2049,59 @@ Main() {
   MammouthCode
   Minishift
   mkcert
-  MultiOSUSB
+  #  MultiOSUSB
   #  Multisystem
   Mullvad
   Music
-  nicotine
-  nix
-  #  npmfx
-  OfflineImap
-  #  OneDrive
-  orionbrowser
+  #  nicotine
+  # nix
+  # npmfx
+  # OfflineImap
+  # OneDrive
+  # orionbrowser
   #  OSQuery
-  PlayOnLinux
-  Powershell
-  ProtonBridge
-  ProtonVPN
-  Puppet
+  # PlayOnLinux
+  # Powershell
+  # ProtonBridge
+  #  ProtonVPN
+  # Puppet
   #  rapidphotodownloader
   #  RocketChat
   Rust
   #  s3benchmark
-  scrcpy
-  Screensavers
+  # scrcpy
+  # Screensavers
   Signal
   Slack
-  SNAP
+  # SNAP
   #  Spip-Cli
-  Spotify
+  # Spotify
   Stacer
-  Students
-  #  STui
-  #  Taskfile
-  Teams
+  # Students
+  # STui
+  # Taskfile
+  # Teams
   Terminal
-  TLDR
-  #  Trello
+  # TLDR
+  # Trello
   ttfmscorefontsinstaller
-  urbackup
+  # urbackup
   VIM
-  VirtualBox
-  Vivaldi
-  VSCodium
+  NeoVim
+  # VirtualBox
+  # Vivaldi
+  # VSCodium
   AntigravityIDE
   WakeMeOps
-  WSS
+  # WSS
   WTF
-  XAuth
-  YakYak
+  # XAuth
+  # YakYak
   youtube
-  #  YunoHost
+  # YunoHost
   SetupAISkillsMCP
   SetupRTK
+  SetupYubiKey
 }
 
 SetupAISkillsMCP() {
@@ -1982,6 +2187,35 @@ SetupRTK() {
   fi
 
   echo "[✓] Configuration de RTK terminée avec succès."
+}
+
+SetupYubiKey() {
+  echo "=== Configuration YubiKey (Authentification PAM & Verrouillage automatique) ==="
+
+  local setup_script="$HOME/bin/setup_yubikey.sh"
+  local autolock_script="$HOME/bin/enable_yubikey_autolock.sh"
+
+  # 1. Vérification des paquets requis
+  sudo apt install -y libpam-u2f pamu2fcfg udev
+
+  # 2. Configuration du verrouillage automatique au retrait de la YubiKey
+  if [ -f "$autolock_script" ]; then
+    echo "-> Configuration du verrouillage automatique au retrait de la YubiKey..."
+    sudo bash "$autolock_script" || echo "[!] Attention : Échec de l'activation du verrouillage YubiKey"
+  fi
+
+  # 3. Configuration de l'authentification PAM (login / sudo / screenlock)
+  if [ -f "$setup_script" ]; then
+    local u2f_keys="$HOME/.config/Yubico/u2f_keys"
+    if [ -f "$u2f_keys" ] && [ -s "$u2f_keys" ]; then
+      echo "-> Clé YubiKey déjà enregistrée dans $u2f_keys. Application des modules PAM..."
+      sudo bash "$setup_script" || echo "[!] Attention : Erreur lors de l'application de la config PAM YubiKey"
+    else
+      echo "-> Première configuration YubiKey détectée :"
+      echo "   Veuillez brancher votre clé YubiKey et la toucher lorsqu'elle clignote."
+      sudo bash "$setup_script" || echo "[!] Attention : Enregistrement de la clé YubiKey ignoré ou annulé"
+    fi
+  fi
 }
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
