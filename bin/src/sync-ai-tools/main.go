@@ -2,16 +2,19 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // OAuthConfig représente la configuration OAuth d'un serveur MCP distant
@@ -418,6 +421,8 @@ func main() {
 	noAgentsFlag := flag.Bool("no-agents", false, "Désactive la synchronisation des agents personnalisés entre les outils")
 	noSkillsFlag := flag.Bool("no-skills", false, "Désactive la synchronisation des skills entre les outils")
 	agentsDirFlag := flag.String("agents-dir", "", "Chemin du hub central des agents. Défaut: ~/.local/share/ai-agents. Les agents y sont stockés au format canonique OpenCode (.md avec frontmatter), puis convertis pour chaque outil (Copilot CLI/VS Code: .agent.md, Antigravity: agents globaux)")
+	reinstallMcpFlag := flag.Bool("reinstall-mcp", false, "Réinstalle et rafraîchit tous les packages de serveurs MCP déclarés (npx, uvx)")
+	flag.BoolVar(reinstallMcpFlag, "reinstall", false, "Alias pour -reinstall-mcp")
 	flag.Parse()
 
 	homeDir, err := os.UserHomeDir()
@@ -524,6 +529,9 @@ func main() {
 	mammouthPath := filepath.Join(homeDir, ".config/mammouth/mammouth.jsonc")
 	opencodeJsonPath := filepath.Join(homeDir, ".config/opencode/opencode.json")
 	opencodePath := filepath.Join(homeDir, ".config/opencode/opencode.jsonc")
+
+	// S'assurer de la présence et structure de base de tous les clients
+	ensureClientStructureForce(homeDir)
 
 	// 1. Lire les serveurs du Hub Central
 	centralServers := make(map[string]UnifiedServer)
@@ -737,6 +745,9 @@ func main() {
 		if !*noSkillsFlag {
 			syncSkills(centralSkillsDir, excludedSkillsSet, excludePatterns, true, homeDir)
 		}
+		if *reinstallMcpFlag {
+			reinstallMCPServers(finalServers, true)
+		}
 		fmt.Println("\n[DRY-RUN] Fin de simulation. Aucun fichier n'a été modifié.")
 		return
 	}
@@ -789,6 +800,11 @@ func main() {
 		syncSkills(centralSkillsDir, excludedSkillsSet, excludePatterns, false, homeDir)
 	} else {
 		fmt.Println("\nℹ️  Synchronisation des skills désactivée (-no-skills)")
+	}
+
+	// --- Étape E : RÉINSTALLATION ÉVENTUELLE DES PACKAGES MCP ---
+	if *reinstallMcpFlag {
+		reinstallMCPServers(finalServers, false)
 	}
 
 	fmt.Println("\nSynchronisation terminée avec succès !")
@@ -1265,6 +1281,23 @@ func ensureSymlink(centralPath, targetPath string) {
 	_ = os.Symlink(centralPath, targetPath)
 }
 
+// ensureClientStructureForce s'assure que les répertoires et structures de base
+// de tous les clients IA supportés existent et sont prêts à accueillir configs, skills et agents.
+func ensureClientStructureForce(homeDir string) {
+	dirs := []string{
+		filepath.Join(homeDir, ".config/Code/User"),
+		filepath.Join(homeDir, ".gemini/config/agents"),
+		filepath.Join(homeDir, ".copilot/agents"),
+		filepath.Join(homeDir, ".config/mammouth/agents"),
+		filepath.Join(homeDir, ".config/opencode/agents"),
+		filepath.Join(homeDir, ".claude"),
+		filepath.Join(homeDir, ".agents/skills"),
+	}
+	for _, d := range dirs {
+		_ = os.MkdirAll(d, 0755)
+	}
+}
+
 // ---------- Synchronisation des skills avec mécanisme d'exclusion ----------
 
 // syncSkills assure les symlinks des outils vers ~/.local/share/ai-skills et
@@ -1278,6 +1311,7 @@ func syncSkills(centralSkillsDir string, excludedSkills map[string]bool, exclude
 		filepath.Join(homeDir, ".gemini/config/skills"),
 		filepath.Join(homeDir, ".copilot/skills"),
 		filepath.Join(homeDir, ".config/mammouth/skills"),
+		filepath.Join(homeDir, ".claude/skills"),
 	}
 
 	if !dryRun {
@@ -2188,4 +2222,178 @@ func fmBool(fm map[string]any, key string, def bool) bool {
 		}
 	}
 	return def
+}
+
+// ---------- Réinstallation et rafraîchissement des MCP ----------
+
+// extractPackageFromArgs tente d'extraire le nom du package principal d'une commande stdio
+// (npx ou uvx).
+func extractPackageFromArgs(cmd string, args []string) (pkg string, isNpx bool, isUvx bool) {
+	cmdBase := filepath.Base(cmd)
+	switch cmdBase {
+	case "npx":
+		isNpx = true
+		for i := 0; i < len(args); i++ {
+			arg := args[i]
+			if arg == "-y" || arg == "--yes" {
+				continue
+			}
+			if strings.HasPrefix(arg, "--package=") {
+				return strings.TrimPrefix(arg, "--package="), true, false
+			}
+			if arg == "--package" || arg == "-p" {
+				if i+1 < len(args) {
+					return args[i+1], true, false
+				}
+				continue
+			}
+			if strings.HasPrefix(arg, "-") {
+				continue
+			}
+			return arg, true, false
+		}
+	case "uvx":
+		isUvx = true
+		for i := 0; i < len(args); i++ {
+			arg := args[i]
+			if strings.HasPrefix(arg, "--from=") {
+				return strings.TrimPrefix(arg, "--from="), false, true
+			}
+			if arg == "--from" {
+				if i+1 < len(args) {
+					return args[i+1], false, true
+				}
+				continue
+			}
+			if strings.HasPrefix(arg, "-") {
+				continue
+			}
+			return arg, false, true
+		}
+	}
+	return "", false, false
+}
+
+// reinstallMCPServers réinstalle ou rafraîchit tous les packages de serveurs MCP déclarés.
+func reinstallMCPServers(servers map[string]UnifiedServer, dryRun bool) {
+	fmt.Printf("\n=== Réinstallation des packages de serveurs MCP déclarés ===\n")
+
+	type targetPkg struct {
+		serverName string
+		pkgName    string
+		isNpx      bool
+		isUvx      bool
+	}
+
+	var targets []targetPkg
+	var skipped []string
+
+	for name, s := range servers {
+		if s.URL != "" {
+			skipped = append(skipped, fmt.Sprintf("%s (serveur distant HTTP/SSE)", name))
+			continue
+		}
+		pkg, isNpx, isUvx := extractPackageFromArgs(s.Command, s.Args)
+		if pkg == "" {
+			skipped = append(skipped, fmt.Sprintf("%s (commande locale personnalisée: %s)", name, s.Command))
+			continue
+		}
+		targets = append(targets, targetPkg{
+			serverName: name,
+			pkgName:    pkg,
+			isNpx:      isNpx,
+			isUvx:      isUvx,
+		})
+	}
+
+	sort.Slice(targets, func(i, j int) bool {
+		return targets[i].serverName < targets[j].serverName
+	})
+	sort.Strings(skipped)
+
+	if len(skipped) > 0 {
+		fmt.Println("ℹ️  Serveurs MCP non soumis à réinstallation de package :")
+		for _, sk := range skipped {
+			fmt.Printf("   • %s\n", sk)
+		}
+	}
+
+	fmt.Printf("\n📦 %d serveur(s) MCP à réinstaller / rafraîchir :\n", len(targets))
+	for _, t := range targets {
+		manager := "npx"
+		if t.isUvx {
+			manager = "uvx"
+		}
+		fmt.Printf("   • [%s] %s -> package '%s'\n", manager, t.serverName, t.pkgName)
+	}
+
+	if dryRun {
+		fmt.Println("\n[DRY-RUN] Fin de la simulation de réinstallation.")
+		return
+	}
+
+	for _, t := range targets {
+		if t.isNpx {
+			reinstallNpxPackage(t.serverName, t.pkgName)
+		} else if t.isUvx {
+			reinstallUvxPackage(t.serverName, t.pkgName)
+		}
+	}
+}
+
+// reinstallNpxPackage purge le cache npx et réinstalle le package npm
+func reinstallNpxPackage(serverName, pkgName string) {
+	fmt.Printf("\n🔄 [%s] Réinstallation du package npm '%s'...\n", serverName, pkgName)
+
+	// 1. Purge des clés du cache npx associées à ce paquet si possible
+	cleanCmd := exec.Command("npm", "cache", "npx", "ls")
+	if out, err := cleanCmd.Output(); err == nil {
+		lines := strings.Split(string(out), "\n")
+		for _, l := range lines {
+			parts := strings.SplitN(l, ":", 2)
+			if len(parts) == 2 {
+				key := strings.TrimSpace(parts[0])
+				cachedPkg := strings.TrimSpace(parts[1])
+				if cachedPkg == pkgName || strings.HasPrefix(cachedPkg, pkgName+"@") {
+					_ = exec.Command("npm", "cache", "npx", "rm", key).Run()
+				}
+			}
+		}
+	}
+
+	// 2. Exécution d'un pré-téléchargement / build npx rapide (timeout 2 min)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, "npx", "-y", "--package="+pkgName, "node", "-e", "process.exit(0)")
+	cmd.Env = os.Environ()
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("❌ [%s] Erreur lors de la réinstallation de '%s' : %v\n", serverName, pkgName, err)
+		if len(out) > 0 {
+			fmt.Printf("   Sortie : %s\n", strings.TrimSpace(string(out)))
+		}
+		return
+	}
+	fmt.Printf("✓ [%s] Package '%s' réinstallé / prêt avec succès.\n", serverName, pkgName)
+}
+
+// reinstallUvxPackage rafraîchit le cache uvx et réinstalle le package python
+func reinstallUvxPackage(serverName, pkgName string) {
+	fmt.Printf("\n🔄 [%s] Rafraîchissement du package Python '%s'...\n", serverName, pkgName)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+
+	cmd := exec.CommandContext(ctx, "uvx", "--refresh", "--from", pkgName, "python", "-c", "import sys; sys.exit(0)")
+	cmd.Env = os.Environ()
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("❌ [%s] Erreur lors du rafraîchissement de '%s' : %v\n", serverName, pkgName, err)
+		if len(out) > 0 {
+			fmt.Printf("   Sortie : %s\n", strings.TrimSpace(string(out)))
+		}
+		return
+	}
+	fmt.Printf("✓ [%s] Package '%s' rafraîchi / prêt avec succès.\n", serverName, pkgName)
 }
