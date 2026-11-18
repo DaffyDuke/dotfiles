@@ -770,7 +770,7 @@ FlatPackages() {
   for pkg in ch.openboard.OpenBoard com.github.tchx84.Flatseal com.getpostman.Postman com.github.xournalpp.xournalpp com.valvesoftware.Steam \
     io.github.qwersyk.Newelle org.geogebra.GeoGebra org.gnome.Cheese org.gnome.FeedReader org.jamovi.jamovi org.jdownloader.JDownloader \
     org.kde.krita org.openshot.OpenShot org.openstreetmap.josm org.pitivi.Pitivi io.github.Bavarder.Bavarder app.drey.Dialect it.mijorus.gearlever \
-    app.zen_browser.zen com.brave.Browser io.github.tobagin.karere net.lutris.Lutris; do
+    app.zen_browser.zen com.brave.Browser io.github.tobagin.karere net.lutris.Lutris com.mattjakeman.ExtensionManager; do
     flatpak install -y flathub "${pkg}"
   done
 }
@@ -813,45 +813,82 @@ Github() {
 }
 
 GnomeExtensions() {
-  # Install Gnome-extensions
-  # Vérification de l'outil d'installation
-  if ! command -v gnomeshell-extension-manage >/dev/null 2>&1 && [ ! -x "$HOME/bin/gnomeshell-extension-manage" ]; then
-    echo "gnomeshell-extension-manage introuvable, étape ignorée."
-    return 0
+  echo "=== Installation et configuration des extensions GNOME Shell ==="
+
+  # 1. Installation du Gestionnaire d'extensions (Extension Manager) via Flatpak
+  if command -v flatpak >/dev/null 2>&1; then
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 2>/dev/null || true
+    if ! flatpak list | grep -q "com.mattjakeman.ExtensionManager"; then
+      echo "Installation de l'application Extension Manager (Flatpak)..."
+      flatpak install -y flathub com.mattjakeman.ExtensionManager || true
+    fi
   fi
 
-  local gmanage
-  gmanage="$(command -v gnomeshell-extension-manage 2>/dev/null || echo "$HOME/bin/gnomeshell-extension-manage")"
+  # 2. Fonction d'installation d'extension GNOME via l'API officielle
+  install_gnome_ext() {
+    local pk="$1"
+    local uuid="$2"
+    local name="$3"
 
-  # Extensions actives et compatibles avec les versions récentes de GNOME Shell :
-  # Removable Drive Menu (GNOME 50+)
-  "$gmanage" --install --extension-id 7 || true
-  # Window Navigator (GNOME 50+)
-  "$gmanage" --install --extension-id 10 || true
-  # Auto Move Windows (GNOME 50+)
-  "$gmanage" --install --extension-id 16 || true
-  # Coverflow Alt-Tab (GNOME 50+)
-  "$gmanage" --install --extension-id 97 || true
-  # Burn My Windows (GNOME 50+)
-  "$gmanage" --install --extension-id 4679 || true
-  # Vitals (GNOME 50+)
-  "$gmanage" --install --extension-id 1460 || true
-  # Frippery Move Clock (GNOME 50+)
-  "$gmanage" --install --extension-id 2 || true
-  # Compiz windows effect (GNOME 50+)
-  "$gmanage" --install --extension-id 3210 || true
+    echo "-> Traitement de l'extension : $name ($uuid)..."
 
-  # Extensions obsolètes / incompatibles avec GNOME 45+ désactivées :
-  # - 906 (Sound Device Chooser - intégré nativement dans GNOME Shell)
-  # - 15 (AlternateTab - intégré nativement)
-  # - 905 (Refresh Wifi - max GNOME 42)
-  # - 1036 (Extensions - max GNOME 3.34, remplacé par l'app Extensions native)
-  # - 1116 (Workspace Switch Wraparound - max GNOME 45)
-  # - 708 (Panel OSD - max GNOME 40)
-  # - 1544 (Cast to TV - max GNOME 3.36)
-  # - 1104 (Section Todo List - max GNOME 43)
-  # - 1162 (Emoji Selector - max GNOME 43)
-  # - 1011 (Dynamic Panel Transparency - max GNOME 43)
+    # Vérification si gnome-extensions est disponible et si l'extension est déjà là
+    if command -v gnome-extensions >/dev/null 2>&1; then
+      if gnome-extensions list 2>/dev/null | grep -q "^${uuid}$"; then
+        echo "   [✓] Déjà installée : $name"
+        gnome-extensions enable "${uuid}" 2>/dev/null || true
+        return 0
+      fi
+    fi
+
+    # Récupération de l'archive via l'API extensions.gnome.org
+    local target_dir="$HOME/.local/share/gnome-shell/extensions/${uuid}"
+    mkdir -p "$target_dir"
+    local tmp_zip
+    tmp_zip=$(mktemp -t ext-XXXXXX.zip)
+
+    # Récupère l'URL de téléchargement pour la version de GNOME Shell actuelle
+    local gver
+    gver=$(DISPLAY=":0" gnome-shell --version 2>/dev/null | tr -cd "0-9." | cut -d'.' -f1)
+    [ -z "$gver" ] && gver="47"
+
+    local dl_url
+    dl_url=$(curl -s "https://extensions.gnome.org/extension-info/?pk=${pk}" | jq -r --arg ver "$gver" '
+      .shell_version_map[$ver].pk as $file_pk |
+      if $file_pk then
+        "https://extensions.gnome.org/download-extension/" + (.uuid|tostring) + ".shell-extension.zip?version_tag=" + ($file_pk|tostring)
+      else
+        empty
+      end
+    ' 2>/dev/null)
+
+    if [ -n "$dl_url" ] && [ "$dl_url" != "null" ]; then
+      if curl -sSL -o "$tmp_zip" "$dl_url"; then
+        unzip -qo "$tmp_zip" -d "$target_dir"
+        rm -f "$tmp_zip"
+        command -v gnome-extensions >/dev/null 2>&1 && gnome-extensions enable "${uuid}" 2>/dev/null || true
+        echo "   [✓] Extension $name installée avec succès."
+        return 0
+      fi
+    fi
+    rm -f "$tmp_zip"
+
+    # Fallback vers gnomeshell-extension-manage si présent
+    local gmanage
+    gmanage="$(command -v gnomeshell-extension-manage 2>/dev/null || echo "$HOME/bin/gnomeshell-extension-manage")"
+    if [ -x "$gmanage" ]; then
+      "$gmanage" --install --extension-id "$pk" || true
+      command -v gnome-extensions >/dev/null 2>&1 && gnome-extensions enable "${uuid}" 2>/dev/null || true
+    fi
+  }
+
+  # 3. Installation et activation des 3 extensions :
+  # - Battery time (ID 5425)
+  install_gnome_ext "5425" "batterytime@typeof.pw" "Battery time"
+  # - Hati Cursor Highlighter (ID 9209)
+  install_gnome_ext "9209" "hati@szymonwilczek.github.io" "Hati Cursor Highlighter"
+  # - Wiggly (ID 8969)
+  install_gnome_ext "8969" "wiggly@mojarch" "Wiggly"
 
   # Configuration dconf
   dconf write /org/gnome/desktop/wm/preferences/button-layout 'close:appmenu' 2>/dev/null || true
