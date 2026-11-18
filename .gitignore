@@ -328,6 +328,7 @@ drive_c/
 system.reg
 user.reg
 userdef.reg
+work/
 workspace/
 Zotero/
 
@@ -352,7 +353,4 @@ Zotero/
 .trae/
 .windsurf/
 _bmad/
-
-
-
 

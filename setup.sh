@@ -47,6 +47,7 @@ Disable_Heavy_Services() {
   # Conteneurs et virtualisation (à lancer manuellement au besoin pour éviter la saturation du SSD au boot)
   sudo systemctl disable docker.service containerd.service 2>/dev/null
   sudo systemctl disable lxc.service lxc-net.service libvirtd.service 2>/dev/null
+  sudo systemctl disable --now k3s.service 2>/dev/null
 
   # Démons d'audit / monitoring intensifs
   sudo systemctl disable --now auditd.service acct.service atop.service 2>/dev/null
@@ -616,9 +617,7 @@ CLOUD() {
   # Import the Google Cloud Platform public key
   curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
   # Update the package list and install the Cloud SDK
-  sudo apt-get update && sudo apt-get install -y google-cloud-sdk
-  # Install components
-  gcloud components install gke-gcloud-auth-plugin
+  sudo apt-get update && sudo apt-get install -y google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
 
   # AZURE
   # Install prerequisite packages:
@@ -2077,7 +2076,8 @@ Main() {
   #  IssueHelper
   Hurl
   #  Keybase
-  K3S
+  # K3S (activé à la demande via systemctl start k3s pour éviter d'encombrer la RAM/swap en visio)
+  # K3S
   Kubernetes
   #  Lightworks
   lutris
@@ -2139,6 +2139,8 @@ Main() {
   SetupAISkillsMCP
   SetupRTK
   SetupYubiKey
+  Optimize_Visio_Performance
+  Disable_Heavy_Services
 }
 
 SetupAISkillsMCP() {
@@ -2253,6 +2255,62 @@ SetupYubiKey() {
       sudo bash "$setup_script" || echo "[!] Attention : Enregistrement de la clé YubiKey ignoré ou annulé"
     fi
   fi
+}
+
+Optimize_Visio_Performance() {
+  echo "=== Optimisation des performances pour la visio (RAM / Swap Zram / PipeWire / Accélération GPU Chrome) ==="
+
+  # 1. Installation de zram-tools et de vainfo
+  echo "-> Installation de zram-tools et vainfo..."
+  sudo apt-get update -qq && sudo apt-get install -y zram-tools vainfo
+
+  # 2. Configuration du zramswap (RAM compressée zstd, 50% de la RAM, haute priorité swap)
+  echo "-> Configuration de zramswap (/etc/default/zramswap)..."
+  sudo bash -c 'cat << "EOF" > /etc/default/zramswap
+# Algorithme de compression zram
+ALGO=zstd
+# Fraction de RAM à utiliser pour le swap zram compressé (50%)
+PERCENT=50
+# Priorité supérieure au swap disque classique
+PRIORITY=100
+EOF'
+  sudo systemctl restart zramswap.service 2>/dev/null || true
+
+  # 3. Paramètres du noyau pour zram / swap réactif
+  echo "-> Ajustement de la réactivité mémoire et sysctl (/etc/sysctl.d/99-visio-perf.conf)..."
+  sudo bash -c 'cat << "EOF" > /etc/sysctl.d/99-visio-perf.conf
+# Favorise le swap rapide en zram et évite de saturer la RAM physique
+vm.swappiness=60
+vm.vfs_cache_pressure=50
+EOF'
+  sudo sysctl --system >/dev/null 2>&1 || true
+
+  # 4. Configuration des buffers PipeWire pour éviter les coupures de flux audio (out of buffers)
+  echo "-> Sécurisation du quantum audio PipeWire (~/.config/pipewire/pipewire.conf.d/10-rates-quantum.conf)..."
+  mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
+  cat << 'EOF' > "$HOME/.config/pipewire/pipewire.conf.d/10-rates-quantum.conf"
+context.properties = {
+    default.clock.rate          = 48000
+    default.clock.allowed-rates = [ 44100 48000 96000 ]
+    default.clock.quantum       = 1024
+    default.clock.min-quantum   = 512
+    default.clock.max-quantum   = 2048
+}
+EOF
+  systemctl --user restart pipewire wireplumber 2>/dev/null || true
+
+  # 5. Accélération matérielle vidéo GPU (VA-API / ANGLE) pour Google Chrome
+  echo "-> Configuration des drapeaux GPU Chrome (~/.config/chrome-flags.conf)..."
+  cat << 'EOF' > "$HOME/.config/chrome-flags.conf"
+--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiIgnoreDriverChecks,CanvasOopRasterization
+--enable-zero-copy
+--ignore-gpu-blocklist
+--enable-gpu-rasterization
+--use-gl=angle
+--use-angle=gl
+EOF
+
+  echo "[✓] Optimisations visio appliquées avec succès."
 }
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
