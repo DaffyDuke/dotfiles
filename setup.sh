@@ -2149,6 +2149,7 @@ Main() {
   SetupRTK
   SetupYubiKey
   Optimize_Visio_Performance
+  Configure_Quiet_Thermal_Profile
   Disable_Heavy_Services
 }
 
@@ -2321,6 +2322,21 @@ EOF
 
   echo "[✓] Optimisations visio appliquées avec succès."
 }
+
+Configure_Quiet_Thermal_Profile() {
+  echo "=== Configuration du profil thermique silencieux (TLP / AMD EPP) ==="
+  echo "-> Application du profil acoustique quiet et balance_power (/etc/tlp.d/01-quiet-profile.conf)..."
+  sudo tee /etc/tlp.d/01-quiet-profile.conf <<'EOF'
+# Profil acoustique et energetique silencieux pour HP Pavilion AMD
+CPU_ENERGY_PERF_POLICY_ON_AC="balance_power"
+CPU_ENERGY_PERF_POLICY_ON_BAT="balance_power"
+PLATFORM_PROFILE_ON_AC="quiet"
+PLATFORM_PROFILE_ON_BAT="quiet"
+EOF
+  sudo tlp start 2>/dev/null || true
+  echo "[✓] Profil silencieux TLP configuré et appliqué avec succès."
+}
+
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
 # Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
