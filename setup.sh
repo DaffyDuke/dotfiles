@@ -36,7 +36,7 @@ EOF'
 }
 
 Disable_Heavy_Services() {
-  echo "==> Désactivation des services lourds ou inutiles au démarrage pour optimiser le temps de boot et les I/O SSD..."
+  echo "==> Désactivation des services lourds ou inutiles au démarrage pour optimiser le temps de boot, la consommation et les I/O SSD..."
 
   # Services non pertinents ou en échec (matériel absent ou incompatible)
   sudo systemctl disable --now nvidia-persistenced.service 2>/dev/null
@@ -48,9 +48,18 @@ Disable_Heavy_Services() {
   sudo systemctl disable docker.service containerd.service 2>/dev/null
   sudo systemctl disable lxc.service lxc-net.service libvirtd.service 2>/dev/null
   sudo systemctl disable --now k3s.service 2>/dev/null
+  sudo systemctl disable --now lxc-monitord.service lxcfs.service 2>/dev/null
 
   # Démons d'audit / monitoring intensifs
-  sudo systemctl disable --now auditd.service acct.service atop.service 2>/dev/null
+  sudo systemctl disable --now auditd.service acct.service atop.service atopacct.service 2>/dev/null
+  sudo systemctl disable --now atop-rotate.timer 2>/dev/null
+  sudo systemctl disable --now pmcd.service pmie.service pmlogger.service pmproxy.service 2>/dev/null
+
+  # Démons réseau / proxies d'arrière-plan souvent superflus
+  sudo systemctl disable --now apt-cacher.service deluged.service tor.service 2>/dev/null
+
+  # Doublons de services d'impression Snap
+  sudo systemctl disable --now snap.cups.cupsd.service snap.cups.cups-browsed.service 2>/dev/null
 
   # Réinitialise les états en échec
   sudo systemctl reset-failed 2>/dev/null
