@@ -2274,24 +2274,40 @@ Optimize_Visio_Performance() {
   echo "-> Installation de zram-tools et vainfo..."
   sudo apt-get update -qq && sudo apt-get install -y zram-tools vainfo
 
-  # 2. Configuration du zramswap (RAM compressée zstd, 50% de la RAM, haute priorité swap)
+  # 2. Configuration du zramswap (RAM compressée zstd, 100% de la RAM, haute priorité swap)
   echo "-> Configuration de zramswap (/etc/default/zramswap)..."
   sudo bash -c 'cat << "EOF" > /etc/default/zramswap
 # Algorithme de compression zram
 ALGO=zstd
-# Fraction de RAM à utiliser pour le swap zram compressé (50%)
-PERCENT=50
+# Fraction de RAM à utiliser pour le swap zram compressé (100% pour absorber les pointes de charge)
+PERCENT=100
 # Priorité supérieure au swap disque classique
 PRIORITY=100
 EOF'
   sudo systemctl restart zramswap.service 2>/dev/null || true
 
+  # 2bis. Agrandissement du swap disque de secours (/swap.img à 12G) pour éviter les OOM brutaux
+  if [ -f /swap.img ]; then
+    current_swap_size=$(stat -c%s /swap.img 2>/dev/null || echo 0)
+    target_swap_size=$((12 * 1024 * 1024 * 1024))
+    if [ "$current_swap_size" -lt "$target_swap_size" ]; then
+      echo "-> Redimensionnement de /swap.img vers 12G..."
+      sudo swapoff /swap.img 2>/dev/null || true
+      sudo fallocate -l 12G /swap.img || sudo dd if=/dev/zero of=/swap.img bs=1M count=12288
+      sudo chmod 600 /swap.img
+      sudo mkswap /swap.img
+      sudo swapon -p -1 /swap.img
+    fi
+  fi
+
   # 3. Paramètres du noyau pour zram / swap réactif
   echo "-> Ajustement de la réactivité mémoire et sysctl (/etc/sysctl.d/99-visio-perf.conf)..."
   sudo bash -c 'cat << "EOF" > /etc/sysctl.d/99-visio-perf.conf
 # Favorise le swap rapide en zram et évite de saturer la RAM physique
-vm.swappiness=60
-vm.vfs_cache_pressure=50
+vm.swappiness=150
+vm.vfs_cache_pressure=100
+vm.page-cluster=0
+vm.watermark_boost_factor=0
 EOF'
   sudo sysctl --system >/dev/null 2>&1 || true
 
