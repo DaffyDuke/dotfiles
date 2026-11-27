@@ -285,15 +285,27 @@ La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-dom
 
 ### Système de Sauvegarde
 
-**Scripts de sauvegarde** :
-- `/usr/lib/alternc/sqlbackup.sh` : Sauvegarde MySQL (quotidienne/hebdomadaire)
-- `/usr/bin/rsync` : Sauvegarde des dossiers via SSH
-- `/usr/lib/alternc/update_mailman.sh` : Sauvegarde des archives Mailman
+L'infrastructure de sauvegarde s'articule autour des données Web (AlternC), des boîtes mail et des bases MySQL.
 
-**Configuration** :
-- Modes daily et weekly
-- Gestion des permissions ACL automatique
-- Protection contre les échecs en cascade (un dossier orphelin ne bloque pas les autres sauvegardes)
+#### 1. Hébergement Web AlternC (`/var/alternc/html`)
+- **Stockage source** : Le répertoire `/var/www/alternc` sur le backend AlternC (`elisa`) est un montage NFS exporté par le serveur de stockage `filou` (`/var/alternc/html`).
+- **Niveau 1 — Sauvegarde quotidienne et rotation sur `filer1` (historique)** :
+  - **Script de synchronisation** : `/backup/bin/cloner` exécuté par cron (`/etc/cron.d/backup-html`, quotidiennement à 01h00 sur `filer1`). Il effectue un `rsync` depuis `filou:/var/alternc/html` vers `/backup/html/current`.
+  - **Rotation par liens physiques (hardlinks)** : `/backup/bin/rotator.sh` exécuté à 03h00 sur `filer1`. Il crée et fait tourner les répertoires `daily.0` à `daily.6` par hardlinks `cp -al`.
+  - **Gestion Ansible** : Rôle Ansible `backup-html` (`roles/backup-html/`).
+- **Niveau 2 — Sauvegarde ZFS & snapshots distants sur `filer3`** :
+  - **Pool & Datasets ZFS** : Sauvegarde de `filou` sur le zpool `backup` de `filer3` dans le dataset `backup/filou`.
+  - **Synchronisation quotidienne** : Cron `/etc/cron.d/octobackup` à 01h30 sur `filer3` exécutant `/usr/local/sbin/octobackup.sh filou` avec exclusions déclarées dans `/etc/octobackup/filou_exclude.list`.
+  - **Snapshots & rétention** : Création automatique de snapshots ZFS (`d-*`, `w-*`, `m-*`) et politique d'élagage via `/usr/local/sbin/octobackup-purge.sh`.
+  - **Gestion Ansible** : Rôle Ansible `backup-filou-zfs` (`roles/backup-filou-zfs/`).
+
+#### 2. Données de Messagerie (`/var/alternc/mail`)
+- **Stockage source** : Les boîtes mail sont hébergées sur `filer4` (`/var/alternc/mail`).
+- **Sauvegarde sur `filou`** : Cron `/etc/cron.d/backup-mail` sur `filou` exécutant `/usr/local/sbin/backup-mail.sh` pour sauvegarder `filer4` vers `filou`.
+
+#### 3. Bases de Données MySQL & Listes Mailman
+- `/usr/lib/alternc/sqlbackup.sh` : Sauvegarde MySQL sur le backend AlternC (`elisa`), modes daily et weekly, avec gestion automatique des ACL.
+- `/usr/lib/alternc/update_mailman.sh` : Sauvegarde et synchronisation des archives Mailman.
 
 ### Système de Supervision (Nagios 4 + Uptime Kuma + Ntfy sur `monit`)
 
@@ -308,7 +320,9 @@ La migration PHP 8.5 n'a pas couvert les domaines encore en 7.4 : **373 sous-dom
 
 **Nagios 4** — configuration dans `/etc/nagios4/conf.d/` (commandes Debian dans `/etc/nagios-plugins/config/`, inclus par `cfg_dir`), état dans `/var/lib/nagios4/status.dat` :
 - `hosts.cfg` déclare le backend, les frontaux, le proxy, la messagerie, les hyperviseurs, les routeurs et les filtres de fichiers ; groupes : `main`, `db`, `mail`, `mailq`, `web`, `proxy`, `hyperviseur`, `equipement`, `nfs`, `backup` (`mysql2` et `switch-2` sont commentés).
-- Sondes Nagios : `check_imap`/`check_simap`/`check_pop`/`check_spop`/`check_smtp`/`check_ssmtp`/`check_clamav` sur le groupe `mail` (`edna`, `erza`) ; `check_https_public` et `check_ssl_lautre` (`check_ssl_cert -H lautre.net`, **non publié** sur la page de statut) sur le groupe `proxy` (`monit`, `nginx`) ; `check_mailman` sur `elisa` (voir « Listes de diffusion (Mailman) »).
+- Sondes Nagios : `check_imap`/`check_simap`/`check_pop`/`check_spop`/`check_smtp`/`check_ssmtp`/`check_clamav` sur le groupe `mail` (`edna`, `erza`) ; `check_https_public` et `check_ssl_lautre` (`check_ssl_cert -H lautre.net`, **non publié** sur la page de statut) sur le groupe `proxy` (`monit`, `nginx`) ; `check_mailman` sur `elisa` (voir « Listes de diffusion (Mailman) ») ;
+  - **Sauvegardes HTML sur `filer1`** : Service `Backup HTML AlternC` vérifié via NRPE (`check_backup_html` appelant `/usr/lib/nagios/plugins/check_file_age` sur `/backup/html/daily.0`). Déclaré dans `50-filer1.cfg`.
+  - **Sauvegardes ZFS de filou sur `filer3`** : Service `Backup ZFS filou sur filer3` sur l'hôte `filou` via NRPE sur `filer3` (`check_backup_filou_zfs` appelant `/usr/local/bin/check_backup_filou_zfs.sh` qui valide l'âge du dernier snapshot ZFS `backup/filou@*`). Déclaré dans `50-filou.cfg`.
 - **Notifications Nagios actives (#217)** : Les contacts du template `normal` dans `/etc/nagios4/conf.d/00-templates.cfg` sont configurés sur les périodes `service_notification_period 24x7` et `host_notification_period 24x7` (auparavant `never`).
   - **Filtre de sévérité (#217)** : Les options du template `normal` sont restreintes à `service_notification_options c,r` (CRITICAL et RECOVERY uniquement) et `host_notification_options d,u,r` afin d'éliminer le spam nocturne lié aux simples avertissements transitoires (`WARNING`).
   - **Contacts & destinataires** : Le contactgroup `root` (`/etc/nagios4/conf.d/10-contacts.cfg`) contient `<admin1>,<admin2>`. Le contact `<contact>` a ses périodes de notification configurées sur `never` à sa demande pour ne plus recevoir les alertes mail de supervision.
@@ -471,7 +485,13 @@ Configuration Roundcube
 Cron système pour les tâches de maintenance
 
 ### `/etc/cron.d/backup-mail`
-Cron pour les sauvegardes de messagerie
+Cron pour les sauvegardes de messagerie (sur `filou`, sauvegarde depuis `filer4`)
+
+### `/etc/cron.d/backup-html`
+Cron pour la sauvegarde et rotation HTML AlternC sur `filer1` (`cloner` à 01h00, `rotator.sh` à 03h00)
+
+### `/etc/cron.d/octobackup` et `/etc/octobackup/filou_exclude.list`
+Cron de synchronisation ZFS de `filou` vers le zpool `backup` sur `filer3` (`octobackup.sh filou` à 01h30) et fichier d'exclusions rsync
 
 ### `/etc/cron.d/nacup`
 Cron pour le monitoring Nagios
@@ -583,7 +603,7 @@ su - alterncpanel -c '/usr/lib/alternc/sqlbackup.sh -t daily'
 
 ### Test de connexion SSH avec clé
 ```bash
-ssh -i /root/.ssh/backup_dsa root@10.0.0.86
+ssh -i /root/.ssh/backup_dsa root@<ip_cible>
 ```
 
 ### Vérification des types de domaines
