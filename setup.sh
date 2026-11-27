@@ -2314,7 +2314,7 @@ EOF'
   # 4. Configuration des buffers PipeWire pour éviter les coupures de flux audio (out of buffers)
   echo "-> Sécurisation du quantum audio PipeWire (~/.config/pipewire/pipewire.conf.d/10-rates-quantum.conf)..."
   mkdir -p "$HOME/.config/pipewire/pipewire.conf.d"
-  cat << 'EOF' > "$HOME/.config/pipewire/pipewire.conf.d/10-rates-quantum.conf"
+  cat <<'EOF' >"$HOME/.config/pipewire/pipewire.conf.d/10-rates-quantum.conf"
 context.properties = {
     default.clock.rate          = 48000
     default.clock.allowed-rates = [ 44100 48000 96000 ]
@@ -2327,7 +2327,7 @@ EOF
 
   # 5. Accélération matérielle vidéo GPU (VA-API / ANGLE) pour Google Chrome
   echo "-> Configuration des drapeaux GPU Chrome (~/.config/chrome-flags.conf)..."
-  cat << 'EOF' > "$HOME/.config/chrome-flags.conf"
+  cat <<'EOF' >"$HOME/.config/chrome-flags.conf"
 --enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,VaapiIgnoreDriverChecks,CanvasOopRasterization
 --enable-zero-copy
 --ignore-gpu-blocklist
@@ -2352,7 +2352,6 @@ EOF
   sudo tlp start 2>/dev/null || true
   echo "[✓] Profil silencieux TLP configuré et appliqué avec succès."
 }
-
 
 # Appel automatique ou manuel de la fonction d'installation AppImage
 # Décommentez la ligne suivante pour installer les AppImages lors du setup principal :
